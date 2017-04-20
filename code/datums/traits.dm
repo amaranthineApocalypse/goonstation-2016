@@ -195,6 +195,25 @@
 					H.limbs.r_arm = new /obj/item/parts/robot_parts/arm/right/light(H)
 					H.update_body()
 		return
+		
+/obj/trait/syntharms
+	name = "Green Fingers (0) \[Body\]"
+	cleanName = "Green Fingers"
+	desc = "Excess exposure to radiation, mutagen and gardening have turned your arms into plants. The horror!"
+	id = "syntharms"
+	points = 0
+	isPositive = 1
+	category = "body"
+
+	onAdd(var/mob/owner)
+		spawn(40) 
+			if(istype(owner, /mob/living/carbon/human))
+				var/mob/living/carbon/human/H = owner
+				if(H.limbs != null)
+					H.limbs.l_arm = pick(new /obj/item/parts/human_parts/arm/left/synth/bloom(H), new /obj/item/parts/human_parts/arm/left/synth(H))
+					H.limbs.r_arm = pick(new /obj/item/parts/human_parts/arm/right/synth/bloom(H), new /obj/item/parts/human_parts/arm/right/synth(H))
+					H.update_body()
+		return
 
 /obj/trait/swedish
 	name = "Swedish (0) \[Language\]"
