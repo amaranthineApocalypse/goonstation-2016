@@ -15,7 +15,7 @@
 /obj/machinery/filter_control/attackby(obj/item/weapon/W, mob/user as mob)
 	if(istype(W, /obj/item/weapon/detective_scanner))
 		return ..()
-	if(istype(W, /obj/item/weapon/screwdriver))
+	if(istype(W, /obj/item/weapon/screwdriver)) //old, don't update
 		src.add_fingerprint(user)
 		user.show_message(text("<span style=\"color:red\">Now [] the panel...</span>", (src.locked) ? "unscrewing" : "reattaching"), 1)
 		sleep(30)

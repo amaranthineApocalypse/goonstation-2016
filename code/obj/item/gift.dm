@@ -21,7 +21,7 @@
 		boutput(user, "<span style=\"color:blue\">You MUST put the paper on a table!</span>")
 		return
 	if (W.w_class < 4)
-		if (user.find_type_in_hand(/obj/item/wirecutters) || user.find_type_in_hand(/obj/item/scissors))
+		if (user.find_type_in_hand(/obj/item/wirecutters) || user.find_type_in_hand(/obj/item/scissors) || user.find_type_in_hand(/obj/item/omnitool)) //fuck it, I'm not fucking with this bullshit fucking proc, fuck. LET'S JUST SAY THE OMNITOOL IS SHARP BY DEFAULT, OKAY.
 			var/a_used = 2 ** (src.w_class - 1)
 			if (src.amount < a_used)
 				boutput(user, "<span style=\"color:blue\">You need more paper!</span>")
@@ -166,7 +166,7 @@
 
 /obj/spresent/attackby(obj/item/W as obj, mob/user as mob)
 
-	if (!istype(W, /obj/item/wirecutters))
+	if (!iswirecutters(W))
 		boutput(user, "<span style=\"color:blue\">I need wirecutters for that.</span>")
 		return
 

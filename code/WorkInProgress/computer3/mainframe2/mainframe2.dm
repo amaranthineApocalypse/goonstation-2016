@@ -212,7 +212,7 @@
 		return
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/crowbar))
+		if (iscrowbar(W))
 			if (!(stat & BROKEN))
 				return
 

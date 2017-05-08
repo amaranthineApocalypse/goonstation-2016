@@ -56,7 +56,7 @@
 	attackby(obj/item/W as obj, mob/living/user as mob)
 		if (!src.alive)
 			// TODO: tie this into surgery()
-			if (istype(W, /obj/item/scalpel))
+			if (isscalpel(W))
 				if (user.zone_sel.selecting == "l_arm")
 					if (src.left_arm_stage == 0)
 						user.visible_message("<span class='combat'>[user] slices through the skin and flesh of [src]'s left arm with [W].</span>", "<span style=\"color:red\">You slice through the skin and flesh of [src]'s left arm with [W].</span>")
@@ -85,7 +85,7 @@
 							src.right_arm = null
 						src.update_dead_icon()
 
-			else if (istype(W, /obj/item/circular_saw))
+			else if (issaw(W))
 				if (user.zone_sel.selecting == "l_arm")
 					if (src.left_arm_stage == 1)
 						user.visible_message("<span class='combat'>[user] saws through the bone of [src]'s left arm with [W].</span>", "<span style=\"color:red\">You saw through the bone of [src]'s left arm with [W].</span>")

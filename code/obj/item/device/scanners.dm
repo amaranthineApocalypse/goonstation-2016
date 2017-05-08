@@ -175,7 +175,7 @@ Contains:
 			user.unlock_medal("He's dead, Jim", 1)
 		return
 
-/obj/item/device/healthanalyzer/borg
+/obj/item/device/healthanalyzer/borg //soon to be deprecated by the Unilyzer (tm)
 	icon_state = "health"
 	reagent_upgrade = 1
 	reagent_scan = 1
@@ -303,6 +303,117 @@ Contains:
 				spawn(0)
 					det.detonate()
 		return
+
+///////////////////////////////////// Unilyzer ////////////////////////////////////////
+
+/obj/item/device/unilyzer
+	name = "\improper Unilyzer (TM)"
+	icon_state = "health" //placehold until sundance's sprites are done
+	inhand_image_icon = 'icons/mob/inhand/hand_medical.dmi' //this doesn't matter since it's borg exclusive
+	item_state = "healthanalyzer" //look, it's going on a borg, so this really, really, doesn't matter
+	flags = FPRINT | ONBELT | TABLEPASS | CONDUCT
+	throwforce = 3
+	w_class = 1.0
+	throw_speed = 5
+	throw_range = 10
+	m_amt = 200
+	mats = 5
+	var/powerusage = 50 //how much cell charge is used per scan
+	var/disease_detection = 1
+	var/reagent_upgrade = 1
+	var/reagent_scan = 1
+	var/scan_results = null
+	var/uni_mode = "medical"
+	desc = "An astounding piece of technology that functions as a health, reagent, and atmospheric scanner all-in-one! Don't just analyze it, Unilyze it!"
+
+	attack_self(mob/user as mob)
+		var/newmode = input("Select desired scanning mode", "Confirm mode selection", src.uni_mode) in list("medical", "reagent", "atmospheric")
+		if (newmode)
+			boutput(user, "<span style=\"color:blue\">Mode is now: [newmode]</span>")
+			src.uni_mode = newmode
+			switch(src.uni_mode)
+				if ("medical")
+					src.icon_state = "health" //sundance placeholder
+				if ("reagent")
+					src.icon_state = "reagentscan" //sundance placeholder
+				if ("atmospheric")
+					src.icon_state = "atmos" //sundance placeholder
+
+	attack(mob/M as mob, mob/user as mob)
+		if (src.uni_mode == "medical")
+			user.visible_message("<span style=\"color:red\"><b>[user]</b> has analyzed [M]'s vitals.</span>",\
+			"<span style=\"color:red\">You have analyzed [M]'s vitals.</span>")
+			boutput(user, scan_health(M, src.reagent_scan, src.disease_detection))
+			update_medical_record(M)
+		if (M.stat > 1)
+			user.unlock_medal("He's dead, Jim", 1)
+
+		if (istype(user, /mob/living/silicon/robot))
+			var/mob/living/silicon/robot/R = user
+			R.cell.charge -= src.powerusage
+
+		else if (istype(user, /mob/living/silicon/ghostdrone))
+			var/mob/living/silicon/ghostdrone/D = user
+			D.cell.charge -= src.powerusage
+
+		else
+			return
+
+// I SINCERELY APOLOGIZE FOR WHAT FOLLOWS.
+
+	afterattack(atom/A as mob|obj|turf|area, mob/user as mob)
+		switch(src.uni_mode)
+			if ("medical")
+				return
+			if ("reagent")
+				user.visible_message("<span style=\"color:blue\"><b>[user]</b> scans [A] with [src]!</span>",\
+				"<span style=\"color:blue\">You scan [A] with [src]!</span>")
+				src.scan_results = scan_reagents(A)
+				if (!isnull(A.reagents))
+					if (A.reagents.reagent_list.len > 0)
+						src.icon_state = "reagentscan-results"
+					else
+						src.icon_state = "reagentscan-no"
+				else
+					src.icon_state = "reagentscan-no"
+
+				if (isnull(src.scan_results))
+					boutput(user, "<span style=\"color:red\">\The [src] encounters an error and crashes!</span>")
+
+				else
+					boutput(user, "[src.scan_results]")
+
+				if (istype(user, /mob/living/silicon/robot))
+					var/mob/living/silicon/robot/R = user
+					R.cell.charge -= src.powerusage
+
+				else if (istype(user, /mob/living/silicon/ghostdrone))
+					var/mob/living/silicon/ghostdrone/R = user
+					R.cell.charge -= src.powerusage
+					return
+
+			if ("atmospheric")
+				if (get_dist(A, user) > 1)
+					return
+				if (istype(A, /obj) || isturf(A))
+					user.visible_message("<span style=\"color:blue\"><b>[user]</b> takes an atmospheric reading of [A].</span>")
+					boutput(user, scan_atmospheric(A))
+					src.add_fingerprint(user)
+
+					if (istype(user, /mob/living/silicon/robot))
+						var/mob/living/silicon/robot/R = user
+						R.cell.charge -= src.powerusage
+
+					else if (istype(user, /mob/living/silicon/ghostdrone))
+						var/mob/living/silicon/ghostdrone/R = user
+						R.cell.charge -= src.powerusage
+						return
+
+	get_desc(dist)
+		if (dist < 3)
+			. += "<br><span style=\"color:blue\">It is currently set to perform [src.uni_mode] scanning functions.</span>"
+		if (!isnull(src.scan_results) && src.uni_mode == "reagent")
+			. += "<br><span style=\"color:blue\">Previous scan's results:<br>[src.scan_results]</span>"
 
 ///////////////////////////////////////////////// Prisoner scanner ////////////////////////////////////
 

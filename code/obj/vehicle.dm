@@ -1994,7 +1994,7 @@ obj/vehicle/clowncar/proc/log_me(var/mob/rider, var/mob/pax, var/action = "", va
 
 obj/vehicle/forklift/attackby(var/obj/item/I, var/mob/user)
 	//Use screwdriver to open/close the forklift's back panel
-	if(istype(I,/obj/item/screwdriver))
+	if(isscrewdriver(I))
 		if (!openpanel)
 			openpanel = 1
 			boutput(usr, "You unlock [src]'s panel with [I].")
@@ -2008,7 +2008,7 @@ obj/vehicle/forklift/attackby(var/obj/item/I, var/mob/user)
 			return
 
 	//Breaking the forklift
-	if(istype(I,/obj/item/wirecutters))
+	if(iswirecutters(I))
 		if (openpanel && !broken)
 			boutput(usr, "<span style=\"color:blue\">You cut [src]'s wires!<span>")
 			new /obj/item/cable_coil/cut/small( src.loc )

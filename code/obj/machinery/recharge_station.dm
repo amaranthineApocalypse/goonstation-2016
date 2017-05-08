@@ -840,7 +840,7 @@
 	anchored = 0
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if(istype(W, /obj/item/wrench))
+		if(iswrench(W))
 			anchored = !anchored
 			user.show_text("You [anchored ? "attach" : "release"] \the [src]'s floor clamps", "red")
 			playsound(src.loc, 'sound/items/Ratchet.ogg', 40, 0, 0)

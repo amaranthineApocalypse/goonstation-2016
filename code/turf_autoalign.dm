@@ -90,7 +90,7 @@ var/global/map_setting = null
 			return
 
 	/* ----- Deconstruction ----- */
-		if (istype(W, /obj/item/wirecutters))
+		if (iswirecutters(W))
 			if (src.d_state == 0)
 				playsound(src.loc, "sound/items/Wirecutter.ogg", 100, 1)
 				src.d_state = 1
@@ -101,7 +101,7 @@ var/global/map_setting = null
 					A.setMaterial(getCachedMaterial("steel"))
 				src.update_icon()
 
-		else if (istype(W, /obj/item/screwdriver))
+		else if (isscrewdriver(W))
 			if (src.d_state == 1)
 				var/turf/T = user.loc
 				playsound(src.loc, "sound/items/Screwdriver.ogg", 100, 1)
@@ -153,7 +153,7 @@ var/global/map_setting = null
 						A.setMaterial(getCachedMaterial("steel"))
 					boutput(user, "<span style=\"color:blue\">You removed the support rods.</span>")
 
-		else if (istype(W, /obj/item/crowbar))
+		else if (iscrowbar(W))
 			if (src.d_state == 3)
 				var/turf/T = user.loc
 				boutput(user, "<span style=\"color:blue\">Prying cover off.</span>")
@@ -182,7 +182,7 @@ var/global/map_setting = null
 					dismantle_wall()
 					return
 
-		else if (istype(W, /obj/item/wrench))
+		else if (iswrench(W))
 			if (src.d_state == 4)
 				var/turf/T = user.loc
 				boutput(user, "<span style=\"color:blue\">Detaching support rods.</span>")

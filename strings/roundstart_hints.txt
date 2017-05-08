@@ -41,3 +41,4 @@ Beware the syndicate drones out in the asteroid belt.
 Stuck in space? Throwing an item will propel you in the opposite direction.
 Need more supplies for your workplace? Check your PDA for the supply request program, or use one of the supply consoles near the cargo belts.
 The cargo routing system is great for quick escapes.
+Hitting someone with a cardboard tube has a chance to disarm them if you use the Harm intent.

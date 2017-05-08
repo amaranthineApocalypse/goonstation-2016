@@ -100,7 +100,7 @@
 				Install(W)
 				return
 
-			if (istype(W, /obj/item/crowbar))
+			if (iscrowbar(W))
 				panel_status = 0
 				boutput(user, "You close the maintenance panel.")
 				return
@@ -139,7 +139,7 @@
 					boutput(user, "<span style=\"color:red\">No main weapon system installed.</span>")
 					return
 
-		if (istype(W, /obj/item/crowbar))
+		if (iscrowbar(W))
 			if (src.lock && src.locked)
 				boutput(usr, "<span style=\"color:red\">You can't open the maintenance panel while [src] is locked.</span>")
 				lock.show_lock_panel(usr, 0)

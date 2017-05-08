@@ -896,7 +896,7 @@
 					return
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/wirecutters) || istype(W, /obj/item/scissors))
+		if (iswirecutters(W) || istype(W, /obj/item/scissors))
 			boutput(user, "You begin cutting up [src].")
 			if (!do_after(user, 30))
 				boutput(user, "<span style=\"color:red\">You were interrupted!</span>")

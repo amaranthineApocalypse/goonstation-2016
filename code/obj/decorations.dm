@@ -119,9 +119,9 @@
 		if (!W) return
 		if (!user) return
 		if (src.destroyed) return
-		if ((user.mind && user.mind.assigned_role == "Captain") && istype(W, /obj/item/wirecutters))
+		if ((user.mind && user.mind.assigned_role == "Captain") && iswirecutters(W))
 			boutput(user, "<span style=\"color:blue\">You carefully and lovingly sculpt your bonsai tree.</span>")
-		if ((user.mind && user.mind.assigned_role == "Captain") && (!(istype(W, /obj/item/wirecutters))))
+		if ((user.mind && user.mind.assigned_role == "Captain") && (!(iswirecutters(W))))
 			boutput(user, "<span style=\"color:red\">Why would you ever destroy your precious bonsai tree?</span>")
 		else if(istype(W, /obj/item/) && (user.mind && user.mind.assigned_role != "Captain"))
 			src.update_icon()

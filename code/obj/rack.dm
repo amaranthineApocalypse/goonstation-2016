@@ -75,7 +75,7 @@
 	..()
 
 /obj/rack/attackby(obj/item/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/wrench))
+	if (iswrench(W))
 		var/atom/A = new /obj/item/rack_parts( src.loc )
 		if(src.material) A.setMaterial(src.material)
 		playsound(src.loc, "sound/items/Ratchet.ogg", 50, 1)

@@ -155,7 +155,7 @@
 		else
 			boutput(user, "<span style=\"color:red\">Access denied.</span>")
 
-	else if (istype(W, /obj/item/screwdriver))
+	else if (isscrewdriver(W))
 		if (src.health < initial(src.health))
 			src.health = initial(src.health)
 			src.visible_message("<span style=\"color:blue\">[user] repairs [src]!</span>", "<span style=\"color:blue\">You repair [src].</span>")
@@ -425,7 +425,7 @@
 
 	else if (istype(W, /obj/item/pen))
 		var/t = input(user, "Enter new robot name", src.name, src.created_name) as text
-		t = strip_html(dd_replacetext(t, "'",""))
+		t = strip_html(replacetext(t, "'",""))
 		t = copytext(t, 1, 45)
 		if (!t)
 			return

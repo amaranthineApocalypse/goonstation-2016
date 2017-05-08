@@ -120,13 +120,14 @@ Frequency:
 	//..()
 	if (usr.stat)
 		return
-	if ((istype(usr, /mob/living/silicon)) || (src in usr) || (istype(src, /obj/item/device/radio/intercom) && (get_dist(src, usr) <= 1) && (istype(src.loc, /turf))) || (usr.loc == src.loc)) // Band-aid fix for intercoms, RE 'bounds_dist' check in the 'in_range' proc. Feel free to improve the implementation (Convair880).
+	if ((istype(usr, /mob/living/silicon)) || (src in usr) || (istype(src, /obj/item/device/radio/intercom)) && (get_dist(src, usr) <= 1 && (istype(src.loc, /turf))) || (usr.loc == src.loc)) // Band-aid fix for intercoms, RE 'bounds_dist' check in the 'in_range' proc. Feel free to improve the implementation (Convair880).
 		usr.machine = src
 		if (href_list["track"])
 			var/mob/target = locate(href_list["track"])
 			var/mob/living/silicon/ai/A = locate(href_list["track2"])
 			A.ai_actual_track(target)
 			return
+
 		if (href_list["freq"])
 			var/new_frequency = sanitize_frequency(frequency + text2num(href_list["freq"]))
 			set_frequency(new_frequency)
@@ -153,7 +154,7 @@ Frequency:
 
 		else if (href_list["wires"])
 			var/t1 = text2num(href_list["wires"])
-			if (!( istype(usr.equipped(), /obj/item/wirecutters) ))
+			if (!( iswirecutters( usr.equipped() ) ))
 				return
 			if (t1 & 1)
 				if (src.wires & 1)
@@ -420,7 +421,7 @@ Frequency:
 
 /obj/item/device/radio/attackby(obj/item/W as obj, mob/user as mob)
 	user.machine = src
-	if (!( istype(W, /obj/item/screwdriver) ))
+	if (!( isscrewdriver(W) ))
 		return
 	src.b_stat = !( src.b_stat )
 	if (src.b_stat)
@@ -510,7 +511,7 @@ Frequency:
 /obj/item/device/radio/electropack/attackby(obj/item/W as obj, mob/user as mob)
 
 	// This doesn't seem to do anything (Convair880).
-	/*if (istype(W, /obj/item/screwdriver))
+	/*if (isscrewdriver(W))
 		src.e_pads = !( src.e_pads )
 		if (src.e_pads)
 			user.show_message("<span style=\"color:blue\">The electric pads have been exposed!</span>")
@@ -794,7 +795,7 @@ obj/item/device/radio/signaler/attackby(obj/item/W as obj, mob/user as mob)
 			src.listening = text2num(href_list["listen"])
 		else if (href_list["wires"])
 			var/t1 = text2num(href_list["wires"])
-			if (!( istype(usr.equipped(), /obj/item/wirecutters) ))
+			if (!(iswirecutters(usr.equipped))) //error is here
 				return
 			if ((!( src.b_stat ) && !( src.master )))
 				return

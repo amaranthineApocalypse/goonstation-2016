@@ -43,7 +43,7 @@ Atmos alert computer
 	interact(user)
 
 /obj/machinery/computer/atmosphere/alerts/attackby(I as obj, user as mob)
-	if(istype(I, /obj/item/screwdriver))
+	if(isscrewdriver(I))
 		playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 		if(do_after(user, 20))
 			if (src.stat & BROKEN)

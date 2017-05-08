@@ -60,7 +60,7 @@
 	return
 
 /obj/machinery/firealarm/attackby(obj/item/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/wirecutters))
+	if (iswirecutters(W))
 		src.detecting = !( src.detecting )
 		if (src.detecting)
 			user.visible_message("<span style=\"color:red\">[user] has reconnected [src]'s detecting unit!</span>", "You have reconnected [src]'s detecting unit.")

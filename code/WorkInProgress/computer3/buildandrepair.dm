@@ -53,7 +53,7 @@
 /obj/computer3frame/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)
 		if(0)
-			if(istype(P, /obj/item/wrench))
+			if(iswrench(P))
 				playsound(src.loc, "sound/items/Ratchet.ogg", 50, 1)
 				if(do_after(user, 20))
 					boutput(user, "<span style=\"color:blue\">You wrench the frame into place.</span>")
@@ -72,7 +72,7 @@
 					A.amount = src.metal_given
 					qdel(src)
 		if(1)
-			if(istype(P, /obj/item/wrench))
+			if(iswrench(P))
 				playsound(src.loc, "sound/items/Ratchet.ogg", 50, 1)
 				if(do_after(user, 20))
 					boutput(user, "<span style=\"color:blue\">You unfasten the frame.</span>")
@@ -85,12 +85,12 @@
 				src.mainboard = P
 				user.drop_item()
 				P.set_loc(src)
-			if(istype(P, /obj/item/screwdriver) && mainboard)
+			if(isscrewdriver(P) && mainboard)
 				playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 				boutput(user, "<span style=\"color:blue\">You screw the mainboard into place.</span>")
 				src.state = 2
 				src.icon_state = "2"
-			if(istype(P, /obj/item/crowbar) && mainboard)
+			if(iscrowbar(P) && mainboard)
 				playsound(src.loc, "sound/items/Crowbar.ogg", 50, 1)
 				boutput(user, "<span style=\"color:blue\">You remove the mainboard.</span>")
 				src.state = 1
@@ -101,7 +101,7 @@
 				boutput(user, "<span style=\"color:red\">This is the wrong type of frame, it won't fit!</span>")
 
 		if(2)
-			if(istype(P, /obj/item/screwdriver) && mainboard && (!peripherals.len))
+			if(isscrewdriver(P) && mainboard && (!peripherals.len))
 				playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 				boutput(user, "<span style=\"color:blue\">You unfasten the mainboard.</span>")
 				src.state = 1
@@ -116,7 +116,7 @@
 				else
 					boutput(user, "<span style=\"color:red\">There is no more room for peripheral cards.</span>")
 
-			if(istype(P, /obj/item/crowbar) && src.peripherals.len)
+			if(iscrowbar(P) && src.peripherals.len)
 				playsound(src.loc, "sound/items/Crowbar.ogg", 50, 1)
 				boutput(user, "<span style=\"color:blue\">You remove the peripheral boards.</span>")
 				for(var/obj/item/peripheral/W in src.peripherals)
@@ -136,7 +136,7 @@
 						src.state = 3
 						src.icon_state = "3"
 		if(3)
-			if(istype(P, /obj/item/wirecutters))
+			if(iswirecutters(P))
 				playsound(src.loc, "sound/items/Wirecutter.ogg", 50, 1)
 				boutput(user, "<span style=\"color:blue\">You remove the cables.</span>")
 				src.state = 2
@@ -153,7 +153,7 @@
 				P.set_loc(src)
 				boutput(user, "<span style=\"color:blue\">You connect the drive to the cabling.</span>")
 
-			if(istype(P, /obj/item/crowbar) && src.hd)
+			if(iscrowbar(P) && src.hd)
 				playsound(src.loc, "sound/items/Crowbar.ogg", 50, 1)
 				boutput(user, "<span style=\"color:blue\">You remove the hard drive.</span>")
 				src.hd.set_loc(src.loc)
@@ -176,7 +176,7 @@
 				else
 					boutput(user, "<span style=\"color:red\">You need sheets of some kind of crystal or glass for this.</span>")
 		if(4)
-			if(istype(P, /obj/item/crowbar))
+			if(iscrowbar(P))
 				playsound(src.loc, "sound/items/Crowbar.ogg", 50, 1)
 				boutput(user, "<span style=\"color:blue\">You remove the glass panel.</span>")
 				src.state = 3
@@ -184,7 +184,7 @@
 				var/obj/item/sheet/glass/A = new /obj/item/sheet/glass(src.loc)
 				A.amount = src.glass_needed
 
-			if(istype(P, /obj/item/screwdriver))
+			if(isscrewdriver(P))
 				playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 				boutput(user, "<span style=\"color:blue\">You connect the monitor.</span>")
 				var/obj/machinery/computer3/C= new /obj/machinery/computer3( src.loc )

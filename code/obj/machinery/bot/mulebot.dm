@@ -131,7 +131,7 @@
 			C.set_loc(src)
 			cell = C
 			updateDialog()
-		else if(istype(I,/obj/item/screwdriver))
+		else if(isscrewdriver(I))
 			if(locked)
 				boutput(user, "<span style=\"color:blue\">The maintenance hatch cannot be opened or closed while the controls are locked.</span>")
 				return
@@ -382,7 +382,7 @@
 					usr << browse(null,"window=mulebot")
 
 				if("wirecut")
-					if(istype(usr.equipped(), /obj/item/wirecutters))
+					if(iswirecutters(usr.equipped))
 						var/wirebit = text2num(href_list["wire"])
 						if (wirebit == wire_mobavoid)
 							logTheThing("vehicle", usr, null, "disables the safety of a MULE ([src.name]) at [log_loc(usr)].")
@@ -391,7 +391,7 @@
 					else
 						boutput(usr, "<span style=\"color:blue\">You need wirecutters!</span>")
 				if("wiremend")
-					if(istype(usr.equipped(), /obj/item/wirecutters))
+					if(iswirecutters(usr.equipped))
 						var/wirebit = text2num(href_list["wire"])
 						if (wirebit == wire_mobavoid)
 							logTheThing("vehicle", usr, null, "reactivates the safety of a MULE ([src.name]) at [log_loc(usr)].")
@@ -401,7 +401,7 @@
 						boutput(usr, "<span style=\"color:blue\">You need wirecutters!</span>")
 
 				if("wirepulse")
-					if(istype(usr.equipped(), /obj/item/device/multitool))
+					if(ismultitool(usr.equipped))
 						switch(href_list["wire"])
 							if("1","2")
 								boutput(usr, "<span style=\"color:blue\">[bicon(src)] The charge light flickers.</span>")

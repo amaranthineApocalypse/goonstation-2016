@@ -1275,7 +1275,7 @@
 			qdel(src)
 			return
 
-		if (istype(W, /obj/item/circular_saw))
+		if (issaw(W))
 			user.visible_message("<span style=\"color:blue\">[user] hollows out [src].</span>")
 			var/obj/item/clothing/mask/skull/smask = new /obj/item/clothing/mask/skull
 			playsound(user.loc, "sound/machines/mixer.ogg", 50, 1)
@@ -1522,7 +1522,7 @@
 		if (src.skull || src.brain)
 
 			// scalpel surgery
-			if (istype(W, /obj/item/scalpel) || istype(W, /obj/item/razor_blade) || istype(W, /obj/item/knife_butcher) || istype(W, /obj/item/kitchen/utensil/knife) || istype(W, /obj/item/raw_material/shard))
+			if (isscalpel(W))
 				if (src.right_eye && src.right_eye.op_stage == 1.0 && user.find_in_hand(W) == user.r_hand)
 					playsound(get_turf(src), "sound/weapons/squishcut.ogg", 50, 1)
 					user.visible_message("<span style=\"color:red\"><b>[user]</b> cuts away the flesh holding [src]'s right eye in with [W]!</span>",\
@@ -1555,7 +1555,7 @@
 					return ..()
 
 			// saw surgery
-			else if (istype(W, /obj/item/circular_saw) || istype(W, /obj/item/saw) || istype(W, /obj/item/kitchen/utensil/fork))
+			else if (issaw(W))
 				if (src.brain)
 					if (src.brain.op_stage == 1.0)
 						playsound(get_turf(src), "sound/weapons/squishcut.ogg", 50, 1)
@@ -1580,7 +1580,7 @@
 					return ..()
 
 			// spoon surgery
-			else if (istype(W, /obj/item/surgical_spoon) || istype(W, /obj/item/kitchen/utensil/spoon))
+			else if (isspoon(W))
 				if (src.right_eye && src.right_eye.op_stage == 0.0 && user.find_in_hand(W) == user.r_hand)
 					playsound(get_turf(src), "sound/weapons/squishcut.ogg", 50, 1)
 					user.visible_message("<span style=\"color:red\"><b>[user]</b> inserts [W] into [src]'s right eye socket!</span>",\

@@ -59,6 +59,12 @@
 	amount = 10
 	delete_on_last_use = 1
 
+	borg
+	name = "Extra large Ducktape brand tape roll"
+	desc = "These handcuffs offer nearly limitless uses in a compact package."
+	amount = 100
+	delete_on_last_use = 0
+
 /obj/item/handcuffs/tape
 	desc = "These seem to be made of tape"
 	strength = 1

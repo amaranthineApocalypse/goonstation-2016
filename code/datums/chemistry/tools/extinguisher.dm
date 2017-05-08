@@ -21,16 +21,17 @@
 	stamina_crit_chance = 35
 	module_research = list("tools" = 5, "science" = 1)
 	rand_pos = 1
+	var/capacity = 75
 
 	virtual
 		icon = 'icons/effects/VR.dmi'
 
 /obj/item/extinguisher/New()
 	..()
-	var/datum/reagents/R = new/datum/reagents(75)
+	var/datum/reagents/R = new/datum/reagents(capacity)
 	reagents = R
 	R.my_atom = src
-	R.add_reagent("ff-foam", 75)
+	R.add_reagent("ff-foam", capacity)
 
 /obj/item/extinguisher/get_desc(dist)
 	if (dist > 1)
@@ -147,3 +148,7 @@
 		boutput(user, "The safety is on.")
 		safety = 1
 	return
+
+/obj/item/extinguisher/large
+	desc = "A portable container with a spray nozzle that contains specially mixed fire-fighting foam. The safety is removed, the nozzle pointed at the base of the fire, and the trigger squeezed to extinguish fire. Damn, this one's big."
+	capacity = 150

@@ -80,7 +80,7 @@
 			src.updateUsrDialog()
 			return
 
-	else if((istype(W, /obj/item/screwdriver)) && ((src.stat & BROKEN) || !src.pod1 || !src.scanner))
+	else if((isscrewdriver(W)) && ((src.stat & BROKEN) || !src.pod1 || !src.scanner))
 		playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 		if(do_after(user, 20))
 			boutput(user, "<span style=\"color:blue\">The broken glass falls out.</span>")

@@ -148,6 +148,18 @@
 			src.root.add_file( new /datum/computer/file/text/diagnostic_readme(src))
 			src.read_only = 1
 
+	ticket
+		name = "TicketMaster Cartridge"
+		icon_state = "cart-s"
+
+		New()
+			..()
+			src.root.add_file( new /datum/computer/file/pda_program/security_ticket(src))
+			src.root.add_file( new /datum/computer/file/pda_program/pingtool(src))
+			src.root.add_file( new /datum/computer/file/pda_program/packet_sniffer(src))
+			src.root.add_file( new /datum/computer/file/pda_program/packet_sender(src))
+			src.read_only = 1
+
 	security
 		name = "R.O.B.U.S.T. Cartridge"
 		icon_state = "cart-s"
@@ -209,7 +221,7 @@
 
 	genetics
 		name = "Deoxyribonucleic Amigo Cartridge"
-		desc = "The ultimate in radio signal technology."
+		desc = "A shitty knock-off of a standard medical cartridge with fewer features. This thing doesn't even have a DNA scanner."
 		icon_state = "cart-gen"
 
 		New()

@@ -217,7 +217,7 @@ obj/machinery/atmospherics/valve
 			if(high_risk) message_admins("[key_name(user)] has opened the valve: [src] at [log_loc(src)]")
 
 	attackby(var/obj/item/G as obj, var/mob/user as mob)
-		if(istype(G, /obj/item/wrench))
+		if(iswrench(G))
 			update_icon(1)
 			sleep(10)
 			logTheThing("station", user, null, "has [src.open ? "closed" : "opened"] the valve: [src] at [log_loc(src)]")

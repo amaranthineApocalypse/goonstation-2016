@@ -110,7 +110,7 @@
 		build_icon()
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/screwdriver))
+		if (isscrewdriver(W))
 			src.coveropen = !src.coveropen
 			src.visible_message("<b>[user.name]</b> [src.coveropen ? "opens" : "closes"] [src]'s cell cover.")
 

@@ -46,12 +46,12 @@
 
 obj/machinery/microwave/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(src.broken > 0)
-		if(src.broken == 2 && istype(O, /obj/item/screwdriver)) // If it's broken and they're using a screwdriver
+		if(src.broken == 2 && isscrewdriver(O)) // If it's broken and they're using a screwdriver
 			src.visible_message("<span style=\"color:blue\">[user] starts to fix part of the microwave.</span>")
 			sleep(20)
 			src.visible_message("<span style=\"color:blue\">[user] fixes part of the microwave.</span>")
 			src.broken = 1 // Fix it a bit
-		else if(src.broken == 1 && istype(O, /obj/item/wrench)) // If it's broken and they're doing the wrench
+		else if(src.broken == 1 && iswrench(O)) // If it's broken and they're doing the wrench
 			src.visible_message("<span style=\"color:blue\">[user] starts to fix part of the microwave.</span>")
 			sleep(20)
 			src.visible_message("<span style=\"color:blue\">[user] fixes the microwave!</span>")

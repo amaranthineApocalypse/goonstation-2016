@@ -73,7 +73,7 @@
 	return
 
 /obj/item/assembly/proximity_bomb/attackby(obj/item/W as obj, mob/user as mob)
-	if ((istype(W, /obj/item/wrench) && !( src.status )))
+	if ((iswrench(W) && !( src.status )))
 		var/obj/item/assembly/prox_ignite/R = new /obj/item/assembly/prox_ignite(  )
 		R.part1 = src.part1
 		R.part2 = src.part2
@@ -202,7 +202,7 @@
 	return
 
 /obj/item/assembly/time_bomb/attackby(obj/item/W as obj, mob/user as mob)
-	if ((istype(W, /obj/item/wrench) && !( src.status )))
+	if ((iswrench(W) && !( src.status )))
 		var/obj/item/assembly/time_ignite/R = new /obj/item/assembly/time_ignite(  )
 		R.part1 = src.part1
 		R.part2 = src.part2
@@ -287,7 +287,7 @@
 	return
 
 /obj/item/assembly/radio_bomb/attackby(obj/item/W as obj, mob/user as mob)
-	if ((istype(W, /obj/item/wrench) && !( src.status )))
+	if ((iswrench(W) && !( src.status )))
 		var/obj/item/assembly/rad_ignite/R = new /obj/item/assembly/rad_ignite(  )
 		R.part1 = src.part1
 		R.part2 = src.part2

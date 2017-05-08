@@ -84,6 +84,9 @@
 	var/self_destruct = 0 //This message will self-destruct in five seconds...
 	mats = 4
 
+	borg
+		max_lines = 360
+		desc ="A fairly spartan recording device. Now with six times the capacity!"
 	//nuclear mode briefing log
 	nuke_briefing
 		name = "Mission Briefing"

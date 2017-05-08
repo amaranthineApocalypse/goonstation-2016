@@ -78,7 +78,9 @@
 
 /obj/machinery/portable_atmospherics/scrubber/return_air()
 	return air_contents
+/*
 
+//AmaranthineApocalypse: I'm fairly certain that Noahs tweaks to how the porter operates have rendered this redundant, still might as well keep it around just in case.
 /obj/machinery/portable_atmospherics/scrubber/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/atmosporter))
 		var/canamt = W:contents.len
@@ -92,7 +94,7 @@
 			s.start()
 	..()
 
-
+*/
 /obj/machinery/portable_atmospherics/scrubber/attack_ai(var/mob/user as mob)
 	if(!src.connected_port && get_dist(src, user) > 7)
 		return

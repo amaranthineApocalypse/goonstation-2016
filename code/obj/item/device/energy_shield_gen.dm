@@ -31,7 +31,7 @@
 		return
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if(istype(W,/obj/item/wrench) && isturf(loc) && !istype(loc,/turf/space))
+		if(iswrench(W) && isturf(loc) && !istype(loc,/turf/space))
 			if(secured)
 				boutput(usr, "<span style=\"color:red\">You unsecure the generator.</span>")
 				secured = 0

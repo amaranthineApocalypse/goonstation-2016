@@ -703,7 +703,7 @@
 				limbs_report += "Right leg"
 			if (!part_leg_l)
 				limbs_report += "Left leg"
-			var/limbs_missing = limbs_report.len ? dd_list2text(limbs_report, "; ") : 0
+			var/limbs_missing = limbs_report.len ? jointext(limbs_report, "; ") : 0
 			stat_cache = list(100 - min(get_brute_damage(), 100), 100 - min(get_burn_damage(), 100), limbs_missing)
 
 		stat("Structural integrity:", "[stat_cache[1]]%")
@@ -1009,7 +1009,7 @@
 			else boutput(user, "<span style=\"color:red\">There's no burn damage on [src.name]'s wiring to mend.</span>")
 			src.update_appearance()
 
-		else if (istype(W, /obj/item/crowbar))	// crowbar means open or close the cover
+		else if (iscrowbar(W))	// crowbar means open or close the cover
 			if (opened)
 				boutput(user, "You close the cover.")
 				opened = 0
@@ -1069,7 +1069,7 @@
 				src.update_appearance()
 				hud.module_added()
 
-		else if	(istype(W, /obj/item/screwdriver))	// haxing
+		else if	(isscrewdriver(W))	// haxing
 			if (src.locked)
 				boutput(user, "<span style=\"color:red\">You need to unlock the cyborg first.</span>")
 			else if (src.opened)
@@ -1154,7 +1154,7 @@
 				src.shell = 1
 				update_appearance()
 
-		else if (istype(W, /obj/item/wrench) && src.wiresexposed)
+		else if (iswrench(W) && src.wiresexposed)
 			var/list/actions = list("Do nothing")
 			if (src.part_arm_r)
 				actions.Add("Remove Right Arm")
@@ -2006,7 +2006,7 @@
 		if(src.module) return
 		if(!src.freemodule) return
 		boutput(src, "<span style=\"color:blue\">You may choose a starter module.</span>")
-		var/list/starter_modules = list("Standard", "Engineering", "Medical", "Janitor", "Hydroponics", "Mining", "Construction", "Chemistry", "Brobot")
+		var/list/starter_modules = list("Civilian", "Engineering and Construction", "Medical", "Mining", "Chemistry", "Brobocop")
 		//var/list/starter_modules = list("Standard", "Engineering", "Medical", "Brobot")
 		if (ticker && ticker.mode)
 			if (istype(ticker.mode, /datum/game_mode/construction))
@@ -2016,9 +2016,9 @@
 			return
 
 		switch(mod)
-			if("Standard")
+			if("Civilian")
 				src.freemodule = 0
-				boutput(src, "<span style=\"color:blue\">You chose the Standard module. It comes with a free Efficiency Upgrade.</span>")
+				boutput(src, "<span style=\"color:blue\">You chose the Civilian module. It comes with a free Efficiency Upgrade.</span>")
 				src.module = new /obj/item/robot_module/standard(src)
 				src.upgrades += new /obj/item/roboupgrade/efficiency(src)
 			if("Medical")
@@ -2028,23 +2028,27 @@
 				src.upgrades += new /obj/item/roboupgrade/healthgoggles(src)
 			if("Engineering")
 				src.freemodule = 0
-				boutput(src, "<span style=\"color:blue\">You chose the Engineering module. It comes with a free Meson Vision Upgrade.</span>")
+				boutput(src, "<span style=\"color:blue\">You chose the Engineering and Construction module. It comes with a free Meson Vision Upgrade.</span>")
 				src.module = new /obj/item/robot_module/engineering(src)
 				src.upgrades += new /obj/item/roboupgrade/opticmeson(src)
-			if("Janitor")
+
+/*			if("Janitor") //not used right now
 				src.freemodule = 0
 				boutput(src, "<span style=\"color:blue\">You chose the Janitor module. It comes with a free Repair Pack.</span>")
 				src.module = new /obj/item/robot_module/janitor(src)
 				src.upgrades += new /obj/item/roboupgrade/repairpack(src)
-			if("Hydroponics")
+*/
+/*			if("Hydroponics") //not used right now
 				src.freemodule = 0
 				boutput(src, "<span style=\"color:blue\">You chose the Standard module. It comes with a free Recharge Pack.</span>")
 				src.module = new /obj/item/robot_module/hydro(src)
 				src.upgrades += new /obj/item/roboupgrade/rechargepack(src)
-			if("Brobot")
+*/
+			if("Brobocop")
 				src.freemodule = 0
-				boutput(src, "<span style=\"color:blue\">You chose the Bro Bot module.</span>")
-				src.module = new /obj/item/robot_module/brobot(src)
+				boutput(src, "<span style=\"color:blue\">You chose the Brobocop module. It comes with a free Recovery Upgrade</span>")
+				src.module = new /obj/item/robot_module/brobot/brobocop(src)
+				src.upgrades += new /obj/item/roboupgrade/aware(src)
 			if("Mining")
 				src.freemodule = 0
 				boutput(src, "<span style=\"color:blue\">You chose the Mining module. It comes with a free Propulsion Upgrade.</span>")
@@ -2059,11 +2063,12 @@
 								break
 					if("No") boutput(src, "Remember - the mining station can be accessed from Engineering.")
 					*/
-			if("Construction")
+/*			if("Construction") //not used right now
 				src.freemodule = 0
 				boutput(src, "<span style=\"color:blue\">You chose the Construction module. It comes with a free Propulsion Upgrade.</span>")
 				src.module = new /obj/item/robot_module/construction(src)
 				src.upgrades += new /obj/item/roboupgrade/jetpack(src)
+*/
 			if("Chemistry")
 				src.freemodule = 0
 				boutput(src, "<span style=\"color:blue\">You chose the Chemistry module.</span>")
@@ -2967,4 +2972,3 @@
 
 /client/proc/set_screen_color_to_red()
 	src.color = "#ff0000"
-

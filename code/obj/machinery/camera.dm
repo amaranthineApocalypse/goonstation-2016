@@ -172,7 +172,7 @@
 	if(istype(W,/obj/item/parts/human_parts)) //dumb easter egg incoming
 		user.visible_message("<span style=\"color:red\">[user] wipes [src] with the bloody end of [W.name]. What the fuck?</span>", "<span style=\"color:red\">You wipe [src] with the bloody end of [W.name]. What the fuck?</span>")
 		return
-	if (istype(W, /obj/item/wirecutters))
+	if (iswirecutters(W))
 		src.status = !( src.status )
 		if (!( src.status ))
 			user.visible_message("<span style=\"color:red\">[user] has deactivated [src]!</span>", "<span style=\"color:red\">You have deactivated [src].</span>")
@@ -266,8 +266,8 @@
 	return 1
 
 /obj/machinery/camera/motion/attackby(W as obj, mob/user as mob)
-	if (istype(W, /obj/item/wirecutters) && locked == 1) return
-	if (istype(W, /obj/item/screwdriver))
+	if (iswirecutters(W) && locked == 1) return
+	if (isscrewdriver(W))
 		var/turf/T = user.loc
 		boutput(user, text("<span style=\"color:blue\">[]ing the access hatch... (this is a long process)</span>", (locked) ? "Open" : "Clos"))
 		sleep(100)
@@ -277,7 +277,7 @@
 
 	..() // call the parent to (de|re)activate
 
-	if (istype(W, /obj/item/wirecutters)) // now handle alarm on/off...
+	if (iswirecutters(W)) // now handle alarm on/off...
 		if (status) // ok we've just been reconnected... send an alarm!
 			detectTime = world.time - 301
 			triggerAlarm()

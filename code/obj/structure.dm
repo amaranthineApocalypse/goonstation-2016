@@ -42,7 +42,7 @@ obj/structure/ex_act(severity)
 	return
 
 /obj/structure/girder/attackby(obj/item/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/wrench) && state == 0 && anchored && !istype(src,/obj/structure/girder/displaced))
+	if(iswrench(W) && state == 0 && anchored && !istype(src,/obj/structure/girder/displaced))
 		playsound(src.loc, "sound/items/Ratchet.ogg", 100, 1)
 		var/turf/T = get_turf(user)
 		boutput(user, "<span style=\"color:blue\">Now disassembling the girder</span>")
@@ -57,7 +57,7 @@ obj/structure/ex_act(severity)
 				A.setMaterial(M)
 			qdel(src)
 
-	else if(istype(W, /obj/item/screwdriver) && state == 2 && istype(src,/obj/structure/girder/reinforced))
+	else if(isscrewdriver(W) && state == 2 && istype(src,/obj/structure/girder/reinforced))
 		playsound(src.loc, "sound/items/Screwdriver.ogg", 100, 1)
 		var/turf/T = get_turf(user)
 		boutput(user, "<span style=\"color:blue\">Now unsecuring support struts</span>")
@@ -66,7 +66,7 @@ obj/structure/ex_act(severity)
 			boutput(user, "<span style=\"color:blue\">You unsecured the support struts!</span>")
 			state = 1
 
-	else if(istype(W, /obj/item/wirecutters) && istype(src,/obj/structure/girder/reinforced) && state == 1)
+	else if(iswirecutters(W) && istype(src,/obj/structure/girder/reinforced) && state == 1)
 		playsound(src.loc, "sound/items/Wirecutter.ogg", 100, 1)
 		var/turf/T = get_turf(user)
 		boutput(user, "<span style=\"color:blue\">Now removing support struts</span>")
@@ -77,7 +77,7 @@ obj/structure/ex_act(severity)
 			if(src.material) A.setMaterial(src.material)
 			qdel(src)
 
-	else if(istype(W, /obj/item/crowbar) && state == 0 && anchored )
+	else if(iscrowbar(W) && state == 0 && anchored )
 		playsound(src.loc, "sound/items/Crowbar.ogg", 100, 1)
 		var/turf/T = get_turf(user)
 		boutput(user, "<span style=\"color:blue\">Now dislodging the girder</span>")
@@ -88,7 +88,7 @@ obj/structure/ex_act(severity)
 			if(src.material) A.setMaterial(src.material)
 			qdel(src)
 
-	else if(istype(W, /obj/item/wrench) && state == 0 && !anchored )
+	else if(iswrench(W) && state == 0 && !anchored )
 		if (!istype(src.loc, /turf/simulated/floor/))
 			boutput(user, "<span style=\"color:red\">Not sure what this floor is made of but you can't seem to wrench a hole for a bolt in it.</span>")
 			return
@@ -197,7 +197,7 @@ obj/structure/ex_act(severity)
 		qdel(src)
 		return
 
-	else if (istype(W, /obj/item/screwdriver))
+	else if (isscrewdriver(W))
 		var/obj/item/sheet/S = new /obj/item/sheet(src.loc)
 		if(src.material)
 			S.setMaterial(src.material)

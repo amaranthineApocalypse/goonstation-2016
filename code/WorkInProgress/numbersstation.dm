@@ -278,7 +278,7 @@ var/global/datum/numbers_station/lincolnshire = new
 		var/TP = ldata["numbers"]
 		if (TP == null)
 			return 1
-		var/list/nums = dd_text2list(TP, " ")
+		var/list/nums = splittext(TP, " ")
 		if (nums.len < 21)
 			logTheThing("debug", null, null, "<b>Numbers station</b> got too few numbers.")
 			return 2
@@ -330,7 +330,7 @@ var/global/datum/numbers_station/lincolnshire = new
 	mats = 0
 
 	attackby(var/obj/item/W, var/mob/user)
-		if (istype(W, /obj/item/crowbar))
+		if (iscrowbar(W))
 			return
 
 	emag_act()
@@ -347,7 +347,7 @@ var/global/datum/numbers_station/lincolnshire = new
 		return 0
 
 	attackby(var/obj/item/W, var/mob/user)
-		if (istype(W, /obj/item/screwdriver))
+		if (isscrewdriver(W))
 			boutput(user, "<span style=\"color:red\">The heads of the screws are completely amortized. These doors were maintained one too many times.</span>")
 			return 0
 		. = ..()

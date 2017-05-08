@@ -23,12 +23,9 @@
 			<HR><BR>
 			<A href='?src=\ref[src];module=std'>Write Standard Module<BR>
 			<A href='?src=\ref[src];module=med'>Write Medical Module<BR>
-			<A href='?src=\ref[src];module=eng'>Write Engineering Module<BR>
-			<A href='?src=\ref[src];module=jan'>Write Janitor Module<BR>
-			<A href='?src=\ref[src];module=hyd'>Write Hydroponics Module<BR>
-			<A href='?src=\ref[src];module=bro'>Write Brobot Module<BR>
+			<A href='?src=\ref[src];module=eng'>Write Engineering and Construction Module<BR>
+			<A href='?src=\ref[src];module=bro'>Write Brobocop Module<BR>
 			<A href='?src=\ref[src];module=min'>Write Mining Module<BR>
-			<A href='?src=\ref[src];module=cst'>Write Construction Module<BR>
 			<A href='?src=\ref[src];module=chem'>Write Chemistry Module<BR>"}
 			if (ticker && ticker.mode)
 				if (istype(ticker.mode, /datum/game_mode/construction))
@@ -68,20 +65,22 @@
 				if ("std") output = /obj/item/robot_module/standard
 				if ("med") output = /obj/item/robot_module/medical
 				if ("eng") output = /obj/item/robot_module/engineering
-				if ("jan") output = /obj/item/robot_module/janitor
-				if ("hyd") output = /obj/item/robot_module/hydro
-				if ("bro") output = /obj/item/robot_module/brobot
+		//	if ("jan") output = /obj/item/robot_module/janitor
+		//	if ("hyd") output = /obj/item/robot_module/hydro
+				if ("bro") output = /obj/item/robot_module/brobot/brobocop //no more normal brobots
 				if ("min") output = /obj/item/robot_module/mining
-				if ("cst") output = /obj/item/robot_module/construction
+		//	if ("cst") output = /obj/item/robot_module/construction
 				if ("chem") output = /obj/item/robot_module/chemistry
 				if ("con")
 					if (ticker && ticker.mode)
 						if (istype(ticker.mode, /datum/game_mode/construction))
 							output = /obj/item/robot_module/construction_worker
+/*	//Deprecated due to merging with engineering module - AmaranthineApocalypse
 						else
 							output = /obj/item/robot_module/construction
 					else
 						output = /obj/item/robot_module/construction
+*/
 
 			src.icon_state = "moduler-on"
 			src.updateUsrDialog()
@@ -116,23 +115,58 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "robojumper"
 
-/obj/item/atmosporter
+/obj/item/porter //this is the parent of atmosporters and cargoporters. It was really dumb to have all the code excuted by the item to be stored. This way is much more extensible
 	name = "Atmospherics Transporter"
 	desc = "Used by Atmospherics Cyborgs for convenient transport of siphons and tanks."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "bedbin"
-	var/capacity = 2
+	var/list/allowed = list(/obj) //ONLY FOR TESTING. WILL BREAK THINGS HORRIBLY IF USED LIVE.
+	var/capacity = 3
+
+	afterattack(atom/target as obj|mob|turf, mob/user as mob, obj/item/W, flag )
+		var/proceed = 0
+		for(var/check_path in src.allowed)
+			if(istype(target, check_path))
+				proceed = 1
+				break
+		if (!proceed)
+			boutput(user, "<span style=\"color:red\">[src] cannot hold that!</span>")
+			return
+		var/canamt = src:contents.len
+		if (canamt >= src:capacity)
+			boutput(user, "<span style=\"color:red\">Your [src] is full!</span>")
+
+		else
+			user.visible_message("<span style=\"color:blue\">[user] collects the [target].</span>", "<span style=\"color:blue\">You collect the [target].</span>")
+			if(hasvar(target, "contained"))
+				//target.contained = 1 //I'm not particularly sure what these variables are for - AmaranthineApocalypse
+				target:set_loc(W)
+
+			var/datum/effects/system/spark_spread/s = unpool(/datum/effects/system/spark_spread)
+			s.set_up(5, 1, user)
+			s.start()
+
 
 	attack_self(var/mob/user as mob)
 		if (src.contents.len == 0) boutput(user, "<span style=\"color:red\">You have nothing stored!</span>")
 		else
 			var/selection = input("What do you want to drop?", "Atmos Transporter", null, null) as null|anything in src.contents
-			if(!selection) return
+			if(!selection)
+				return
 			selection:set_loc(user.loc)
-			selection:contained = 0
+			//selection:contained = 0 //I'm not particularly sure what these variables are for - AmaranthineApocalypse
 			var/datum/effects/system/spark_spread/s = unpool(/datum/effects/system/spark_spread)
 			s.set_up(5, 1, user)
 			s.start()
+
+/obj/item/porter/atmos
+	allowed = list(/obj/machinery/portable_atmospherics)
+
+/obj/item/porter/cargo
+	name = "Crate Holder"
+	desc = "Used by Cargo Cyborgs for convenient carrying of heavy storage containers."
+	capacity = 12 //I know it seems a bit excessive, but I feel like it needs to be excessive in order to properly accomodate the sheer number of crates a QM will typically order.
+	allowed = list(/obj/storage)
 
 /obj/item/robot_chemaster
 	name = "Mini-ChemMaster"
@@ -461,9 +495,191 @@ ported and crapped up by: haine
 		if (data)
 			return data
 
+/obj/item/borghose/chem
+	name = "\improper Chemworks Reagent Dispening Hose 4000" // Name of the Module
+	desc = "A hose that dispenses chemicals from slowly regenerating chemical tanks." // Description that shows up when examined
+	hydro_reagents = list("oil", "phenol", "acetone", "ammonia", "diethylamine", "acid")
+
 /obj/item/reagent_containers/borghose_tank
 	name = "borghose reagent tank"
 	desc = "you shouldn't see me!!"
 	initial_volume = 40
 	var/label = null // the ID of the reagent inside
 	var/label_name = null // the name of the reagent inside, so we don't have to keep calling reagent_id_to_name()
+
+/obj/item/robot_grenade_fabricator_utility
+	name = "Utility Grenade Fabricator"
+	desc = "A portable device that uses electricity to manufacture several types of general purpose chemical grenades."
+	icon = 'icons/obj/kitchen.dmi'
+	icon_state = "synthesizer"
+	var/vend_this = null
+	var/last_use = 0
+
+	attack_self(var/mob/user as mob)
+		if (!vend_this)
+			var/pickme = input("Please make your selection!", "Item selection", src.vend_this) in list("Metal foam", "Fire fighting", "Cleaner")
+			if (prob(1))
+				src.vend_this = "Malfunctioning"
+				user.show_text("<b>ERROR</b> - Fabrication fault! Reboot unsuccessful...", "red")
+			else
+				src.vend_this = pickme
+				user.show_text("[pickme] selected. Click with the fabricator on yourself to pick a different item.", "blue")
+			return
+
+		if (src.last_use && world.time < src.last_use + 50)
+			user.show_text("The fabricator is recharging!", "red")
+			return
+
+		else
+			switch(src.vend_this)
+				if ("Metal foam")
+					new /obj/item/chem_grenade/metalfoam(get_turf(src))
+				if ("Fire fighting")
+					new /obj/item/chem_grenade/firefighting(get_turf(src))
+				if ("Cleaner")
+					new /obj/item/chem_grenade/cleaner(get_turf(src))
+				if ("Malfunctioning")
+					new /obj/item/chem_grenade/anticleaner(get_turf(src))
+				else
+					user.show_text("<b>ERROR</b> - Invalid item! Resetting...", "red")
+					logTheThing("debug", user, null, "<b>Convair880</b>: [user]'s utility grenade fabricator was set to an invalid value.")
+					src.vend_this = null
+					return
+
+			if (isrobot(user)) // Carbon mobs might end up using the synthesizer somehow, I guess?
+				var/mob/living/silicon/robot/R = user
+				if (R.cell)
+					if (src.vend_this == "Malfunctioning")
+						R.cell.charge -= 1000
+					else
+						R.cell.charge -= 500 //if this is too little, double this value and the above value.
+			playsound(src.loc, "sound/machines/click.ogg", 50, 1)
+			user.visible_message("<span style=\"color:blue\">[user] dispenses a [src.vend_this] grenade!</span>", "<span style=\"color:blue\">You dispense a [src.vend_this] grenade!</span>")
+			src.last_use = world.time
+			return
+
+	attack(mob/M as mob, mob/user as mob, def_zone)
+		src.vend_this = null
+		user.show_text("Selection cleared.", "red")
+		return
+
+/obj/item/robot_grenade_fabricator_security //for secborgs
+	name = "Security Grenade Fabricator"
+	desc = "A portable device that uses electricity to manufacture several types of grenades for use by private security forces."
+	icon = 'icons/obj/kitchen.dmi'
+	icon_state = "synthesizer"
+	var/vend_this = null
+	var/last_use = 0
+
+	attack_self(var/mob/user as mob)
+		if (!vend_this)
+			var/pickme = input("Please make your selection!", "Item selection", src.vend_this) in list("Flashbang", "Cryo", "Cheese sandwich", "Crowd dispersal")
+			if (prob(1))
+				src.vend_this = "Malfunctioning"
+				user.show_text("<b>AUTHORIZATION ERROR</b> - Experimental grenade fault! Reboot unsuccessful...", "red")
+			else
+				src.vend_this = pickme
+				user.show_text("[pickme] selected. Click with the fabricator on yourself to pick a different item.", "blue")
+			return
+
+		if (src.last_use && world.time < src.last_use + 50)
+			user.show_text("The fabricator is recharging!", "red")
+			return
+
+		else
+			switch(src.vend_this)
+				if ("Flashbang")
+					new /obj/item/chem_grenade/flashbang(get_turf(src))
+				if ("Cryo")
+					new /obj/item/chem_grenade/cryo(get_turf(src))
+				if ("Crowd dispersal")
+					new /obj/item/chem_grenade/pepper(get_turf(src))
+				if ("Cheese sandwich")
+					new /obj/item/old_grenade/banana/cheese_sandwich(get_turf(src)) //TO DO: make cheese sandwich grenade.
+				if ("Malfunctioning")
+					var/pick_nade = rand(1,13)
+					switch(pick_nade)
+						if(1)
+							if(prob(5))
+								new /obj/item/chem_grenade/incendiary(get_turf(src))
+							else
+								new /obj/item/old_grenade/banana(get_turf(src))
+						if(2)
+							if(prob(5))
+								new /obj/item/chem_grenade/very_incendiary(get_turf(src))
+							else
+								new /obj/item/old_grenade/banana(get_turf(src))
+						if(3)
+							if(prob(5))
+								new /obj/item/chem_grenade/shock(get_turf(src))
+							else
+								new /obj/item/old_grenade/banana(get_turf(src))
+						if(4)
+							if(prob(5))
+								new /obj/item/old_grenade/smoke(get_turf(src))
+							else
+								new /obj/item/old_grenade/banana(get_turf(src))
+						if(5)
+							if(prob(5))
+								new /obj/item/old_grenade/smoke/mustard(get_turf(src))
+							else
+								new /obj/item/old_grenade/banana(get_turf(src))
+						if(6)
+							if(prob(5))
+								new /obj/item/old_grenade/moustache(get_turf(src))
+							else
+								new /obj/item/old_grenade/banana(get_turf(src))
+						if(7)
+							new /obj/item/old_grenade/banana(get_turf(src))
+						if(8)
+							if(prob(5))
+								new /obj/item/chem_grenade/sarin(get_turf(src))
+							else
+								new /obj/item/old_grenade/banana(get_turf(src))
+						if(9)
+							if(prob(5))
+								new /obj/item/old_grenade/gravaton(get_turf(src))
+							else
+								new /obj/item/old_grenade/banana(get_turf(src))
+						if(10)
+							if(prob(5))
+								new /obj/item/old_grenade/sonic(get_turf(src))
+							else
+								new /obj/item/old_grenade/banana(get_turf(src))
+						if(11)
+							if(prob(5))
+								new /obj/item/old_grenade/emp(get_turf(src))
+							else
+								new /obj/item/old_grenade/banana(get_turf(src))
+						if(12)
+							if(prob(5))
+								new /obj/item/gimmickbomb/owlclothes(get_turf(src))
+							else
+								new /obj/item/old_grenade/banana(get_turf(src))
+						if(13)
+							if(prob(1))
+								new /obj/item/pipebomb/bomb/syndicate(get_turf(src))
+							else
+								new /obj/item/old_grenade/banana(get_turf(src))
+				else
+					user.show_text("<b>ERROR</b> - Invalid item! Resetting...", "red")
+					logTheThing("debug", user, null, "<b>Convair880</b>: [user]'s utility grenade fabricator was set to an invalid value.")
+					src.vend_this = null
+					return
+
+			if (isrobot(user)) // Carbon mobs might end up using the synthesizer somehow, I guess?
+				var/mob/living/silicon/robot/R = user
+				if (R.cell)
+					if (src.vend_this == "Malfunctioning")
+						R.cell.charge -= 2000
+					else
+						R.cell.charge -= 1000 //if this is too little, double this value and the above value.
+			playsound(src.loc, "sound/machines/click.ogg", 50, 1)
+			user.visible_message("<span style=\"color:blue\">[user] dispenses a [src.vend_this] grenade!</span>", "<span style=\"color:blue\">You dispense a [src.vend_this] grenade!</span>")
+			src.last_use = world.time
+			return
+
+	attack(mob/M as mob, mob/user as mob, def_zone)
+		src.vend_this = null
+		user.show_text("Selection cleared.", "red")
+		return

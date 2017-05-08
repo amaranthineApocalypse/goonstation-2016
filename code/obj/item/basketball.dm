@@ -87,7 +87,7 @@
 	var/probability = 40
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W,/obj/item/wrench) && mounted)
+		if (iswrench(W) && mounted)
 			src.visible_message("<span style=\"color:blue\"><b>[user] removes [src].</b></span>")
 			src.pixel_y = 0
 			src.pixel_x = 0

@@ -446,7 +446,7 @@
 			else
 				boutput(user, "<span style=\"color:red\">Need more welding fuel!</span>")
 
-		else if(istype(W, /obj/item/wrench))
+		else if(iswrench(W))
 			switch(construct_stage)
 				if(0)
 					change_stage(1)
