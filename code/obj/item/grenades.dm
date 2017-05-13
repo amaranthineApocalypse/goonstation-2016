@@ -75,7 +75,7 @@ PIPE BOMBS + CONSTRUCTION
 		return
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (isscrewdriver(W))
+		if (istype(W, /obj/item/screwdriver))
 			if (src.det_time == src.org_det_time)
 				src.det_time = src.alt_det_time
 				user.show_message("<span style=\"color:blue\">You set [src] for a [det_time/10] second detonation time.</span>")
@@ -105,25 +105,19 @@ PIPE BOMBS + CONSTRUCTION
 	is_syndicate = 1
 	sound_armed = "sound/weapons/armbomb.ogg"
 	icon_state_armed = "banana1"
-	var/payload = /obj/item/bananapeel //I hope this is how this works.
 
 	prime()
 		var/turf/T = ..()
 		if (T)
 			playsound(T, "sound/weapons/flashbang.ogg", 25, 1)
-			new payload(T)
+			new /obj/item/bananapeel(T)
 			for (var/i = 1; i<= 8; i= i*2)
 				if (istype(get_turf(get_step(T,i)),/turf/simulated/floor))
-					new payload(get_step(T,i))
+					new /obj/item/bananapeel (get_step(T,i))
 				else
-					new payload(T)
+					new /obj/item/bananapeel(T)
 		qdel(src)
 		return
-
-
-/obj/item/old_grenade/banana/cheese_sandwich
-	name = "cheese sandwich grenade"
-	payload = /obj/item/reagent_containers/food/snacks/sandwich/cheese
 
 /obj/item/old_grenade/gravaton
 	desc = "It is set to detonate in 10 seconds."

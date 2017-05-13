@@ -161,15 +161,15 @@
 					return
 
 			if (src.armed && src.anchored)
-				if (isscrewdriver(W))
+				if (istype(W, /obj/item/screwdriver/))
 					actions.start(new /datum/action/bar/icon/unanchorNuke(src), user)
 					return
-				//else if (iswirecutters(W))
+				//else if (istype(W,/obj/item/wirecutters/))
 				//	user.visible_message("<b>[user]</b> opens up [src]'s wiring panel and takes a look.")
 				//	open_wire_panel(user)
 				//	return
 
-		if (isobj(W) && !(isscrewdriver(W) || istype(W, /obj/item/disk/data/floppy/read_only/authentication) || iswirecutters(W)))
+		if (isobj(W) && !(istype(W, /obj/item/screwdriver/) || istype(W, /obj/item/disk/data/floppy/read_only/authentication) || istype(W,/obj/item/wirecutters/)))
 			switch (W.force)
 				if (0 to 19)
 					src.take_damage(W.force / 4)

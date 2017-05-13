@@ -1436,7 +1436,7 @@ datum/computer/file/embedded_program/maintpanel
 		..()
 
 	proc/do_setup(var/setupString)
-		var/list/setupList = splittext(setupString, ";")
+		var/list/setupList = dd_text2list(setupString, ";")
 		if (!setupList || !setupList.len)
 			return
 
@@ -1927,7 +1927,7 @@ datum/maintpanel_device_entry
 	icon_state = "aisleshelf"
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (iswrench(W))
+		if (istype(W, /obj/item/wrench))
 			return
 
 		return ..()

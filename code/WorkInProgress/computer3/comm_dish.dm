@@ -49,7 +49,7 @@
 			if (!src.link)
 				return
 
-			var/list/report_content = list(title) + splittext(message, "<BR>")
+			var/list/report_content = list(title) + dd_text2list(message, "<BR>")
 
 			for (var/listener_netid in src.terminals)
 				var/datum/computer/file/record/report = new ()
@@ -96,10 +96,10 @@
 
 		parse_string(string) //Parse commands the same way a c3 does, for terminal control.
 			var/list/sort1 = list()
-			sort1 = splittext(string,";")
+			sort1 = dd_text2list(string,";")
 			for(var/x in sort1)
 				var/list/sorted = list()
-				sorted = splittext(x," ")
+				sorted = dd_text2list(x," ")
 				return sorted
 
 	receive_signal(datum/signal/signal)

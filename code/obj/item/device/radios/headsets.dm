@@ -74,13 +74,6 @@
 	secure_frequencies = list("h" = R_FREQ_SECURITY)
 	secure_colors = list("h" = RADIOC_SECURITY)
 
-	borg
-	name = "\improper Security Scanner"
-	desc = "A radio capable of communicating over the security channel."
-	icon = 'icons/misc/worlds.dmi'
-	icon_state = "radio"
-	item_state = "radio"
-
 /obj/item/device/radio/headset/engineer
 	name = "\improper Engineering Headset"
 	desc = "A radio headset capable of communicating over a second, secure frequency."

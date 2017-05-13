@@ -195,15 +195,6 @@
 	stamina_cost = 20
 	stamina_crit_chance = 40
 
-/obj/item/saw/borg //actually, making the borg saw a syndie saw was a dumb idea
-	name = "industrial chainsaw"
-	desc = "A heavy duty industrial electric chainsaw. Far more durable than your typical botanical saw."
-	force = 9.0
-	off_force = 9.0
-	active_force = 18.0 //ACTUALLY NO, IT WAS A DUMB IDEA TO HAVE BORGS GET A SYNDIE CHAINSAW, EVEN IF IT WASN'T ANY STRONGER THAN NORMAL. STUNS ARE WORSE THAN DAMAGE, IN GENERAL.
-	health = 10
-	takes_damage = 0
-
 /obj/item/saw/syndie/vr
 	icon = 'icons/effects/VR.dmi'
 

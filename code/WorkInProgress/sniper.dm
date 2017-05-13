@@ -41,8 +41,8 @@
 /proc/mysql_sanitize(var/t)
 	if(!t)
 		return ""
-	var/tmp = replacetext(t, "'", "\'")
-	tmp = replacetext(tmp, "\\", "/")
+	var/tmp = dd_replacetext(t, "'", "\'")
+	tmp = dd_replacetext(tmp, "\\", "/")
 	return tmp
 
 /mob/proc/addicted_to_reagent(var/datum/reagent/reagent)

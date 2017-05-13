@@ -17,7 +17,7 @@
 	desc = "An arcade machine, you can win wonderful prizes!"
 
 /obj/machinery/computer/arcade/attackby(I as obj, user as mob)
-	if(isscrewdriver(I))
+	if(istype(I, /obj/item/screwdriver))
 		playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 		if(do_after(user, 20))
 			if (src.stat & BROKEN)
@@ -60,7 +60,7 @@
 	name_part1 = pick("the Automatic ", "Farmer ", "Lord ", "Professor ", "the Evil ", "the Dread King ", "the Space ", "Lord ")
 	name_part2 = pick("Melonoid", "Murdertron", "Sorcerer", "Ruin", "Jeff", "Ectoplasm", "Crushulon")
 
-	src.enemy_name = replacetext((name_part1 + name_part2), "the ", "")
+	src.enemy_name = dd_replacetext((name_part1 + name_part2), "the ", "")
 	src.name = (name_action + name_part1 + name_part2)
 
 

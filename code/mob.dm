@@ -484,8 +484,6 @@
 // medals
 
 /mob/proc/unlock_medal(title, announce)
-	return //No medals 4 u
-
 	if (!src.client || !src.key)
 		return
 	else if (IsGuestKey(src.key))
@@ -1950,9 +1948,9 @@
 			else
 				stat("Co-ordinates:", "([x], [y], [z])")
 
-			stat("Server Load:", "[world.cpu] ([world.cpu < 90 ? "No" : "Yes"])")
+			stat("Server Load:", "[world.cpu] ([lag_string])")
 		else
-			stat(world.cpu < 90 ? "Server Load: No" : "Server Load: Yes") //Yes very useful a++
+			stat("Server Load:", lag_string) //Yes very useful a++
 
 		if (ticker && ticker.round_elapsed_ticks)
 			stat(null, " ")
@@ -2005,8 +2003,7 @@
 
 /mob/verb/say_verb(message as text)
 	set name = "say"
-	//&& !src.client.holder
-	if (src.client && url_regex && url_regex.Find(message))
+	if (src.client && !src.client.holder && url_regex && url_regex.Find(message))
 		boutput(src, "<span style=\"color:blue\"><b>Web/BYOND links are not allowed in ingame chat.</b></span>")
 		boutput(src, "<span style=\"color:red\">&emsp;<b>\"[message]</b>\"</span>")
 		return

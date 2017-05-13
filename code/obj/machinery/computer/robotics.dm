@@ -12,7 +12,7 @@
 
 
 /obj/machinery/computer/robotics/attackby(I as obj, user as mob)
-	if(isscrewdriver(I))
+	if(istype(I, /obj/item/screwdriver))
 		if (perma)
 			boutput(user, "<span style=\"color:red\">The screws are all weird safety-bit types! You can't turn them!</span>")
 			return

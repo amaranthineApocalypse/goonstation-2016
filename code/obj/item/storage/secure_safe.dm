@@ -55,13 +55,13 @@
 		return
 	//Waluigi hates this
 	if (hackable)
-		if ((isscrewdriver(W)) && (src.locked == 1))
+		if ((istype(W, /obj/item/screwdriver)) && (src.locked == 1))
 			sleep(6)
 			src.open =! src.open
 			user.show_message("<span style=\"color:blue\">You [src.open ? "open" : "close"] the service panel.</span>")
 			return
 
-		if (ismultitool(W) && (src.open == 1) && (!src.locked) && (!src.l_hacking))
+		if ((istype(W, /obj/item/device/multitool)) && (src.open == 1) && (!src.locked) && (!src.l_hacking))
 			user.show_message(text("<span style=\"color:red\">Now attempting to reset internal memory, please hold.</span>"), 1)
 			src.l_hacking = 1
 			spawn(100)

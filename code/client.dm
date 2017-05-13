@@ -71,8 +71,6 @@
 	var/datum/chatOutput/chatOutput = null
 	var/resourcesLoaded = 0 //Has this client done the mass resource downloading yet?
 	var/datum/tooltip/tooltip = null
-	
-	var/delete_state = DELETE_STOP
 
 /client/Del()
 	if (ticker && ticker.current_state < GAME_STATE_FINISHED)
@@ -1073,7 +1071,7 @@ var/global/curr_day = null
 	else
 		var/changelogHtml = grabResource("html/changelog.html")
 		var/data = changelog:html
-		changelogHtml = replacetext(changelogHtml, "<!-- HTML GOES HERE -->", "[data]")
+		changelogHtml = dd_replacetext(changelogHtml, "<!-- HTML GOES HERE -->", "[data]")
 		src.Browse(changelogHtml, "window=changes;size=500x650;title=Changelog;")
 		src.changes = 1
 

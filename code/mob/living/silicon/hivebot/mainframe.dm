@@ -147,6 +147,6 @@
 	if (newname)
 		if (length(newname) >= 26)
 			newname = copytext(newname, 1, 26)
-		newname = replacetext(newname, ">", "'")
+		newname = dd_replacetext(newname, ">", "'")
 		src.real_name = newname
 		src.name = newname

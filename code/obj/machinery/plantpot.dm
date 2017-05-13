@@ -328,7 +328,7 @@
 		// From here on out we handle item reacions of the plantpot itself rather than specific
 		// special kinds of plant.
 
-		if (iswrench(W) || isscrewdriver(W))
+		if (istype(W, /obj/item/wrench) || istype(W, /obj/item/screwdriver))
 			// These allow you to unanchor the plantpots to move them around, or re-anchor them.
 			if (src.anchored == 1)
 				user.visible_message("<b>[user]</b> unbolts the [src] from the floor.")

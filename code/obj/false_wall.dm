@@ -84,10 +84,10 @@
 				boutput(user, "<span style=\"color:blue\">The wall slides shut.</span>")
 		return
 
-	attackby(obj/item/S as obj, mob/user as mob)
+	attackby(obj/item/screwdriver/S as obj, mob/user as mob)
 		src.add_fingerprint(user)
 		var/known = (user in known_by)
-		if (isscrewdriver(S))
+		if (istype(S, /obj/item/screwdriver))
 			//try to disassemble the false wall
 			if (!src.density || prob(prob_opens))
 				//without this, you can detect a false wall just by going down the line with screwdrivers

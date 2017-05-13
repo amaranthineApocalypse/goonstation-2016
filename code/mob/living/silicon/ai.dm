@@ -160,12 +160,12 @@ var/list/ai_emotions = list("Happy" = "ai_happy",\
 				available_ai_shells += R
 
 /mob/living/silicon/ai/attackby(obj/item/W as obj, mob/user as mob)
-	if (isscrewdriver(W))
+	if (istype(W, /obj/item/screwdriver))
 		src.anchored = !src.anchored
 		playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 		user.visible_message("<span style=\"color:red\"><b>[user.name]</b> [src.anchored ? "screws down" : "unscrews"] [src.name]'s floor bolts.</span>")
 
-	else if (iscrowbar(W))
+	else if (istype(W, /obj/item/crowbar))
 		if (src.dismantle_stage == 1)
 			playsound(src.loc, "sound/items/Crowbar.ogg", 50, 1)
 			src.visible_message("<span style=\"color:red\"><b>[user.name]</b> opens [src.name]'s chassis cover.</span>")
@@ -176,7 +176,7 @@ var/list/ai_emotions = list("Happy" = "ai_happy",\
 			src.dismantle_stage = 1
 		else ..()
 
-	else if (iswrench(W))
+	else if (istype(W, /obj/item/wrench))
 		if (src.dismantle_stage == 2)
 			playsound(src.loc, "sound/items/Ratchet.ogg", 50, 1)
 			src.visible_message("<span style=\"color:red\"><b>[user.name]</b> begins undoing [src.name]'s CPU bolts.</span>")
@@ -1441,7 +1441,7 @@ var/list/ai_emotions = list("Happy" = "ai_happy",\
 	return
 
 /mob/living/silicon/ai/proc/announce_arrival(var/name, var/rank)
-	var/message = replacetext(replacetext(replacetext(src.arrivalalert, "$STATION", "[station_name()]"), "$JOB", rank), "$NAME", name)
+	var/message = dd_replacetext(dd_replacetext(dd_replacetext(src.arrivalalert, "$STATION", "[station_name()]"), "$JOB", rank), "$NAME", name)
 	src.say( message )
 	logTheThing("say", src, null, "SAY: [message]")
 

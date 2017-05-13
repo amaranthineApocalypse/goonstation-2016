@@ -221,7 +221,7 @@
 
 					if (newname)
 						if (length(newname) >= 26) newname = copytext(newname, 1, 26)
-						newname = replacetext(newname, ">", "'")
+						newname = dd_replacetext(newname, ">", "'")
 						traitor.current.real_name = newname
 						traitor.current.name = newname
 
@@ -249,7 +249,7 @@
 
 					if (newname)
 						if (length(newname) >= 26) newname = copytext(newname, 1, 26)
-						newname = replacetext(newname, ">", "'") + " the Blob"
+						newname = dd_replacetext(newname, ">", "'") + " the Blob"
 						traitor.current.real_name = newname
 						traitor.current.name = newname
 

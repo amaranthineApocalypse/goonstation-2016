@@ -272,7 +272,7 @@ Report Arrests: <A href='?src=\ref[src];operation=report'>[report_arrests ? "On"
 			else
 				boutput(user, "<span style=\"color:red\">Access denied.</span>")
 
-		else if (isscrewdriver(W))
+		else if (istype(W, /obj/item/screwdriver))
 			if (src.health < initial(health))
 				src.health = initial(health)
 				src.visible_message("<span style=\"color:red\">[user] repairs [src]!</span>", "<span style=\"color:red\">You repair [src].</span>")
@@ -1065,7 +1065,7 @@ Report Arrests: <A href='?src=\ref[src];operation=report'>[report_arrests ? "On"
 
 	else if (istype(W, /obj/item/pen))
 		var/t = input(user, "Enter new robot name", src.name, src.created_name) as text
-		t = strip_html(replacetext(t, "'",""))
+		t = strip_html(dd_replacetext(t, "'",""))
 		t = copytext(t, 1, 45)
 		if (!t)
 			return

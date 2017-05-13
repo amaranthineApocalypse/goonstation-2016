@@ -63,7 +63,7 @@
 				if (!NA)
 					return null
 				var/temp = copytext(str, pos, NA)
-				buf += replacetext(temp, " ", "&nbsp;")
+				buf += dd_replacetext(temp, " ", "&nbsp;")
 				pos = NA + 1
 				state = NONE
 
@@ -75,14 +75,14 @@
 					pos = NQ + 1
 					continue
 				var/temp = copytext(str, qpos, NQ)
-				buf += replacetext(replacetext(temp, " ", "&nbsp;"), "\\\"", "\"")
+				buf += dd_replacetext(dd_replacetext(temp, " ", "&nbsp;"), "\\\"", "\"")
 				pos = NQ + 1
 				state = NONE
 
-	var/list/el = splittext(buf, " ")
+	var/list/el = dd_text2list(buf, " ")
 	var/list/ret = list()
 	for (var/s in el)
-		ret += replacetext(s, "&nbsp;", " ")
+		ret += dd_replacetext(s, "&nbsp;", " ")
 	return ret
 
 #undef ESCAPE

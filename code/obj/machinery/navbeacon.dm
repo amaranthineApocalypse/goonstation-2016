@@ -45,7 +45,7 @@
 
 		codes = new()
 
-		var/list/entries = splittext(codes_txt, ";")	// entries are separated by semicolons
+		var/list/entries = dd_text2List(codes_txt, ";")	// entries are separated by semicolons
 
 		for(var/e in entries)
 			var/index = findtext(e, "=")		// format is "key=value"
@@ -115,7 +115,7 @@
 		if (T.intact)
 			return		// prevent intraction when T-scanner revealed
 
-		if (isscrewdriver(I))
+		if (istype(I, /obj/item/screwdriver))
 			open = !open
 
 			user.visible_message("[user] [open ? "opens" : "closes"] the beacon's cover.", "You [open ? "open" : "close"] the beacon's cover.")

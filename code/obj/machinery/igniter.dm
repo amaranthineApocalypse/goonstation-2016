@@ -69,7 +69,7 @@
 		light.disable()
 
 /obj/machinery/sparker/attackby(obj/item/W as obj, mob/user as mob)
-	if (isscrewdriver(W))
+	if (istype(W, /obj/item/screwdriver))
 		add_fingerprint(user)
 		src.disable = !src.disable
 		if (src.disable)

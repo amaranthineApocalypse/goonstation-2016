@@ -182,7 +182,7 @@
 	7 Screwdriver
 	*/
 	attackby(obj/item/O as obj, mob/user as mob)
-		if (isscrewdriver(O))
+		if (istype(O, /obj/item/screwdriver))
 			if (src.repair_stage == 0)
 				user.show_text("You open the maintenance panel.", "blue")
 				src.repair_stage = 1
@@ -268,7 +268,7 @@
 					user.show_text("You were interrupted!", "red")
 					return
 
-		else if (ismultitool(O))
+		else if (istype(O, /obj/item/device/multitool))
 			if (src.repair_stage == 5)
 				user.show_text("You initialize the control board.", "blue")
 				src.repair_stage = 6

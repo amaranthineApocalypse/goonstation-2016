@@ -73,11 +73,10 @@ AI MODULES
 		boutput(user, "[law_counter++]: [X]")
 
 
-/obj/machinery/computer/aiupload/attackby(obj/item/aiModule/module as obj, mob/user as mob, obj/item/W as obj)
+/obj/machinery/computer/aiupload/attackby(obj/item/aiModule/module as obj, mob/user as mob)
 	if(istype(module, /obj/item/aiModule))
 		module.install(src)
-
-	if(isscrewdriver(W))
+	else if(istype(module, /obj/item/screwdriver))
 		playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 		if(do_after(user, 20))
 			if (src.stat & BROKEN)
@@ -353,7 +352,7 @@ AI MODULES
 	var/newName = input(user, "Please enter anything you want the AI(s) to be called. Anything. Serious.", "What?", pick(ai_names)) as null|text
 	if (!newName)
 		return
-	targetName = replacetext(copytext(html_encode(newName),1, 128), "http:","")
+	targetName = dd_replacetext(copytext(html_encode(newName),1, 128), "http:","")
 	desc = "A 'rename' AI module: 'Changes the names of any existing AI(s) to \"[targetName]\".'"
 
 /obj/item/aiModule/rename/transmitInstructions(var/mob/sender, var/law)

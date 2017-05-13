@@ -86,7 +86,7 @@
 		src.set_loc(R)
 		R.part2 = src
 		src.add_fingerprint(user)
-	else if ((istype(W, /obj/item/device/multitool) && !(src.status))) //this can stay, don't want borgs accidentally deleting their omnitools
+	else if ((istype(W, /obj/item/device/multitool) && !(src.status)))
 
 		var/obj/item/assembly/detonator/R = new /obj/item/assembly/detonator(user);
 		W.loc = R
@@ -107,7 +107,7 @@
 		src.add_fingerprint(user)
 		user.show_message("<span style=\"color:blue\">You hook up the igniter to the multitool's panel.</span>")
 
-	if (!( isscrewdriver(W) ))
+	if (!( istype(W, /obj/item/screwdriver) ))
 		return
 	src.status = !( src.status )
 	if (src.status)

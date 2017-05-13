@@ -144,8 +144,3 @@ var/global/list/chem_whitelist = list("antihol", "charcoal", "epinephrine", "ins
 			user.show_text("[src] can only be used on living organisms.", "red")
 
 		update_icon()
-
-/obj/item/reagent_containers/hypospray/deluxe
-	name = "deluxe hypospray"
-	desc = "An automated injector that will dump out any harmful chemicals it finds in itself. Now double the size!"
-	initial_volume = 60

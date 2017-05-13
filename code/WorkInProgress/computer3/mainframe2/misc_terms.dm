@@ -337,7 +337,7 @@
 			src.sync(src.host_id)
 			return
 
-		else if (isscrewdriver(W))
+		else if (istype(W, /obj/item/screwdriver))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			src.locked = !src.locked
 			src.panel_open = !src.locked
@@ -607,7 +607,7 @@
 			if(!string)
 				return 1
 
-			if(ckey(string) != replacetext(lowertext(string), " ", null))
+			if(ckey(string) != dd_replacetext(lowertext(string), " ", null))
 				return 1
 
 			if(findtext(string, "/"))
@@ -714,7 +714,7 @@
 	attackby(obj/item/W as obj, mob/user as mob)
 		if (istype(W, /obj/item/tank))
 			return attack_hand(user)
-		else if (isscrewdriver(W))
+		else if (istype(W, /obj/item/screwdriver))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			boutput(user, "You [src.locked ? "secure" : "unscrew"] the maintenance panel.")
 			src.panel_open = !src.panel_open
@@ -1172,7 +1172,7 @@
 		return
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (isscrewdriver(W))
+		if (istype(W, /obj/item/screwdriver))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			boutput(user, "You [src.panel_open ? "secure" : "unscrew"] the maintenance panel.")
 			src.panel_open = !src.panel_open
@@ -1426,7 +1426,7 @@
 		return
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (isscrewdriver(W))
+		if (istype(W, /obj/item/screwdriver))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			boutput(user, "You [src.panel_open ? "secure" : "unscrew"] the maintenance panel.")
 			src.panel_open = !src.panel_open
@@ -1594,7 +1594,7 @@
 					src.post_status(target, "command","term_connect","data","noreply","device",src.device_tag)
 				src.updateUsrDialog()
 				spawn(5) //Sign up with the driver (if a mainframe contacted us)
-					src.post_status(target,"command","term_message","data","command=register[(frequencies && frequencies.len) ? "&freqs=[jointext(frequencies,",")]" : ""]")
+					src.post_status(target,"command","term_message","data","command=register[(frequencies && frequencies.len) ? "&freqs=[dd_list2text(frequencies,",")]" : ""]")
 				return
 
 			if("term_message","term_file")
@@ -1758,7 +1758,7 @@
 			src.updateUsrDialog()
 			return
 
-		else if (isscrewdriver(W))
+		else if (istype(W, /obj/item/screwdriver))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			boutput(user, "You [src.panel_open ? "secure" : "unscrew"] the maintenance panel.")
 			src.panel_open = !src.panel_open
@@ -1947,7 +1947,7 @@
 						if(istype(signal.data_file, /datum/computer/file/record))
 							var/datum/computer/file/record/rec = signal.data_file
 							if (rec.fields)
-								buffer_add = jointext(rec.fields, "<br>")
+								buffer_add = dd_list2text(rec.fields, "<br>")
 						else
 							buffer_add = signal.data_file:data
 
@@ -2863,7 +2863,7 @@
 	attackby(obj/item/W as obj, mob/user as mob)
 		if (istype(W, /obj/item/raw_material/telecrystal))
 			return attack_hand(user)
-		else if (isscrewdriver(W))
+		else if (istype(W, /obj/item/screwdriver))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			boutput(user, "You [src.panel_open ? "secure" : "unscrew"] the maintenance panel.")
 			src.panel_open = !src.panel_open
@@ -3366,7 +3366,7 @@
 		if (istype(W, /obj/item/raw_material/telecrystal))
 			return attack_hand(user)
 
-		else if (isscrewdriver(W))
+		else if (istype(W, /obj/item/screwdriver))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			boutput(user, "You [src.panel_open ? "secure" : "unscrew"] the maintenance panel.")
 			src.panel_open = !src.panel_open

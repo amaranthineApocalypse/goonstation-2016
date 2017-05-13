@@ -13,7 +13,7 @@
 	return
 
 /obj/machinery/computer/teleporter/attackby(obj/item/W as obj, user as mob)
-	if (isscrewdriver(W))
+	if (istype(W, /obj/item/screwdriver))
 		playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 		if(do_after(user, 20))
 			if (src.stat & BROKEN)

@@ -31,7 +31,7 @@
 /obj/item/assembly/shock_kit/attackby(obj/item/W as obj, mob/user as mob)
 	src.add_fingerprint(user)
 
-	if (iswrench(W))
+	if (istype(W, /obj/item/wrench))
 		var/turf/T = get_turf(src)
 		if (src.part1)
 			src.part1.set_loc(T)

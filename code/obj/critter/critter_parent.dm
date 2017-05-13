@@ -86,8 +86,8 @@
 	proc/tokenized_message(var/message, var/target)
 		if (!message || !length(message))
 			return
-		var/msg = replacetext(message, "%src%", "<b>[src]</b>")
-		msg = replacetext(msg, "%target%", "[target]")
+		var/msg = dd_replacetext(message, "%src%", "<b>[src]</b>")
+		msg = dd_replacetext(msg, "%target%", "[target]")
 		src.visible_message("<span style=\"color:red\">[msg]</span>")
 
 	proc/report_spawn()
@@ -196,7 +196,7 @@
 		..()
 		if (!src.alive)
 			if (src.skinresult && max_skins)
-				if (issaw(W) || isscalpel(W) || istype(W, /obj/item/sword) || iswirecutters(W))
+				if (istype(W, /obj/item/circular_saw) || istype(W, /obj/item/kitchen/utensil/knife) || istype(W, /obj/item/scalpel) || istype(W, /obj/item/raw_material/shard) || istype(W, /obj/item/sword) || istype(W, /obj/item/saw) || istype(W, /obj/item/wirecutters))
 
 					for(var/i, i<rand(1, max_skins), i++)
 						new src.skinresult (src.loc)
@@ -796,7 +796,7 @@
 			logTheThing("debug", user, null, "names a critter egg \"[t]\"")
 			if (!t)
 				return
-			t = strip_html(replacetext(t, "'",""))
+			t = strip_html(dd_replacetext(t, "'",""))
 			t = copytext(t, 1, 65)
 			if (!t)
 				return

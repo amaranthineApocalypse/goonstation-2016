@@ -743,8 +743,8 @@ About the new airlock wires panel:
 		M.show_message("<span style=\"color:red\">[user.name] was shocked by the [src.name]!</span>", 3, "<span style=\"color:red\">You hear a heavy electrical crack</span>", 2)
 	return 1
 
-/obj/machinery/door/airlock/update_icon(var/toggling = 0)
-	if(toggling ? !density : density)
+/obj/machinery/door/airlock/update_icon()
+	if (density)
 		if (locked)
 			icon_state = "[icon_base]_locked"
 		else
@@ -1024,7 +1024,7 @@ About the new airlock wires panel:
 			usr.machine = src
 			if (href_list["wires"])
 				var/t1 = text2num(href_list["wires"])
-				if (!( iswirecutters(usr.equipped) ))
+				if (!( istype(usr.equipped(), /obj/item/wirecutters) ))
 					boutput(usr, "You need wirecutters!")
 					return
 				if (src.isWireColorCut(t1))
@@ -1033,7 +1033,7 @@ About the new airlock wires panel:
 					src.cut(t1)
 			else if (href_list["pulse"])
 				var/t1 = text2num(href_list["pulse"])
-				if (ismultitool(usr.equipped))
+				if (!istype(usr.equipped(), /obj/item/device/multitool))
 					boutput(usr, "You need a multitool!")
 					return
 				else if (src.isWireColorCut(t1))
@@ -1241,19 +1241,19 @@ About the new airlock wires panel:
 				src.welded = null
 			src.update_icon()
 			return
-	else if (isscrewdriver(C))
+	else if (istype(C, /obj/item/screwdriver))
 		if (src.hardened == 1)
 			boutput(usr, "<span style=\"color:red\">Your screwdriver can't pierce this airlock! Huh.</span>")
 			return
 		src.p_open = !( src.p_open )
 		src.update_icon()
-	else if (iswirecutters(C))
+	else if (istype(C, /obj/item/wirecutters))
 		return src.attack_hand(user)
-	else if (ismultitool(C))
+	else if (istype(C, /obj/item/device/multitool))
 		return src.attack_hand(user)
 	else if (istype(C, /obj/item/device/radio/signaler))
 		return src.attack_hand(user)
-	else if (iscrowbar(C))
+	else if (istype(C, /obj/item/crowbar))
 		src.unpowered_open_close()
 	else
 		..()
@@ -1267,11 +1267,11 @@ About the new airlock wires panel:
 		spawn( 0 )
 			src.operating = 1
 			play_animation("opening")
-			update_icon(1)
 
 			sleep(src.operation_time)
 
 			src.density = 0
+			update_icon()
 
 			if (!istype(src, /obj/machinery/door/airlock/glass))
 				src.RL_SetOpacity(0)
@@ -1282,10 +1282,10 @@ About the new airlock wires panel:
 			spawn( 0 )
 				src.operating = 1
 				play_animation("closing")
-				update_icon(1)
 
 				src.density = 1
 				sleep(15)
+				update_icon()
 
 				if (src.visible)
 					src.RL_SetOpacity(1)

@@ -144,7 +144,7 @@
 					update_icon()
 					return
 			if(2)
-				if (ismultitool(W)) //LOOK, I KNOW IT'S NOT IMPLEMENTED, BUT I GOTTA HAVE CONSISTENCY.
+				if (istype(W, /obj/item/device/multitool))
 					user.show_text("You use the multitool to root the health analyzer, voiding the warranty! Probably won't be enough to power the assembly, though.", "blue")
 					playsound(src.loc, "sound/effects/brrp.ogg", 50, 1)
 					crafting_stage = 3

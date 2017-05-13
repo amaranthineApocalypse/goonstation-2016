@@ -28,7 +28,7 @@
 //////////////////////////////////////////
 
 /obj/machinery/shuttle/engine/propulsion/attackby(obj/item/W as obj, mob/user as mob)
-	if (isscrewdriver(W))
+	if (istype(W, /obj/item/screwdriver))
 		if (src.stat1 == 0)
 			boutput(usr, "<span style=\"color:blue\">Resecuring outer frame.</span>")
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 100, 1)
@@ -53,7 +53,7 @@
 		qdel(W)
 		src.stat2 = 1
 		return
-	else if (iswrench(W) && src.stat2 == 1)
+	else if (istype(W, /obj/item/wrench) && src.stat2 == 1)
 		var/obj/item/rods/R = new /obj/item/rods
 		playsound(src.loc, "sound/items/Ratchet.ogg", 100, 1)
 		boutput(usr, "<span style=\"color:red\">Removing outer hull plating.</span>")

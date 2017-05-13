@@ -149,7 +149,7 @@
 	if(T.intact)
 		return
 
-	if(iswirecutters(W))
+	if(istype(W, /obj/item/wirecutters))
 
 		if(src.d1)	// 0-X cables are 1 unit, X-X cables are 2 units long
 			var/atom/A = new/obj/item/cable_coil(T, 2)
@@ -174,7 +174,7 @@
 		coil.cable_join(src, user)
 		//note do shock in cable_join
 
-	else if(istype(W, /obj/item/device/t_scanner) || (istype(W, /obj/item/device/pda2) && istype(W:module, /obj/item/device/pda_module/tray)) || ismultitool(W)) //HECK YEAH, COMPILER MACROS
+	else if(istype(W, /obj/item/device/t_scanner) || istype(W,/obj/item/device/multitool) || (istype(W, /obj/item/device/pda2) && istype(W:module, /obj/item/device/pda_module/tray)))
 
 		var/datum/powernet/PN = get_powernet()		// find the powernet
 

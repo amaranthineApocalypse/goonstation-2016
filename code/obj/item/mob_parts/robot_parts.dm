@@ -79,13 +79,13 @@
 			remove_stage = 0
 
 		else if(remove_stage == 0 || remove_stage == 2)
-			if(isscalpel(tool))
+			if(istype(tool, /obj/item/scalpel) || istype(tool, /obj/item/raw_material/shard) || istype(tool, /obj/item/kitchen/utensil/knife))
 				remove_stage++
 			else
 				wrong_tool = 1
 
 		else if(remove_stage == 1)
-			if(issaw(tool))
+			if(istype(tool, /obj/item/circular_saw) || istype(tool, /obj/item/saw))
 				remove_stage++
 			else
 				wrong_tool = 1
@@ -225,7 +225,7 @@
 			playsound(get_turf(src), "sound/weapons/Genhit.ogg", 40, 1)
 			return
 
-		else if (iswrench(W))
+		else if (istype(W,/obj/item/wrench))
 			if (!src.brain && !src.ai_interface)
 				boutput(user, "<span style=\"color:red\">There's no brain or AI interface chip in there to remove.</span>")
 				return
@@ -238,7 +238,7 @@
 				boutput(user, "<span style=\"color:blue\">You open the head's compartment and take out [src.brain].</span>")
 				user.put_in_hand_or_drop(src.brain)
 				src.brain = null
-		else if (isscrewdriver(W))
+		else if (istype(W, /obj/item/screwdriver))
 			if (src.brain)
 				user.show_text("You can't reach the wiring with a brain inside the cyborg head.", "red")
 				return
@@ -381,7 +381,7 @@
 					boutput(user, "<span style=\"color:blue\">You insert some wire.</span>")
 					playsound(get_turf(src), "sound/weapons/Genhit.ogg", 40, 1)
 
-		else if(iswrench(W))
+		else if(istype(W,/obj/item/wrench/))
 			if(!src.cell)
 				boutput(user, "<span style=\"color:red\">There's no cell in there to remove.</span>")
 				return
@@ -390,7 +390,7 @@
 			src.cell.set_loc( get_turf(src) )
 			src.cell = null
 
-		else if(iswirecutters(W))
+		else if(istype(W,/obj/item/wirecutters/))
 			if(src.wires < 1)
 				boutput(user, "<span style=\"color:red\">There's no wiring in there to remove.</span>")
 				return
@@ -823,7 +823,7 @@
 			boutput(user, "<span style=\"color:red\">The brain needs to go in the head piece, not the frame.</span>")
 			return
 
-		if(iswrench(W))
+		if(istype(W,/obj/item/wrench))
 			var/list/actions = list("Do nothing")
 			if(src.check_completion())
 				actions.Add("Finish and Activate the Cyborg")

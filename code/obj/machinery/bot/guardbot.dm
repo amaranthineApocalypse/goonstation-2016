@@ -214,7 +214,7 @@
 
 		vaquero
 			name = "El Vaquero"
-			desc = "The side label reads 'Fabricado en Mï¿½xico'"
+			desc = "The side label reads 'Fabricado en México'"
 			setup_unique_name = 1
 			setup_default_startup_task = /datum/computer/file/guardbot_task/security/patrol
 			setup_charge_percentage = 98
@@ -359,7 +359,7 @@
 					boutput(user, "You show \the [W] to [src]! They are very impressed.")
 			return
 		*/
-		else if (isscrewdriver(W))
+		else if (istype(W, /obj/item/screwdriver))
 			if (src.health < initial(health))
 				src.health = initial(health)
 				src.visible_message("<span style=\"color:blue\">[user] repairs [src]!</span>", "<span style=\"color:blue\">You repair [src].</span>")
@@ -2556,7 +2556,7 @@
 
 					if (ckey(current_tour_text))
 						if (findtext(current_tour_text, "|p")) //There are pauses present! So, um, pause.
-							var/list/tour_text_with_pauses = splittext(current_tour_text, "|p")
+							var/list/tour_text_with_pauses = dd_text2list(current_tour_text, "|p")
 							spawn (0)
 								sleep(10)
 								for (var/tour_line in tour_text_with_pauses)
@@ -3456,7 +3456,7 @@
 		return
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (isscrewdriver(W))
+		if (istype(W, /obj/item/screwdriver))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			boutput(user, "You [src.panel_open ? "secure" : "unscrew"] the maintenance panel.")
 			src.panel_open = !src.panel_open

@@ -301,7 +301,7 @@
 			return ..()
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (ismultitool(W) && locked)
+		if (istype(W, /obj/item/device/multitool) && locked)
 			if (istype(lock))
 				lock.read_device(user)
 			if (istype(trap))

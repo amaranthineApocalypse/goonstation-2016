@@ -42,7 +42,7 @@
 			qdel(src)
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (iswrench(W) && src.deconstructable)
+		if (istype(W, /obj/item/wrench) && src.deconstructable)
 			playsound(src.loc, "sound/items/Ratchet.ogg", 50, 1)
 			var/atom/C = new /obj/item/sheet(src.loc)
 			if (src.material)
@@ -169,7 +169,7 @@
 
 		attackby(obj/item/W as obj, mob/user as mob)
 			..()
-			if (isscrewdriver(W))
+			if (istype(W, /obj/item/screwdriver))
 				if (src.anchored)
 					playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 					if (do_after(user, 30))
@@ -201,7 +201,7 @@
 		if (istype(W, /obj/item/clothing/suit/bedsheet))
 			src.tuck_sheet(W, user)
 			return
-		if (iswrench(W))
+		if (istype(W, /obj/item/wrench))
 			if (src.security)
 				boutput(user, "<span style=\"color:red\">You briefly ponder how to go about disassembling a featureless slab using a wrench. You quickly give up.</span>")
 			else
@@ -856,7 +856,7 @@
 
 	attackby(obj/item/W as obj, mob/user as mob)
 		..()
-		if (isscrewdriver(W))
+		if (istype(W, /obj/item/screwdriver))
 			if (src.anchored)
 				playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 				if (do_after(user, 30))
@@ -902,7 +902,7 @@
 		return
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (iswrench(W))
+		if (istype(W, /obj/item/wrench))
 			var/obj/stool/chair/C = new /obj/stool/chair(get_turf(src))
 			if (src.material)
 				C.setMaterial(src.material)

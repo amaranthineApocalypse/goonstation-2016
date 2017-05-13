@@ -22,7 +22,7 @@
 
 
 /obj/machinery/autolathe/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if (isscrewdriver(O))
+	if (istype(O, /obj/item/screwdriver))
 		if (!opened)
 			src.opened = 1
 			src.icon_state = "autolathef"
@@ -134,7 +134,7 @@
 
 	if(href_list["act"])
 		if(href_list["act"] == "pulse")
-			if (!(ismultitool(usr.equipped()))) //I KNOW IT'S DEPRECATED, BUT I GOTTA BE CONSISTENT.
+			if (!istype(usr.equipped(), /obj/item/device/multitool))
 				boutput(usr, "You need a multitool!")
 			else
 				if(src.wires[href_list["wire"]])
@@ -152,7 +152,7 @@
 						src.shock(usr)
 						spawn(100) src.shocked = !src.shocked
 		if(href_list["act"] == "wire")
-			if (!iswirecutters(usr.equipped()))
+			if (!istype(usr.equipped(), /obj/item/wirecutters))
 				boutput(usr, "You need wirecutters!")
 			else
 				if(src.hack_wire == href_list["wire"])

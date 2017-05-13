@@ -47,7 +47,6 @@
 	src.RL_SetOpacity(0)
 	p_open = 1
 	play_animation("opening")
-	update_icon()
 	playsound(src, "sound/machines/airlock_swoosh_temp.ogg", 100, 0)
 	spawn(2.5)
 		density = 0 // let them through halfway through the anim
@@ -65,7 +64,6 @@
 	operating = 1
 	p_open = 0
 	play_animation("closing")
-	update_icon()
 	playsound(src, "sound/machines/airlock_swoosh_temp.ogg", 100, 0)
 	spawn(2.5)
 		density = 1

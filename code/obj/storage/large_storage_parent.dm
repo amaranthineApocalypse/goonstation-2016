@@ -180,7 +180,7 @@
 							welder.set_loc(src.loc)
 					return
 
-			else if (iswrench(W))
+			else if (istype(W, /obj/item/wrench))
 				var/obj/item/I = new /obj/item/sheet(get_turf(src))
 				if (src.material)
 					I.setMaterial(src.material)

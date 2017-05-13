@@ -65,7 +65,6 @@
 	for (var/turf/S in members)
 		if (istype(S, /turf/space))
 			members -= S
-		LAGCHECK(90)
 	if(!members || !members.len ) //I guess all the areas were BADSPACE!!! OH NO! (Spyguy fix for pick() from empty list)
 		qdel(src)
 		return 0	
@@ -83,7 +82,6 @@
 /datum/air_group/proc/update_tiles_from_group()
 	for(var/turf/simulated/member in members)
 		if (member.air) member.air.copy_from(air)
-		LAGCHECK(90)
 
 /datum/air_group/proc/archive()
 	air.archive()
@@ -111,7 +109,8 @@
 
 	var/turf/simulated/sample = pick(members)
 	for(var/turf/simulated/member in members)
-		LAGCHECK(90)
+		if (!istype(member)) // Marq fix for undefined variable /turf/space/var/air
+			continue
 		if(member.active_hotspot)
 			return 0
 		if(member.air && member.air.compare(sample.air)) continue
@@ -179,7 +178,6 @@
 						if(!self_tile_borders)
 							self_tile_borders = list()
 						self_tile_borders += border_tile
-					LAGCHECK(90)
 
 		var/abort_group = 0
 
@@ -222,7 +220,6 @@
 							enemy_turf.consider_pressure_difference(-connection_difference, get_dir(enemy_turf,self_border))
 
 					border_index++
-					LAGCHECK(90)
 
 		// Process connections to adjacent tiles
 		border_index = 1
@@ -285,6 +282,8 @@
 	// This logic is not inverted because group processing may have been
 	// suspended in the above block.
 	if(!group_processing) //Revert to individual processing
+		var/c = 0
+
 		// space fastpath
 		if (members.len && length_space_border) {
 			if (space_fastpath(parent_controller))
@@ -293,13 +292,13 @@
 		}
 		for(var/turf/simulated/member in members)
 			member.process_cell()
-			LAGCHECK(90)
+			if (!(c++ % 10) && parent_controller)
+				parent_controller.scheck()
 	else
 		if(air.temperature > FIRE_MINIMUM_TEMPERATURE_TO_EXIST)
 			for(var/turf/simulated/member in members)
 				member.hotspot_expose(air.temperature, CELL_VOLUME)
 				member.consider_superconductivity(starting=1)
-				LAGCHECK(90)
 
 		air.react()
 
@@ -312,6 +311,7 @@
 	var/dist
 	var/turf/space/sample = locate()
 	var/totalPressure = 0
+	var/c
 
 	for(var/turf/simulated/member in members)
 		minDist = null
@@ -330,6 +330,9 @@
 			member.air.mimic(sample, CLAMP(length_space_border / (2 * max(1, minDist)), 0.1, 1))
 		if (member && member.air)
 			totalPressure += member.air.return_pressure()
+
+		if (!(c++ % 20))
+			parent_controller.scheck()
 
 	if (totalPressure / members.len < 5)
 		space_group()

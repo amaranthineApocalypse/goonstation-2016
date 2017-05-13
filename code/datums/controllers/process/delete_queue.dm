@@ -1,11 +1,8 @@
 datum/controller/process/delete_queue
 	var/tmp/delcount = 0
 	var/tmp/gccount = 0
-	var/tmp/deleteChunkSize = MIN_DELETE_CHUNK_SIZE	
+	var/tmp/deleteChunkSize = MIN_DELETE_CHUNK_SIZE
 	//var/tmp/delpause = 1
-#ifdef DELETE_QUEUE_DEBUG
-	var/tmp/datum/dynamicQueue/delete_queue = 0
-#endif
 
 	// Timing vars
 	var/tmp/start = 0
@@ -13,18 +10,13 @@ datum/controller/process/delete_queue
 
 	setup()
 		name = "DeleteQueue"
-		schedule_interval = 5
-		tick_allowance = 25
+		schedule_interval = 1
+		sleep_interval = 1
 
 	doWork()
 		if(!global.delete_queue)
 			boutput(world, "Error: there is no delete queue!")
 			return 0
-
-#ifdef DELETE_QUEUE_DEBUG
-		if (!src.delete_queue)
-			src.delete_queue = global.delete_queue
-#endif
 
 		//var/datum/dynamicQueue/queue =
 		if(global.delete_queue.isEmpty())
@@ -59,7 +51,7 @@ datum/controller/process/delete_queue
 			D.qdeled = 0
 			del(D)
 
-			scheck()
+			scheck(0)
 
 			//if (delpause)
 				//sleep(delpause)
@@ -73,9 +65,9 @@ datum/controller/process/delete_queue
 		// If the number of items processed is equal to the chunk size
 		// and the average time taken by the delete queue is greater than the scheduled interval
 		if (numItems == deleteChunkSize && averageTimeTaken() > schedule_interval && deleteChunkSize > MIN_DELETE_CHUNK_SIZE)
-			deleteChunkSize-=10
+			deleteChunkSize--
 		else if (numItems == deleteChunkSize && averageTimeTaken() < schedule_interval)
-			deleteChunkSize+=10
+			deleteChunkSize++
 
 	proc
 		averageTimeTaken()

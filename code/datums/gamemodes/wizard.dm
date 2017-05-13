@@ -90,7 +90,7 @@
 
 			if (newname)
 				if (length(newname) >= 26) newname = copytext(newname, 1, 26)
-				newname = replacetext(newname, ">", "'")
+				newname = dd_replacetext(newname, ">", "'")
 				wizard.current.real_name = newname
 				wizard.current.name = newname
 

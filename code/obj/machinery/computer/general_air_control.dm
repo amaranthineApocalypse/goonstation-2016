@@ -21,7 +21,7 @@ obj/machinery/computer/general_air_control
 		src.updateDialog()
 
 	attackby(I as obj, user as mob)
-		if(isscrewdriver(I))
+		if(istype(I, /obj/item/screwdriver))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			if(do_after(user, 20))
 				if (src.stat & BROKEN)
@@ -275,7 +275,7 @@ Max Output Pressure: [output_pressure] kPa<BR>"}
 		var/on_temperature = 1200
 
 		attackby(I as obj, user as mob)
-			if(isscrewdriver(I))
+			if(istype(I, /obj/item/screwdriver))
 				playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 				if(do_after(user, 20))
 					if (src.stat & BROKEN)
@@ -452,9 +452,9 @@ Rate: <A href='?src=\ref[src];change_vol=-10'>--</A> <A href='?src=\ref[src];cha
 			newsignal.data["address_1"] = signal.data["sender"]
 			newsignal.data["command"] = "reply_alerts"
 			if(priority_alarms.len)
-				newsignal.data["severe_list"] = jointext(priority_alarms, ";")
+				newsignal.data["severe_list"] = dd_list2text(priority_alarms, ";")
 			if(minor_alarms.len)
-				newsignal.data["minor_list"] = jointext(minor_alarms, ";")
+				newsignal.data["minor_list"] = dd_list2text(minor_alarms, ";")
 
 			frequency.post_signal(src, newsignal)
 			return
@@ -569,7 +569,7 @@ Rate: <A href='?src=\ref[src];change_vol=-10'>--</A> <A href='?src=\ref[src];cha
 		src.updateDialog()
 
 	attackby(I as obj, user as mob)
-		if(isscrewdriver(I))
+		if(istype(I, /obj/item/screwdriver))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			if(do_after(user, 20))
 				if (src.stat & BROKEN)

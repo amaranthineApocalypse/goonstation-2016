@@ -1,6 +1,6 @@
 /obj/item/satchel
 	name = "satchel"
-	desc = "A leather bag. It holds 0/30 items."
+	desc = "A leather bag. It holds 0/20 items."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "satchel"
 	flags = ONBELT
@@ -109,9 +109,3 @@
 	/obj/item/parts/human_parts/leg,
 	/obj/item/raw_material/cotton)
 	itemstring = "items of produce"
-
-/obj/item/satchel/heavy //for borgs
-	name = "heavy satchel"
-	desc = "A heavy leather bag. It holds 0/50 items."
-	maxitems = 50
-	list/allowed = list(/obj/item/) //look, it's ONLY for the civ bot, this at least gives them SOME utility

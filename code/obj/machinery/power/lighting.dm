@@ -141,7 +141,7 @@
 		if (istype(user, /mob/living/silicon))
 			return
 
-		if (iswrench(W))
+		if (istype(W, /obj/item/wrench))
 
 			add_fingerprint(user)
 			src.anchored = !src.anchored
@@ -375,7 +375,7 @@
 
 	// attempt to stick weapon into light socket
 	else if(status == LIGHT_EMPTY)
-		if(isscrewdriver(W))
+		if(istype(W, /obj/item/screwdriver))
 			if (has_power())
 				boutput(user, "That's not safe with the power on!")
 				return

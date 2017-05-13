@@ -343,7 +343,7 @@ obj/machinery/atmospherics/retrofilter
 				src.update_overlays()
 			else
 				boutput(user, "<span style=\"color:red\">Access denied.</span>")
-		else if(isscrewdriver(W))
+		else if(istype(W, /obj/item/screwdriver))
 			if(src.hacked)
 				user.show_message("<span style=\"color:red\">Remove the foreign wires first!</span>", 1)
 				return
@@ -374,7 +374,7 @@ obj/machinery/atmospherics/retrofilter
 			src.locked = 0
 			src.update_overlays()
 			return
-		else if(iswirecutters(W) && hacked)
+		else if(istype(W, /obj/item/wirecutters) && hacked)
 			src.add_fingerprint(user)
 			user.show_message("<span style=\"color:red\">Now removing the bypass wires... <I>(This may take a while)</I></span>", 1)
 			if (!do_after(user, 50))

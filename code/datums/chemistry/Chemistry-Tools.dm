@@ -241,7 +241,7 @@
 			I.reagents.trans_to(src, I.reagents.total_volume)
 			qdel(I)
 
-		else if (istype(I, /obj/item/scalpel) || istype(I, /obj/item/circular_saw) || istype(I, /obj/item/surgical_spoon)) //do not replace with isscalpel(), etc. 
+		else if (istype(I, /obj/item/scalpel) || istype(I, /obj/item/circular_saw) || istype(I, /obj/item/surgical_spoon))
 			if (src.reagents && I.reagents)
 				I:Poisoner = user
 				src.reagents.trans_to(I, 5)
@@ -309,7 +309,7 @@
 				playsound(src.loc, 'sound/effects/slosh.ogg', 25, 1)
 			else
 				user.show_text("Out of water!", "blue")
-		else if (iswirecutters(D))
+		else if (istype(D, /obj/item/wirecutters))
 			if (src.reagents.total_volume)
 				user.show_text("<b>You start cutting [src], causing it to spill!</b>", "red")
 				src.reagents.reaction(get_turf(src))
@@ -324,12 +324,6 @@
 			qdel(src)
 		else
 			return ..()
-
-/obj/item/reagent_containers/glass/bucket/borg //for civ bots
-	name = "massive bucket"
-	desc = "Geez, this thing is huge. You could probably even water plants with it."
-	amount_per_transfer_from_this = 60
-	initial_volume = 180 //big
 
 /obj/item/reagent_containers/glass/dispenser
 	name = "reagent glass"
@@ -347,7 +341,6 @@
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "beakerlarge"
 	item_state = "beaker"
-	initial_volume = 1000
 	rc_flags = RC_SCALE | RC_VISIBLE | RC_SPECTRO
 	amount_per_transfer_from_this = 10
 	flags = FPRINT | TABLEPASS | OPENCONTAINER | SUPPRESSATTACK

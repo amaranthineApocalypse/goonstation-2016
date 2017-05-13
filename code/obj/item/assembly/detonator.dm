@@ -94,7 +94,7 @@
 				src.part_t = W
 				src.add_fingerprint(user)
 				user.show_message("<span style=\"color:blue\">You insert the [W.name] into the slot.</span>")
-			else if (iswirecutters(W))
+			else if (istype(W, /obj/item/wirecutters))
 				src.part_ig.loc = user.loc
 				src.part_mt.loc = user.loc
 				src.part_ig.master = null
@@ -110,13 +110,13 @@
 		if (1)
 			if (istype(W, /obj/item/cable_coil))
 				user.show_message("<span style=\"color:red\">The plasma tank must be firmly secured to the assembly first.</span>")
-			else if (iscrowbar(W))
+			else if (istype(W, /obj/item/crowbar))
 				src.setDetState(0)
 				src.part_t.loc = user.loc
 				src.part_t.master = null
 				src.part_t = null
 				user.show_message("<span style=\"color:blue\">You pry the plasma tank out of the assembly.</span>")
-			else if (isscrewdriver(W))
+			else if (istype(W, /obj/item/screwdriver))
 				src.setDetState(2)
 				user.show_message("<span style=\"color:blue\">You secure the plasma tank to the assembly.</span>")
 
@@ -130,9 +130,9 @@
 					user.show_message("<span style=\"color:blue\">You add the wiring to the assembly.</span>")
 				else
 					user.show_message("<span style=\"color:red\">This cable coil isn't long enough!</span>")
-			else if (iscrowbar(W))
+			else if (istype(W, /obj/item/crowbar))
 				user.show_message("<span style=\"color:red\">The plasma tank is firmly secured to the assembly and won't budge.</span>")
-			else if (isscrewdriver(W))
+			else if (istype(W, /obj/item/screwdriver))
 				src.setDetState(1)
 				user.show_message("<span style=\"color:blue\">You unsecure the plasma tank from the assembly.</span>")
 
@@ -147,13 +147,13 @@
 				src.part_fs.time = 90 //Minimum det time
 				src.add_fingerprint(user)
 				user.show_message("<span style=\"color:blue\">You wire the timer failsafe to the assembly, disabling its external controls.</span>")
-			else if (iswirecutters(W))
+			else if (istype(W, /obj/item/wirecutters))
 				src.setDetState(2)
 				var/obj/item/cable_coil/C = new /obj/item/cable_coil(user, 6)
 				C.loc = user.loc
 				user.show_message("<span style=\"color:blue\">You cut the wiring on the assembly.</span>")
 		if (4)
-			if (iswirecutters(W))
+			if (istype(W, /obj/item/wirecutters))
 				src.setDetState(3)
 				src.part_fs.loc = user.loc
 				src.part_fs.master = null
@@ -171,7 +171,7 @@
 					user.show_message("<span style=\"color:red\">The [a] falls off the assembly.</span>")
 				src.attachments.Cut()
 				user.show_message("<span style=\"color:blue\">You disconnect the timer from the assembly, and reenable its external controls.</span>")
-			if (isscrewdriver(W))
+			if (istype(W, /obj/item/screwdriver))
 				if (!src.trigger && !src.attachments.len)
 					user.show_message("<span style=\"color:red\">You cannot remove any attachments, as there are none attached.</span>")
 					return

@@ -229,7 +229,7 @@ var/list/meatland_fx_sounds = list('sound/ambience/meatzone_fx1.ogg','sound/ambi
 				src.loc.invisibility = 100 //Hide the floor below us so people don't just right click and see two floors.
 
 		attackby(obj/item/O as obj, mob/user as mob)
-			if (src.alive && iscrowbar(O))
+			if (src.alive && istype(O, /obj/item/crowbar))
 				user.visible_message("<span style=\"color:red\"><b>[user] jabs [src] with [O]!</b></span>", "<span style=\"color:red\">You jab [src] with [O] and begin to pull!  Hold on!</span>")
 				if (do_after(user, 20))
 					playsound(src.loc, "sound/items/Crowbar.ogg", 50, 1)
@@ -409,7 +409,7 @@ var/global/list/default_meat_head_dialog = list("hello hello", "... it's not vir
 			if (. == ckey(test_string))
 				return 1
 
-		var/list/exploded_sentence = splittext(message, " ")
+		var/list/exploded_sentence = dd_text2list(message, " ")
 		if (!exploded_sentence || !exploded_sentence.len)
 			return 1
 
@@ -423,7 +423,7 @@ var/global/list/default_meat_head_dialog = list("hello hello", "... it's not vir
 					if (prob(10))
 						exploded_sentence[i] = "..."
 
-		. = jointext(exploded_sentence, " ")
+		. = dd_list2text(exploded_sentence, " ")
 		dialog += .
 
 		if ((dialog.len - default_meat_head_dialog.len) > MEATHEAD_MAX_CUSTOM_UTTERANCES)

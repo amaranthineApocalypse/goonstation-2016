@@ -34,7 +34,7 @@
 			icon_state = "chemg2"
 			name = "unsecured grenade"
 			stage = 1
-		else if (isscrewdriver(W) && stage == 1)
+		else if (istype(W,/obj/item/screwdriver) && stage == 1)
 			if (beakers.len)
 				boutput(user, "<span style=\"color:blue\">You lock the assembly.</span>")
 				playsound(src.loc, 'sound/items/Screwdriver.ogg', 25, -3)
@@ -387,50 +387,3 @@
 
 		beakers += B1
 		beakers += B2
-
-/obj/item/chem_grenade/anticleaner
-	name = "anti cleaner grenade"
-	desc = "Why would anyone ever need this?"
-	icon_state = "chemg3"
-	stage = 2
-	var/nightmarish = 0
-
-	New()
-		..()
-		var/obj/item/reagent_containers/glass/large/B1 = new(src)
-		var/obj/item/reagent_containers/glass/large/B2 = new(src)
-		if((rand(1,250) == 250) || (src.nightmarish == 1))
-			B1.reagents.add_reagent("synthflesh", 25)
-			B1.reagents.add_reagent("carbon", 25)
-			B1.reagents.add_reagent("ice", 25)
-			B1.reagents.add_reagent("bread", 25)
-			B1.reagents.add_reagent("cheese", 25)
-			B1.reagents.add_reagent("gcheese", 25)
-			B1.reagents.add_reagent("chocolate", 25)
-			B1.reagents.add_reagent("honey", 25)
-			B1.reagents.add_reagent("carpet", 25)
-			B1.reagents.add_reagent("ectoplasm", 25)
-			B1.reagents.add_reagent("oil", 25)
-			B1.reagents.add_reagent("luminol", 25)
-			B1.reagents.add_reagent("paper", 25)
-			B1.reagents.add_reagent("glitter_harmless", 25)
-			B1.reagents.add_reagent("blood", 25)
-			B1.reagents.add_reagent("vomit", 25)
-			B1.reagents.add_reagent("gvomit", 25)
-			B1.reagents.add_reagent("urine", 25)
-			B1.reagents.add_reagent("colors", 25)
-			B1.reagents.add_reagent("sugar", 100)
-			src.name = "janitor's nightmare"
-			src.desc = "Usage of this grenade constitutes a cleanliness war crime."
-		else
-			B1.reagents.add_reagent(pick("synthflesh","carbon","ice","bread","cheese","gcheese","chocolate","honey","carpet","ectoplasm","oil","paper","glitter_harmless","blood","vomit","gvomit","urine","colors"), 100)
-			B1.reagents.add_reagent("sugar", 100)
-
-		B2.reagents.add_reagent("phosphorus", 100)
-		B2.reagents.add_reagent("potassium", 100)
-
-		beakers += B1
-		beakers += B2
-
-/obj/item/chem_grenade/anticleaner/bad
-	nightmarish = 1

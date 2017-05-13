@@ -1008,7 +1008,7 @@
 		else
 			boutput(user, "<span style=\"color:red\">This machine does not accept ID cards.</span>")
 			return
-	else if(isscrewdriver(W))
+	else if(istype(W, /obj/item/screwdriver))
 		src.panel_open = !src.panel_open
 		boutput(user, "You [src.panel_open ? "open" : "close"] the maintenance panel.")
 		src.UpdateOverlays(src.panel_open ? src.panel_image : null, "panel")
@@ -1023,7 +1023,7 @@
 			else
 				boutput(user, "<span style=\"color:blue\">[bicon(W)] Regular electrical response received from access panel.</span>")
 		return
-	else if (ismultitool(W))
+	else if (istype(W, /obj/item/device/multitool))
 		return src.attack_hand(user)
 
 	else
@@ -1203,7 +1203,7 @@
 
 		if ((href_list["cutwire"]) && (src.panel_open))
 			var/twire = text2num(href_list["cutwire"])
-			if (!( iswirecutters(usr.equipped) ))
+			if (!( istype(usr.equipped(), /obj/item/wirecutters) ))
 				boutput(usr, "You need wirecutters!")
 				return
 			else if (src.isWireColorCut(twire))
@@ -1213,7 +1213,7 @@
 
 		if ((href_list["pulsewire"]) && (src.panel_open))
 			var/twire = text2num(href_list["pulsewire"])
-			if (!(ismultitool(usr.equipped)))
+			if (!istype(usr.equipped(), /obj/item/device/multitool))
 				boutput(usr, "You need a multitool!")
 				return
 			else if (src.isWireColorCut(twire))

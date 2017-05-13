@@ -354,7 +354,7 @@ var/zapLimiter = 0
 
 	src.add_fingerprint(user)
 	if(stat & BROKEN) //APC REPAIR
-		if (isscrewdriver(W))
+		if (istype(W, /obj/item/screwdriver))
 			switch (src.repair_status)
 				if (0)
 					src.repair_status = 1
@@ -426,7 +426,7 @@ var/zapLimiter = 0
 					return
 			return
 
-		else if (iswrench(W))
+		else if (istype(W, /obj/item/wrench))
 			switch (src.repair_status)
 				if (0)
 					boutput(user, "<span style=\"color:red\">You must disconnect the control board prior to working on the autotransformer.</span>")
@@ -444,7 +444,7 @@ var/zapLimiter = 0
 
 			return
 
-		else if (ismultitool(W))
+		else if (istype(W, /obj/item/device/multitool))
 			switch(src.repair_status)
 				if (3)
 					boutput(user, "<span style=\"color:red\">You reset the control board.[prob(10) ? " Takes no time at all, eh?" : ""]</span>")
@@ -456,7 +456,7 @@ var/zapLimiter = 0
 			return
 
 		return
-	if (iscrowbar(W))	// crowbar means open or close the cover
+	if (istype(W, /obj/item/crowbar))	// crowbar means open or close the cover
 		if(opened)
 			opened = 0
 			updateicon()
@@ -476,7 +476,7 @@ var/zapLimiter = 0
 				boutput(user, "You insert the power cell.")
 				chargecount = 0
 		updateicon()
-	else if	(isscrewdriver(W))	// haxing
+	else if	(istype(W, /obj/item/screwdriver))	// haxing
 		if(opened)
 			boutput(user, "Close the APC first")
 		else if(emagged)
@@ -929,7 +929,7 @@ var/zapLimiter = 0
 		usr.machine = src
 		if (href_list["apcwires"] && wiresexposed)
 			var/t1 = text2num(href_list["apcwires"])
-			if (!( iswirecutters(usr.equipped) ))
+			if (!( istype(usr.equipped(), /obj/item/wirecutters) ))
 				boutput(usr, "You need wirecutters!")
 				return
 			else if (src.isWireColorCut(t1))
@@ -947,7 +947,7 @@ var/zapLimiter = 0
 
 		else if (href_list["pulse"] && wiresexposed)
 			var/t1 = text2num(href_list["pulse"])
-			if (!(ismultitool(usr.equipped)))
+			if (!istype(usr.equipped(), /obj/item/device/multitool))
 				boutput(usr, "You need a multitool!")
 				return
 			else if (src.isWireColorCut(t1))

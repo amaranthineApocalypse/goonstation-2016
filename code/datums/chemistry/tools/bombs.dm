@@ -77,7 +77,7 @@
 	..()	
 
 /obj/item/assembly/chem_bomb/attackby(obj/item/W as obj, mob/user as mob)
-	if (iswrench(W))
+	if (istype(W, /obj/item/wrench))
 		var/obj/item/assembly/R = null
 		switch(src.triggering_device.type)
 			if (/obj/item/device/timer)

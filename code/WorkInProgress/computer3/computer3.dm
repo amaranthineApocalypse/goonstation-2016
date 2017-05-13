@@ -564,7 +564,7 @@ function lineEnter ()
 			user << output(url_encode("Disk: <a href='byond://?src=\ref[src];eject=1'>Eject</a>"),"comp3.browser:setInternalDisk")
 			return
 
-	else if (isscrewdriver(W))
+	else if (istype(W, /obj/item/screwdriver))
 		playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 		if(do_after(user, 20))
 			if(!ispath(setup_frame_type, /obj/computer3frame))
@@ -976,7 +976,7 @@ function lineEnter ()
 				src.updateUsrDialog()
 				return
 
-		else if (iscrowbar(W))
+		else if (istype(W, /obj/item/crowbar))
 			if(!src.cell)
 				boutput(user, "<span style=\"color:red\">There is no energy cell inserted!</span>")
 				return

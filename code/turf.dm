@@ -199,7 +199,7 @@ var/global/client/ff_debugger = null
 	icon = 'ocean.dmi'
 	name = "seafloor"
 	water = 138771
-	temperature = T0C + 2 // average ocean temp on Earth is roughly 1-4 ï¿½C
+	temperature = T0C + 2 // average ocean temp on Earth is roughly 1-4 °C
 
 	New()
 		..()
@@ -1356,7 +1356,7 @@ var/global/client/ff_debugger = null
 					A.setMaterial(getCachedMaterial("steel"))
 				boutput(user, "<span style=\"color:blue\">You removed the support rods.</span>")
 
-	else if (iswrench(W))
+	else if (istype(W, /obj/item/wrench))
 		if (src.d_state == 4)
 			var/turf/T = user.loc
 			boutput(user, "<span style=\"color:blue\">Detaching support rods.</span>")
@@ -1369,7 +1369,7 @@ var/global/client/ff_debugger = null
 				src.d_state = 5
 				boutput(user, "<span style=\"color:blue\">You detach the support rods.</span>")
 
-	else if (iswirecutters(W))
+	else if (istype(W, /obj/item/wirecutters))
 		if (src.d_state == 0)
 			playsound(src.loc, "sound/items/Wirecutter.ogg", 100, 1)
 			src.d_state = 1
@@ -1379,7 +1379,7 @@ var/global/client/ff_debugger = null
 			else
 				A.setMaterial(getCachedMaterial("steel"))
 
-	else if (isscrewdriver(W))
+	else if (istype(W, /obj/item/screwdriver))
 		if (src.d_state == 1)
 			var/turf/T = user.loc
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 100, 1)
@@ -1392,7 +1392,7 @@ var/global/client/ff_debugger = null
 				src.d_state = 2
 				boutput(user, "<span style=\"color:blue\">You removed the support lines.</span>")
 
-	else if (iscrowbar(W))
+	else if (istype(W, /obj/item/crowbar))
 
 		if (src.d_state == 3)
 			var/turf/T = user.loc
@@ -1580,7 +1580,7 @@ var/global/client/ff_debugger = null
 		var/obj/item/pen/P = C
 		P.write_on_turf(src, user)
 		return
-	else if (iswrench(C))
+	else if (istype(C, /obj/item/wrench))
 		boutput(user, "<span style=\"color:blue\">Removing rods...</span>")
 		playsound(src.loc, "sound/items/Ratchet.ogg", 80, 1)
 		if(do_after(user, 30))
@@ -1663,7 +1663,7 @@ var/global/client/ff_debugger = null
 	if(!C || !user)
 		return 0
 
-	if(iscrowbar(C) && intact)
+	if(istype(C, /obj/item/crowbar) && intact)
 		if(broken || burnt)
 			boutput(user, "<span style=\"color:red\">You remove the broken plating.</span>")
 		else

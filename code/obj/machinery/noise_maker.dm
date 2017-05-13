@@ -43,7 +43,7 @@
 	src.add_fingerprint(user)
 
 /obj/machinery/noise_maker/attackby(obj/item/W, mob/user)
-	if(iswirecutters(W))
+	if(istype(W, /obj/item/wirecutters))
 		playsound(src.loc, "sound/items/Wirecutter.ogg", 60, 1)
 		if(broken)
 			broken = 0
