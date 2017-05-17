@@ -34,15 +34,15 @@
 		if (!W) return
 		if (!user) return
 		if (istype(W, /obj/item/axe)) qdel (src)
-		if (istype(W, /obj/item/circular_saw)) qdel (src)
+		if (issaw(W)) qdel (src)
 		if (istype(W, /obj/item/kitchen/utensil/knife)) qdel (src)
-		if (istype(W, /obj/item/scalpel)) qdel (src)
-		if (istype(W, /obj/item/screwdriver)) qdel (src)
+		if (isscalpel(W)) qdel (src)
+		if (isscrewdriver(W)) qdel (src)
 		if (istype(W, /obj/item/raw_material/shard)) qdel (src)
 		if (istype(W, /obj/item/sword)) qdel (src)
 		if (istype(W, /obj/item/saw)) qdel (src)
 		if (istype(W, /obj/item/weldingtool)) qdel (src)
-		if (istype(W, /obj/item/wirecutters)) qdel (src)
+		if (iswirecutters(W)) qdel (src)
 		..()
 
 /obj/spacevine/proc/Life()

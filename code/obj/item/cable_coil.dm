@@ -189,7 +189,7 @@
 		boutput(usr, "Its conductive layer is made out of [conductor].")
 
 /obj/item/cable_coil/attackby(obj/item/W, mob/user)
-	if (istype(W, /obj/item/wirecutters) && src.amount > 1)
+	if (iswirecutters(W) && src.amount > 1)
 		src.amount--
 		take(1, usr.loc)
 		boutput(user, "You cut a piece off the cable coil.")

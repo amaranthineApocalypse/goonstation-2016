@@ -129,7 +129,7 @@
 	frequency.post_signal(src, alert_signal)
 
 /obj/machinery/alarm/attackby(W as obj, user as mob)
-	if (istype(W, /obj/item/wirecutters))
+	if (iswirecutters(W))
 		stat ^= BROKEN
 		src.add_fingerprint(user)
 		src.visible_message("<span style=\"color:red\">[user] has [(stat & BROKEN) ? "de" : "re"]activated [src]!</span>")

@@ -1713,7 +1713,7 @@ datum/reagent/medical/heparin
 
 	throw_impact(atom/hit_atom)
 		if (hit_atom && isvampire(hit_atom))
-			src.force = (src.force * 2)
+			src.force = (src.force * 2) //I know this is totally unrelated, but shouldn't this be THROWFORCE?
 			src.stamina_damage = (src.stamina_damage * 2)
 			src.stamina_crit_chance = (src.stamina_crit_chance * 2)
 			..(hit_atom)

@@ -290,7 +290,7 @@
 		else
 			boutput(user, "<span style=\"color:red\">Access denied.</span>")
 
-	else if (istype(W, /obj/item/screwdriver))
+	else if (isscrewdriver(W))
 		if (src.health < initial(src.health))
 			src.health = initial(src.health)
 			src.visible_message("<span style=\"color:blue\">[user] repairs [src]!</span>", "<span style=\"color:blue\">You repair [src].</span>")

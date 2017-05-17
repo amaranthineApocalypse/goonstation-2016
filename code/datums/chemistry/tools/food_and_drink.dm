@@ -135,7 +135,7 @@
 						boutput(M, "<span style=\"color:red\">You need a fork to eat [src]!</span>")
 						M.visible_message("<span style=\"color:red\">[user] stares glumly at [src].</span>")
 						return
-					if (src.needspoon && !user.find_in_hands(/obj/item/kitchen/utensil/spoon))
+					if (src.needspoon && !((user.find_in_hands(/obj/item/kitchen/utensil/spoon) || user.find_in_hands(/obj/item/surgical_spoon))))
 						boutput(M, "<span style=\"color:red\">You need a spoon to eat [src]!</span>")
 						M.visible_message("<span style=\"color:red\">[user] stares glumly at [src].</span>")
 						return

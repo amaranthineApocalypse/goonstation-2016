@@ -90,7 +90,7 @@
 			update_icon()
 
 			return
-	if (!( istype(C, /obj/item/crowbar) ))
+	if (!( iscrowbar(C) ))
 		return
 
 	if (!src.blocked && !src.operating)

@@ -25,6 +25,7 @@ var/global/list/chem_whitelist = list("antihol", "charcoal", "epinephrine", "ins
 	mats = 6
 	rc_flags = RC_SCALE | RC_VISIBLE | RC_SPECTRO
 	var/image/fluid_image
+	var/list/amounts = list("ALL",1,2,3,4,5,8,10,15,20,25)
 
 	emagged
 		safe = 0 // who keeps doing the emag_act() thing idgi
@@ -96,8 +97,8 @@ var/global/list/chem_whitelist = list("antihol", "charcoal", "epinephrine", "ins
 			src.reagents.clear_reagents()
 
 		if (href_list["change_amt"])
-			var/amt = input(usr,"Select:","Amount", inj_amount) in list("ALL",1,2,3,4,5,8,10,15,20,25)
-			if (amt == "ALL")
+			var/amt = input(usr,"Select:","Amount", inj_amount) in amounts //Changing how this works so that 60u hypos are consistent with normal ones.
+			if (amt = "ALL")
 				inj_amount = -1
 			else
 				inj_amount = amt
@@ -144,3 +145,9 @@ var/global/list/chem_whitelist = list("antihol", "charcoal", "epinephrine", "ins
 			user.show_text("[src] can only be used on living organisms.", "red")
 
 		update_icon()
+
+/obj/item/reagent_containers/hypospray/deluxe
+	name = "deluxe hypospray"
+	desc = "An automated injector that will dump out any harmful chemicals it finds in itself. Now double the size!"
+	initial_volume = 60
+	amounts = list("ALL",1,2,3,4,5,8,10,15,20,25,30,45)

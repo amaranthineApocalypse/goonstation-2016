@@ -505,7 +505,7 @@
 
 /obj/machinery/door/poddoor/attackby(obj/item/C as obj, mob/user as mob)
 	src.add_fingerprint(user)
-	if (!( istype(C, /obj/item/crowbar) ))
+	if (!( iscrowbar(C) ))
 		return
 	if ((src.density && (stat & NOPOWER) && !( src.operating )))
 		spawn( 0 )
@@ -594,7 +594,7 @@
 
 /obj/machinery/door/poddoor/blast/attackby(obj/item/C as obj, mob/user as mob)
 	src.add_fingerprint(user)
-	if (!( istype(C, /obj/item/crowbar) ))
+	if (!( iscrowbar(C) ))
 		return
 	if ((src.density && (stat & NOPOWER) && !( src.operating )))
 		spawn( 0 )

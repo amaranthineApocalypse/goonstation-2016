@@ -1341,7 +1341,7 @@
 
 	attackby(obj/item/W as obj, mob/user as mob)
 		/*
-		if (istype(W, /obj/item/screwdriver))
+		if (isscrewdriver(W))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			src.panel_open = !src.panel_open
 			boutput(user, "You [src.panel_open ? "unscrew" : "secure"] the cover.")

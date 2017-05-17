@@ -63,7 +63,7 @@
 			else
 				boutput(user, "The hatch must be open to insert a power cell.")
 				return
-		else if(istype(I, /obj/item/screwdriver))
+		else if(isscrewdriver(I))
 			open = !open
 			user.visible_message("<span style=\"color:blue\">[user] [open ? "opens" : "closes"] the hatch on the [src].</span>", "<span style=\"color:blue\">You [open ? "open" : "close"] the hatch on the [src].</span>")
 			update_icon()

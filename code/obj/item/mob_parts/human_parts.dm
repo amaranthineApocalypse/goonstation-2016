@@ -111,13 +111,13 @@
 			remove_stage = 0
 
 		else if(remove_stage == 0 || remove_stage == 2)
-			if(istype(tool, /obj/item/scalpel) || istype(tool, /obj/item/raw_material/shard) || istype(tool, /obj/item/kitchen/utensil/knife) || istype(tool, /obj/item/knife_butcher) || istype(tool,/obj/item/razor_blade))
+			if(isscalpel(tool))
 				remove_stage++
 			else
 				return 0
 
 		else if(remove_stage == 1)
-			if(istype(tool, /obj/item/circular_saw) || istype(tool, /obj/item/saw))
+			if(issaw(tool))
 				remove_stage++
 			else
 				return 0

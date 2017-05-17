@@ -142,8 +142,142 @@ MATERIAL COLLECTOR
 /obj/item/screwdriver/vr
 	icon = 'icons/effects/VR.dmi'
 
+	/* ._.-'~'-._.-'~'-._.-'~'-._.-'~'-._.-'~'-._.-'~'-._.-'~'-._. */
+	/*=-=-=-=-=-=-=-=-=-=-=-=-=-OMNITOOLS-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+	/* '~'-._.-'~'-._.-'~'-._.-'~'-._.-'~'-._.-'~'-._.-'~'-._.-'~' */
+
+/obj/item/omnitool
+	name = "universal omnitool"
+	icon = 'icons/obj/device.dmi' //once again, all sprite references are placeholders until sundance finishes his sprites
+	inhand_image_icon = 'icons/mob/inhand/hand_tools.dmi'
+	icon_state = "multitool" //defaults to multitool mode
+	flags = FPRINT | TABLEPASS | CONDUCT
+	force = 5.0 //same as a multitool
+	w_class = 2.0
+	hit_type = DAMAGE_BLUNT
+	hitsound = 'sound/weapons/genhit1.ogg'
+	throwforce = 5.0
+	throw_speed = 3
+	throw_range = 15
+	desc = "An amazing piece of technology that function as five tools in one."
+	stamina_damage = 5
+	stamina_cost = 5
+	stamina_crit_chance = 1
+	module_research = list("tools" = 8, "metals" = 5, "devices" = 5)
+	rand_pos = 1
+	var/omni_mode = OMNITOOL_MULTITOOL
+	var/temp_mode = "multitool"
+	var/powerusage = 100 //amount of cell charge used per switch, I would do per tool usage, but that's way too hard to gauge in this case.
+
+	proc/usepower(mob/user as mob)
+		if (istype(user, /mob/living/silicon/robot))
+			var/mob/living/silicon/robot/R = user
+			R.cell.charge -= src.powerusage
+		else if (istype(user, /mob/living/silicon/ghostdrone)) //I sincerely hope this still works with all the ghost drone updates!
+			var/mob/living/silicon/ghostdrone/R = user
+			R.cell.charge -= src.powerusage
+  		return
+
+	attack_self(mob/user as mob)
+		var/newmode = input("Select desired tool", "Confirm tool selection", src.temp_mode) in list("multitool", "screwdriver", "wrench", "crowbar", "wirecutters")
+		if (newmode)
+			if (newmode == "wirecutters")
+				boutput(user, "<span style=\"color:blue\"> The omnitool is now set to function as a pair of [newmode].</span>")
+				src.temp_mode = newmode
+			else
+				boutput(user, "<span style=\"color:blue\"> The omnitool is now set to function as a [newmode].</span>")
+				usepower(user)
+				src.temp_mode = newmode
+
+			switch(temp_mode)
+				if ("multitool")
+					icon = 'icons/obj/device.dmi' //once again, all sprite references are placeholders until sundance finishes his sprites
+					inhand_image_icon = 'icons/mob/inhand/hand_tools.dmi'
+					icon_state = "multitool"
+					force = 5.0 //ALL the stats are as similar as possible to the actual items
+					w_class = 2.0
+					hit_type = DAMAGE_BLUNT
+					hitsound = 'sound/weapons/genhit1.ogg'
+					throwforce = 5.0
+					throw_speed = 3
+					throw_range = 15
+					stamina_damage = 5
+					stamina_cost = 5
+					stamina_crit_chance = 1
+					omni_mode = OMNITOOL_MULTITOOL
+
+				if ("screwdriver")
+					icon = 'icons/obj/items.dmi' //placeholder again
+					inhand_image_icon = 'icons/mob/inhand/hand_tools.dmi'
+					icon_state = "screwdriver"
+					force = 5.0
+					w_class = 1.0
+					hit_type = DAMAGE_STAB
+					hitsound = 'sound/effects/bloody_stab.ogg'
+					throwforce = 5.0
+					throw_speed = 3
+					throw_range = 5
+					stamina_damage = 10
+					stamina_cost = 10
+					stamina_crit_chance = 30
+					omni_mode = OMNITOOL_SCREWDRIVER
+
+				if ("wrench")
+					icon = 'icons/obj/items.dmi' //PLACEHOLDER
+					inhand_image_icon = 'icons/mob/inhand/hand_tools.dmi'
+					icon_state = "wrench"
+					force = 5.0
+					throwforce = 7.0
+					w_class = 2.0
+					m_amt = 150
+					hit_type = DAMAGE_BLUNT
+					hitsound = 'sound/weapons/genhit1.ogg'
+					stamina_damage = 25
+					stamina_cost = 20
+					stamina_crit_chance = 15
+					omni_mode = OMNITOOL_WRENCH
+
+				if ("crowbar")
+					icon = 'icons/obj/items.dmi' //PLACEHOLDER
+					icon_state = "crowbar"
+					inhand_image_icon = 'icons/mob/inhand/hand_tools.dmi'
+					force = 5.0
+					throwforce = 7.0
+					item_state = "wrench"
+					w_class = 2.0
+					m_amt = 50
+					hit_type = DAMAGE_BLUNT
+					hitsound = 'sound/weapons/genhit1.ogg'
+					stamina_damage = 33
+					stamina_cost = 25
+					stamina_crit_chance = 10
+					omni_mode = OMNITOOL_CROWBAR
+
+				if ("wirecutters")
+					icon = 'icons/obj/items.dmi' //PLACEHOLDER
+					inhand_image_icon = 'icons/mob/inhand/hand_tools.dmi'
+					icon_state = "cutters"
+					force = 6.0
+					throw_speed = 2
+					throw_range = 9
+					w_class = 2.0
+					hit_type = DAMAGE_STAB
+					hitsound = 'sound/effects/bloody_stab.ogg'
+					m_amt = 80
+					stamina_damage = 5
+					stamina_cost = 10
+					stamina_crit_chance = 30
+					omni_mode = OMNITOOL_WIRECUTTERS
+		return
+
+	get_desc(dist)
+		if (dist < 3)
+			desc += "<br><span style=\"color:blue\">It is currently set to [src.temp_mode] mode.</span>"
+		return
+
+
 // WELDING TOOL
-/obj/item/weldingtool
+/obj/item/weldingtool //no way in hell am I adding all the shit below to the omnitool.
 	name = "weldingtool"
 	icon = 'icons/obj/items.dmi'
 	inhand_image_icon = 'icons/mob/inhand/hand_tools.dmi'
@@ -179,7 +313,7 @@ MATERIAL COLLECTOR
 	return
 
 /obj/item/weldingtool/attackby(obj/item/W as obj, mob/user as mob)
-	if (status == 0 && istype(W,/obj/item/screwdriver))
+	if (status == 0 && isscrewdriver(W))
 		status = 1
 		boutput(user, "<span style=\"color:blue\">The welder can now be attached and modified.</span>")
 	else if (status == 1 && istype(W,/obj/item/rods))
@@ -205,7 +339,7 @@ MATERIAL COLLECTOR
 		src.set_loc(F)
 		F.part2 = R
 		src.add_fingerprint(user)
-	else if (status == 1 && istype(W,/obj/item/screwdriver))
+	else if (status == 1 && isscrewdriver(W))
 		status = 0
 		boutput(user, "<span style=\"color:blue\">You resecure the welder.</span>")
 		return

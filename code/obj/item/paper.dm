@@ -247,7 +247,7 @@
 
 			boutput(user, "<span style=\"color:blue\">You stamp the paper with your rubber stamp.</span>")
 
-		else if (istype(P, /obj/item/wirecutters) || istype(P, /obj/item/scissors))
+		else if (iswirecutters(P) || istype(P, /obj/item/scissors))
 			boutput(user, "<span style=\"color:blue\">You cut the paper into a mask.</span>")
 			var/obj/item/paper_mask/M = new /obj/item/paper_mask(src.loc)
 			user.put_in_hand_or_drop(M)

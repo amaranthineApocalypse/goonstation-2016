@@ -1348,7 +1348,7 @@ Frequency:
 			boutput(user, "[src] needs[src.build_step ? "" : " metal plating and"] at least three lengths of cable installed before you can add the AI interface.")
 			return
 
-	else if (istype(W, /obj/item/wrench))
+	else if (iswrench(W))
 		if (src.build_step >= 5)
 			src.build_step++
 			boutput(user, "You activate the shell!  Beep bop!")

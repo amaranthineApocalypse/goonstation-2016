@@ -63,7 +63,7 @@
 
 		POT.visible_message("<span style=\"color:red\"><b>[POT.name]</b> violently retaliates against [user.name]!</span>")
 		random_brute_damage(user, 3)
-		if (W && prob(50))
+		if (W && prob(50) && !istype(W, /obj/item/saw/syndie) && !istype(W, /obj/item/saw/borg)) //borgs and syndies have a use now, w o a h
 			boutput(user, "<span style=\"color:red\">The lasher grabs and smashes your [W]!</span>")
 			W.dropped()
 			qdel(W)

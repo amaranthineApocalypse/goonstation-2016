@@ -30,7 +30,7 @@
 				W.set_loc(src)
 				user.u_equip(W)
 				return
-		else if (istype(W, /obj/item/wirecutters))
+		else if (iswirecutters(W))
 			if (src.vchange)
 				user.show_text("You begin removing [src.vchange] from [src].", "blue")
 				if (!do_after(user, 20))

@@ -1024,18 +1024,24 @@ About the new airlock wires panel:
 			usr.machine = src
 			if (href_list["wires"])
 				var/t1 = text2num(href_list["wires"])
-				if (!( istype(usr.equipped(), /obj/item/wirecutters) ))
+
+				var/obj/item/equip = usr.equipped()
+				if (!iswirecutters(equip))
 					boutput(usr, "You need wirecutters!")
 					return
+
 				if (src.isWireColorCut(t1))
 					src.mend(t1)
 				else
 					src.cut(t1)
 			else if (href_list["pulse"])
 				var/t1 = text2num(href_list["pulse"])
-				if (!istype(usr.equipped(), /obj/item/device/multitool))
+
+				var/obj/item/equip = usr.equipped()
+				if (!ismultitool(equip))
 					boutput(usr, "You need a multitool!")
 					return
+
 				else if (src.isWireColorCut(t1))
 					boutput(usr, "You can't pulse a cut wire.")
 					return
@@ -1241,19 +1247,19 @@ About the new airlock wires panel:
 				src.welded = null
 			src.update_icon()
 			return
-	else if (istype(C, /obj/item/screwdriver))
+	else if (isscrewdriver(C))
 		if (src.hardened == 1)
 			boutput(usr, "<span style=\"color:red\">Your screwdriver can't pierce this airlock! Huh.</span>")
 			return
 		src.p_open = !( src.p_open )
 		src.update_icon()
-	else if (istype(C, /obj/item/wirecutters))
+	else if (iswirecutters(C))
 		return src.attack_hand(user)
-	else if (istype(C, /obj/item/device/multitool))
+	else if (ismultitool(C))
 		return src.attack_hand(user)
 	else if (istype(C, /obj/item/device/radio/signaler))
 		return src.attack_hand(user)
-	else if (istype(C, /obj/item/crowbar))
+	else if (iscrowbar(C))
 		src.unpowered_open_close()
 	else
 		..()
@@ -1266,7 +1272,7 @@ About the new airlock wires panel:
 	if ((src.density) && (!( src.welded ) && !( src.operating ) && ((!src.arePowerSystemsOn()) || (stat & NOPOWER)) && !( src.locked )))
 		spawn( 0 )
 			src.operating = 1
-			play_animation("opening")			
+			play_animation("opening")
 			update_icon(1)
 
 			sleep(src.operation_time)
@@ -1281,7 +1287,7 @@ About the new airlock wires panel:
 		if ((!src.density) && (!( src.welded ) && !( src.operating ) && !( src.locked )))
 			spawn( 0 )
 				src.operating = 1
-				play_animation("closing")				
+				play_animation("closing")
 				update_icon(1)
 
 				src.density = 1

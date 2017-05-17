@@ -19,7 +19,7 @@ RACK PARTS
 	stamina_crit_chance = 10
 
 /obj/item/table_parts/attackby(obj/item/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/wrench))
+	if (iswrench(W))
 		var/atom/A = new /obj/item/sheet( src.loc )
 		if(src.material)
 			A.setMaterial(src.material)
@@ -121,7 +121,7 @@ RACK PARTS
 	stamina_crit_chance = 15
 
 /obj/item/table_parts/reinforced/attackby(obj/item/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/wrench))
+	if (iswrench(W))
 		var/obj/item/sheet/A = new /obj/item/sheet(get_turf(src))
 		if(src.material)
 			A.setMaterial(src.material)
@@ -147,7 +147,7 @@ RACK PARTS
 	stamina_crit_chance = 15
 
 /obj/item/rack_parts/attackby(obj/item/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/wrench))
+	if (iswrench(W))
 		var/obj/item/sheet/A = new /obj/item/sheet(get_turf(src))
 		if(src.material)
 			A.setMaterial(src.material)

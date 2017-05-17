@@ -8,6 +8,7 @@ SUTURE
 BANDAGE
 BLOOD BAG (unused)
 BODY BAG
+SURGICAL LASER
 */
 
 /* ================================================= */
@@ -177,6 +178,130 @@ BODY BAG
 			if (user)
 				user.suiciding = 0
 		return 1
+
+/* =========================================================== */
+/* -------------------- Surgical Laser ----------------------- */
+/* =========================================================== */
+
+/obj/item/surgical_laser //Moved here from tools.dm //gonna need to come back to this once you have help
+	name = "surgical laser"
+	icon = 'icons/obj/surgery.dmi' //once again, all sprite references are placeholders until sundance finishes his sprites
+	inhand_image_icon = 'icons/mob/inhand/hand_tools.dmi'
+	icon_state = "scalpel1" //defaults to scalpel mode
+	flags = FPRINT | TABLEPASS | CONDUCT
+	force = 3.0 //same as a scalpel
+	w_class = 1.0
+	hit_type = DAMAGE_CUT
+	hitsound = 'sound/weapons/slashcut.ogg'
+	throwforce = 5.0
+	throw_speed = 3
+	throw_range = 5
+	desc = "An amazing piece of medical technology that function as three medical tools in one."
+	stamina_damage = 5
+	stamina_cost = 5
+	stamina_crit_chance = 35
+	module_research = list("tools" = 8, "metals" = 5, "devices" = 5)
+	rand_pos = 1
+	var/omni_mode = LASER_SCALPEL
+	var/temp_mode = "scalpel"
+	var/powerusage = 100 //amount of cell charge used per switch, I would do per tool usage, but that's way too hard to gauge in this case.
+
+	proc/usepower(mob/user as mob)
+		if (istype(user, /mob/living/silicon/robot))
+			var/mob/living/silicon/robot/R = user
+			R.cell.charge -= src.powerusage
+		else if (istype(user, /mob/living/silicon/ghostdrone)) //I sincerely hope this still works with all the ghost drone updates!
+			var/mob/living/silicon/ghostdrone/R = user
+			R.cell.charge -= src.powerusage
+  		return
+
+	attack_self(mob/user as mob)
+		var/newmode = input("Select desired tool", "Confirm tool selection", src.temp_mode) in list("scalpel", "enucleation spoon", "circular saw")
+		if (newmode)
+			boutput(user, "<span style=\"color:blue\"> The laser is now set to function as a [newmode].</span>")
+			usepower(user)
+			src.temp_mode = newmode
+
+			switch(temp_mode)
+				if ("scalpel")
+					icon = 'icons/obj/surgery.dmi'
+					icon_state = "scalpel1"
+					inhand_image_icon = 'icons/mob/inhand/hand_medical.dmi'
+					item_state = "scalpel"
+					hit_type = DAMAGE_CUT
+					hitsound = 'sound/weapons/slashcut.ogg'
+					force = 3.0
+					w_class = 1.0
+					throwforce = 5.0
+					throw_speed = 3
+					throw_range = 5
+					m_amt = 10000
+					g_amt = 5000
+					stamina_damage = 5
+					stamina_cost = 5
+					stamina_crit_chance = 35
+					omni_mode = LASER_SCALPEL
+
+				if ("circular saw")
+					icon = 'icons/obj/surgery.dmi'
+					icon_state = "saw1"
+					inhand_image_icon = 'icons/mob/inhand/hand_medical.dmi'
+					item_state = "saw1"
+					hit_type = DAMAGE_CUT
+					hitsound = 'sound/weapons/slashcut.ogg'
+					force = 3
+					w_class = 1.0
+					throwforce = 3.0
+					throw_speed = 3
+					throw_range = 5
+					m_amt = 20000
+					g_amt = 10000
+					stamina_damage = 5
+					stamina_cost = 5
+					stamina_crit_chance = 35
+					omni_mode = LASER_SAW
+
+				if ("enucleation spoon")
+					icon = 'icons/obj/surgery.dmi'
+					icon_state = "spoon"
+					inhand_image_icon = 'icons/mob/inhand/hand_medical.dmi'
+					item_state = "scalpel"
+					hit_type = DAMAGE_STAB
+					hitsound = 'sound/effects/bloody_stab.ogg'
+					force = 3.0
+					w_class = 1.0
+					throwforce = 5.0
+					throw_speed = 3
+					throw_range = 5
+					m_amt = 10000
+					g_amt = 5000
+					stamina_damage = 5
+					stamina_cost = 5
+					stamina_crit_chance = 35
+					omni_mode = LASER_SPOON
+		return
+
+	attack(mob/living/carbon/M as mob, mob/user as mob)
+		logTheThing("combat", user, M, "used [src] in [src.temp_mode] mode on %target% (<b>Intent</b>: <i>[user.a_intent]</i>) (<b>Targeting</b>: <i>[user.zone_sel.selecting]</i>)")
+		switch (temp_mode)
+			if ("scalpel")
+				if (!scalpel_surgery(M, user))
+					return ..()
+				else return
+			if ("enucleation spoon")
+				if (!spoon_surgery(M, user))
+					return ..()
+				else return
+			if ("circular saw")
+				if (!saw_surgery(M, user))
+					return ..()
+				else return
+
+
+	get_desc(dist)
+		if (dist < 3)
+			desc += "<br><span style=\"color:blue\">It is currently set to [src.temp_mode] mode.</span>"
+		return
 
 /* ==================================================== */
 /* -------------------- Staple Gun -------------------- */

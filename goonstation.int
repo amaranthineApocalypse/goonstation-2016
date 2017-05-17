@@ -1,9 +1,11 @@
 // BEGIN_INTERNALS
 /*
-LAST_COMPILE_TIME: 1457219709
-DIR: code code\chui\example code\datums\buildmodes code\datums\buildmodes\adventure code\datums\buildmodes\adventure\elements code\datums\chemistry code\datums\chemistry\tools code\datums\critter_mobs\health code\datums\gamemodes code\datums\genetics 
+LAST_COMPILE_TIME: 1495025428
+DIR: code code\chui\example code\datums code\datums\buildmodes code\datums\buildmodes\adventure code\datums\buildmodes\adventure\elements code\datums\chemistry code\datums\chemistry\tools code\datums\controllers code\datums\critter_mobs\health code\mob code\mob\living code\mob\living\silicon code\mob\living\silicon\robot code\obj code\obj\item code\obj\submachine code\procs icons icons\mob icons\mob\inhand 
 AUTO_FILE_DIR: OFF
 MAP_ICON_TYPE: 0
-LAST_COMPILE_VERSION: 510.1327
+LAST_COMPILE_VERSION: 511.1359
+WINDOW: code\mob\living\silicon\robot\robot_modules.dm;code\obj\submachine\robotics.dm;code\mob\living\silicon\robot.dm;code\_macros.dm;code\obj\item\tools.dm;code\obj\misc_junk.dm;icons\mob\inhand\hand_tools.dmi;code\obj\item\surgery_tools.dm;code\obj\item\pens_writing_etc.dm;code\procs\surgery.dm;code\procs\mob_procs.dm
+FILE: code\obj\submachine\robotics.dm
 */
 // END_INTERNALS

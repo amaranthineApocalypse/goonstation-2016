@@ -347,7 +347,7 @@
 			build_icon()
 			qdel(W)
 
-		else if (istype(W, /obj/item/crowbar))
+		else if (iscrowbar(W))
 			var/turf/T = user.loc
 			boutput(user, "<span style=\"color:blue\">Prying door open.</span>")
 			playsound(src.loc, "sound/items/Crowbar.ogg", 100, 1)
@@ -596,7 +596,7 @@
 		return 0
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (src.open && istype(W, /obj/item/wrench))
+		if (src.open && iswrench(W))
 			return
 		else
 			return ..()

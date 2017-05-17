@@ -110,7 +110,7 @@
 	portable = 0
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/device/multitool))
+		if ismultitool(W) //heck yeah, macros.
 			user.visible_message("<span style=\"color:red\"><b>[user] begins to clear the [src]!</b></span>","You begin to clear the [src].")
 			if(do_after(user, 30))
 				user.visible_message("<span style=\"color:red\"><b>[user] clears the [src]!</b></span>","You clear the [src].")

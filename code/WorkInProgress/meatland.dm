@@ -229,7 +229,7 @@ var/list/meatland_fx_sounds = list('sound/ambience/meatzone_fx1.ogg','sound/ambi
 				src.loc.invisibility = 100 //Hide the floor below us so people don't just right click and see two floors.
 
 		attackby(obj/item/O as obj, mob/user as mob)
-			if (src.alive && istype(O, /obj/item/crowbar))
+			if (src.alive && iscrowbar(O))
 				user.visible_message("<span style=\"color:red\"><b>[user] jabs [src] with [O]!</b></span>", "<span style=\"color:red\">You jab [src] with [O] and begin to pull!  Hold on!</span>")
 				if (do_after(user, 20))
 					playsound(src.loc, "sound/items/Crowbar.ogg", 50, 1)

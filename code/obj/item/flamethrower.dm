@@ -127,7 +127,7 @@ GETLINEEEEEEEEEEEEEEEEEEEEE
 	return
 
 /obj/item/assembly/weld_rod/attackby(obj/item/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/wrench) )
+	if (iswrench(W) )
 		var/turf/T = src.loc
 		if (ismob(T))
 			T = T.loc
@@ -173,7 +173,7 @@ GETLINEEEEEEEEEEEEEEEEEEEEE
 	return
 
 /obj/item/assembly/w_r_ignite/attackby(obj/item/W as obj, mob/user as mob)
-	if ((istype(W, /obj/item/wrench) && !( src.status )))
+	if ((iswrench(W) && !( src.status )))
 		var/turf/T = src.loc
 		if (ismob(T))
 			T = T.loc
@@ -189,7 +189,7 @@ GETLINEEEEEEEEEEEEEEEEEEEEE
 
 		qdel(src)
 		return
-	if (istype(W, /obj/item/screwdriver))
+	if (isscrewdriver(W))
 		user.show_message("<span style=\"color:blue\">The igniter is now secured!</span>", 1)
 		var/obj/item/flamethrower/R = new /obj/item/flamethrower(src.loc)
 		var/obj/item/assembly/w_r_ignite/S = src
@@ -263,7 +263,7 @@ GETLINEEEEEEEEEEEEEEEEEEEEE
 		icon_state = "flamethrower[oxy]_fuel"
 
 // PantsNote: Flamethrower disassmbly.
-	else if (istype(W, /obj/item/screwdriver))
+	else if (isscrewdriver(W))
 		var/obj/item/flamethrower/S = src
 		if (( S.part4 ))
 			return

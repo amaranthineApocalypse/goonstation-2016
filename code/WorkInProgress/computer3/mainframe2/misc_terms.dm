@@ -337,7 +337,7 @@
 			src.sync(src.host_id)
 			return
 
-		else if (istype(W, /obj/item/screwdriver))
+		else if (isscrewdriver(W))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			src.locked = !src.locked
 			src.panel_open = !src.locked
@@ -714,7 +714,7 @@
 	attackby(obj/item/W as obj, mob/user as mob)
 		if (istype(W, /obj/item/tank))
 			return attack_hand(user)
-		else if (istype(W, /obj/item/screwdriver))
+		else if (isscrewdriver(W))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			boutput(user, "You [src.locked ? "secure" : "unscrew"] the maintenance panel.")
 			src.panel_open = !src.panel_open
@@ -1172,7 +1172,7 @@
 		return
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/screwdriver))
+		if (isscrewdriver(W))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			boutput(user, "You [src.panel_open ? "secure" : "unscrew"] the maintenance panel.")
 			src.panel_open = !src.panel_open
@@ -1426,7 +1426,7 @@
 		return
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/screwdriver))
+		if (isscrewdriver(W))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			boutput(user, "You [src.panel_open ? "secure" : "unscrew"] the maintenance panel.")
 			src.panel_open = !src.panel_open
@@ -1758,7 +1758,7 @@
 			src.updateUsrDialog()
 			return
 
-		else if (istype(W, /obj/item/screwdriver))
+		else if (isscrewdriver(W))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			boutput(user, "You [src.panel_open ? "secure" : "unscrew"] the maintenance panel.")
 			src.panel_open = !src.panel_open
@@ -2863,7 +2863,7 @@
 	attackby(obj/item/W as obj, mob/user as mob)
 		if (istype(W, /obj/item/raw_material/telecrystal))
 			return attack_hand(user)
-		else if (istype(W, /obj/item/screwdriver))
+		else if (isscrewdriver(W))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			boutput(user, "You [src.panel_open ? "secure" : "unscrew"] the maintenance panel.")
 			src.panel_open = !src.panel_open
@@ -3366,7 +3366,7 @@
 		if (istype(W, /obj/item/raw_material/telecrystal))
 			return attack_hand(user)
 
-		else if (istype(W, /obj/item/screwdriver))
+		else if (isscrewdriver(W))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			boutput(user, "You [src.panel_open ? "secure" : "unscrew"] the maintenance panel.")
 			src.panel_open = !src.panel_open

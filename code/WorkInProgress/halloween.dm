@@ -1260,7 +1260,7 @@
 		else
 			switch(repair_stage)
 				if (0)
-					if (istype(W, /obj/item/screwdriver))
+					if (isscrewdriver(W))
 						user.visible_message("[user] begins to unscrew the maintenance panel.","You begin to unscrew the maintenance panel.")
 						playsound(user, "sound/items/Screwdriver2.ogg", 65, 1)
 						if (!do_after(user, 20) || repair_stage)
@@ -1273,7 +1273,7 @@
 						return
 
 				if (1)
-					if (istype(W, /obj/item/crowbar))
+					if (iscrowbar(W))
 						user.visible_message("[user] begins to pry off the maintenance panel.","You begin to pry off the maintenance panel.")
 						playsound(user, "sound/items/Crowbar.ogg", 65, 1)
 						if (!do_after(user, 20) || (repair_stage != 1))
@@ -1290,7 +1290,7 @@
 						return
 
 				if (2)
-					if (istype(W, /obj/item/wrench))
+					if (iswrench(W))
 						user.visible_message("[user] begins to loosen the service module bolts.","You begin to loosen the service module bolts.")
 						playsound(user, "sound/items/Ratchet.ogg", 65, 1)
 						if (!do_after(user, 30) || (repair_stage != 2))
@@ -1325,7 +1325,7 @@
 						return
 
 				if (5)
-					if (istype(W, /obj/item/wrench))
+					if (iswrench(W))
 						user.visible_message("[user] begins to tighten the service module bolts.","You begin to tighten the service module bolts.")
 						playsound(user, "sound/items/Ratchet.ogg", 65, 1)
 						if (!do_after(user, 30) || (repair_stage != 5))
@@ -1359,7 +1359,7 @@
 						return
 
 				if (7)
-					if (istype(W, /obj/item/screwdriver))
+					if (isscrewdriver(W))
 						user.visible_message("[user] begins to secure the maintenance panel..","You begin to secure the maintenance panel.")
 						playsound(user, "sound/items/Screwdriver2.ogg", 65, 1)
 						if (!do_after(user, 100) || (repair_stage != 7))
@@ -1422,7 +1422,7 @@
 			qdel(src)
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/screwdriver))
+		if (isscrewdriver(W))
 			src.anchored = !( src.anchored )
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 75, 1)
 			user << (src.anchored ? "You have fastened the cubicle panel to the floor." : "You have unfastened the cubicle panel.")

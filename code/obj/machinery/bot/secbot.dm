@@ -272,7 +272,7 @@ Report Arrests: <A href='?src=\ref[src];operation=report'>[report_arrests ? "On"
 			else
 				boutput(user, "<span style=\"color:red\">Access denied.</span>")
 
-		else if (istype(W, /obj/item/screwdriver))
+		else if (isscrewdriver(W))
 			if (src.health < initial(health))
 				src.health = initial(health)
 				src.visible_message("<span style=\"color:red\">[user] repairs [src]!</span>", "<span style=\"color:red\">You repair [src].</span>")

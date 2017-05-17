@@ -143,7 +143,7 @@
 				user.show_text("There's already a payload attached.", "red")
 				return
 
-		else if (istype(W, /obj/item/wrench))
+		else if (iswrench(W))
 			if (src.grenade)
 				user.show_text("You detach [src.grenade].", "blue")
 				src.grenade.set_loc(get_turf(src))

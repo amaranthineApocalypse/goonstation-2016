@@ -238,7 +238,7 @@
 
 		src.take_damage(damage,damage_mult,damtype,user)
 
-		if (istype(W, /obj/item/crowbar))
+		if (iscrowbar(W))
 			user.unlock_medal("Is it really that time again?", 1)
 
 		return

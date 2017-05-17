@@ -325,7 +325,7 @@
 					return
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/wirecutters) || istype(W, /obj/item/scissors))
+		if (iswirecutters(W) || istype(W, /obj/item/scissors))
 			var/list/actions = list("Make bandages")
 			if (src.cape)
 				actions += "Cut cable"
@@ -785,7 +785,7 @@
 			return ..()
 
 	attackby(obj/item/W, mob/user)
-		if (istype(W, /obj/item/wirecutters) || istype(W, /obj/item/scissors))
+		if (iswirecutters(W) || istype(W, /obj/item/scissors))
 			if (src.eyeholes)
 				user.show_text("\The [src] already has eyeholes cut out of it!", "red")
 				return

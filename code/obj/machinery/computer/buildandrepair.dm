@@ -133,7 +133,7 @@
 /obj/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)
 		if (0)
-			if (istype(P, /obj/item/wrench))
+			if (iswrench(P))
 				playsound(src.loc, "sound/items/Ratchet.ogg", 50, 1)
 				if (do_after(user, 20))
 					boutput(user, "<span style=\"color:blue\">You wrench the frame into place.</span>")
@@ -152,7 +152,7 @@
 						A.setMaterial(M)
 					qdel(src)
 		if (1)
-			if (istype(P, /obj/item/wrench))
+			if (iswrench(P))
 				playsound(src.loc, "sound/items/Ratchet.ogg", 50, 1)
 				if (do_after(user, 20))
 					boutput(user, "<span style=\"color:blue\">You unfasten the frame.</span>")
@@ -165,12 +165,12 @@
 				src.circuit = P
 				user.drop_item()
 				P.set_loc(src)
-			if (istype(P, /obj/item/screwdriver) && circuit)
+			if (isscrewdriver(P) && circuit)
 				playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 				boutput(user, "<span style=\"color:blue\">You screw the circuit board into place.</span>")
 				src.state = 2
 				src.icon_state = "2"
-			if (istype(P, /obj/item/crowbar) && circuit)
+			if (iscrowbar(P) && circuit)
 				playsound(src.loc, "sound/items/Crowbar.ogg", 50, 1)
 				boutput(user, "<span style=\"color:blue\">You remove the circuit board.</span>")
 				src.state = 1
@@ -178,7 +178,7 @@
 				circuit.set_loc(src.loc)
 				src.circuit = null
 		if (2)
-			if (istype(P, /obj/item/screwdriver) && circuit)
+			if (isscrewdriver(P) && circuit)
 				playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 				boutput(user, "<span style=\"color:blue\">You unfasten the circuit board.</span>")
 				src.state = 1
@@ -196,7 +196,7 @@
 					boutput(user, "<span style=\"color:red\">You need at least five pieces of cable to wire the computer.</span>")
 
 		if (3)
-			if (istype(P, /obj/item/wirecutters))
+			if (iswirecutters(P))
 				playsound(src.loc, "sound/items/Wirecutter.ogg", 50, 1)
 				boutput(user, "<span style=\"color:blue\">You remove the cables.</span>")
 				src.state = 2
@@ -223,14 +223,14 @@
 				else
 					boutput(user, "<span style=\"color:red\">This is the wrong kind of material. You'll need a type of glass or crystal.</span>")
 		if (4)
-			if (istype(P, /obj/item/crowbar))
+			if (iscrowbar(P))
 				playsound(src.loc, "sound/items/Crowbar.ogg", 50, 1)
 				boutput(user, "<span style=\"color:blue\">You remove the glass panel.</span>")
 				src.state = 3
 				src.icon_state = "3"
 				var/obj/item/sheet/glass/A = new /obj/item/sheet/glass( src.loc )
 				A.amount = 2
-			if (istype(P, /obj/item/screwdriver))
+			if (isscrewdriver(P))
 				playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 				boutput(user, "<span style=\"color:blue\">You connect the monitor.</span>")
 				var/B = new src.circuit.computertype ( src.loc )

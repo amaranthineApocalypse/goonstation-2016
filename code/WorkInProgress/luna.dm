@@ -1927,7 +1927,7 @@ datum/maintpanel_device_entry
 	icon_state = "aisleshelf"
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/wrench))
+		if (iswrench(W))
 			return
 
 		return ..()

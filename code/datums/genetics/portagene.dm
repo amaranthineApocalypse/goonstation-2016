@@ -13,7 +13,7 @@
 		return
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if(istype(W, /obj/item/screwdriver) && (src.stat & BROKEN))
+		if(isscrewdriver(W) && (src.stat & BROKEN))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			if(do_after(user, 20))
 				boutput(user, "<span style=\"color:blue\">The broken glass falls out.</span>")

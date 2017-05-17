@@ -434,7 +434,7 @@
 		qdel(W)
 		return
 
-	else if (istype(W, /obj/item/wrench))
+	else if (iswrench(W))
 		boutput(user, "<span style=\"color:blue\">Now disassembling table</span>")
 		playsound(src.loc, "sound/items/Ratchet.ogg", 50, 1)
 		if(do_after(user,50))
@@ -483,7 +483,7 @@
 				src.status = 2
 		return
 
-	else if (istype(W, /obj/item/wrench))
+	else if (iswrench(W))
 		var/turf/T = user.loc
 		if(src.status == 1)
 			boutput(user, "<span style=\"color:blue\">Now disassembling the reinforced table</span>")

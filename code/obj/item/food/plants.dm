@@ -161,7 +161,7 @@
 			HYPpassplantgenes(DNA,PDNA)
 			qdel(W)
 			qdel(src)
-		else if (istype(W, /obj/item/axe) || istype(W, /obj/item/circular_saw) || istype(W, /obj/item/kitchen/utensil/knife) || istype(W, /obj/item/scalpel) || istype(W, /obj/item/sword) || istype(W,/obj/item/saw) || istype(W,/obj/item/knife_butcher) && !istype (src, /obj/item/reagent_containers/food/snacks/plant/orange/wedge))
+		else if ((istype(W, /obj/item/axe) || isscalpel(W) || istype(W, /obj/item/sword) || ((issaw(W)) && !(istype(W, /obj/item/kitchen/utensil/fork)))) && !istype (src, /obj/item/reagent_containers/food/snacks/plant/orange/wedge))
 			if (istype (src, /obj/item/reagent_containers/food/snacks/plant/orange/wedge))
 				boutput(user, "<span style=\"color:red\">You can't cut wedges into wedges! What kind of insanity is that!?</span>")
 				return
@@ -242,7 +242,7 @@
 	food_color = "#7FFF00"
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/axe) || istype(W, /obj/item/circular_saw) || istype(W, /obj/item/kitchen/utensil/knife) || istype(W, /obj/item/scalpel) || istype(W, /obj/item/sword) || istype(W,/obj/item/saw) || istype(W,/obj/item/knife_butcher))
+		if (istype(W, /obj/item/axe) || isscalpel(W) || istype(W, /obj/item/sword) || ((issaw(W)) && !(istype(W, /obj/item/kitchen/utensil/fork))))
 			var/turf/T = get_turf(src)
 			user.visible_message("[user] cuts [src] into slices.", "You cut [src] into slices.")
 			var/makeslices = 6
@@ -280,7 +280,7 @@
 		reagents.add_reagent("george_melonium",50)
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/axe) || istype(W, /obj/item/circular_saw) || istype(W, /obj/item/kitchen/utensil/knife) || istype(W, /obj/item/scalpel) || istype(W, /obj/item/sword) || istype(W,/obj/item/saw) || istype(W,/obj/item/knife_butcher))
+		if (istype(W, /obj/item/axe) || isscalpel(W) || istype(W, /obj/item/sword) || ((issaw(W)) && !(istype(W, /obj/item/kitchen/utensil/fork))))
 			var/turf/T = get_turf(src)
 			user.visible_message("[user] cuts [src] into slices.", "You cut [src] into slices.")
 			var/makeslices = 6
@@ -492,7 +492,7 @@
 	food_color = "#CC6600"
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/axe) || istype(W, /obj/item/circular_saw) || istype(W, /obj/item/kitchen/utensil/knife) || istype(W, /obj/item/scalpel) || istype(W, /obj/item/sword) || istype(W,/obj/item/saw) || istype(W,/obj/item/knife_butcher))
+		if (istype(W, /obj/item/axe) || isscalpel(W) || istype(W, /obj/item/sword) || ((issaw(W)) && !(istype(W, /obj/item/kitchen/utensil/fork))))
 			user.visible_message("[user] carefully and creatively carves [src].", "You carefully and creatively carve [src]. Spooky!")
 			new /obj/item/clothing/head/pumpkin(user.loc)
 			qdel (src)
@@ -528,7 +528,7 @@
 	plant_reagent = "juice_lime"
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/axe) || istype(W, /obj/item/circular_saw) || istype(W, /obj/item/kitchen/utensil/knife) || istype(W, /obj/item/scalpel) || istype(W, /obj/item/sword) || istype(W,/obj/item/saw) || istype(W,/obj/item/knife_butcher))
+		if (istype(W, /obj/item/axe) || isscalpel(W) || istype(W, /obj/item/sword) || ((issaw(W)) && !(istype(W, /obj/item/kitchen/utensil/fork))))
 			if (istype (src, /obj/item/reagent_containers/food/snacks/plant/lime/wedge))
 				boutput(user, "<span style=\"color:red\">You can't cut wedges into wedges! What kind of insanity is that!?</span>")
 				return
@@ -568,7 +568,7 @@
 	plant_reagent = "juice_lemon"
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/axe) || istype(W, /obj/item/circular_saw) || istype(W, /obj/item/kitchen/utensil/knife) || istype(W, /obj/item/scalpel) || istype(W, /obj/item/sword) || istype(W,/obj/item/saw) || istype(W,/obj/item/knife_butcher))
+		if (istype(W, /obj/item/axe) || isscalpel(W) || istype(W, /obj/item/sword) || ((issaw(W)) && !(istype(W, /obj/item/kitchen/utensil/fork))))
 			if (istype (src, /obj/item/reagent_containers/food/snacks/plant/lemon/wedge))
 				boutput(user, "<span style=\"color:red\">You can't cut wedges into wedges! What kind of insanity is that!?</span>")
 				return

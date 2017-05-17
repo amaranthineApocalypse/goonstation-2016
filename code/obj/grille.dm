@@ -219,7 +219,7 @@
 	attackby(obj/item/W, mob/user)
 		// Things that won't electrocute you
 
-		if (istype(W,/obj/item/device/multitool) || istype(W, /obj/item/device/t_scanner))
+		if (ismultitool(W) || istype(W, /obj/item/device/t_scanner)) //I'm only six changes in and I already can't stand it.
 			var/net = get_connection()
 			if(!net)
 				boutput(user, "<span style=\"color:blue\">No electrical current detected.</span>")
@@ -287,12 +287,12 @@
 
 		// Things that will electrocute you
 
-		if (istype(W, /obj/item/wirecutters))
+		if (iswirecutters(W))
 			damage_slashing(src.health_max)
 			src.visible_message("<span style=\"color:red\"><b>[usr]</b> cuts apart the [src] with [W].</span>")
 			playsound(src.loc, 'sound/items/Wirecutter.ogg', 100, 1)
 
-		else if ((istype(W, /obj/item/screwdriver) && (istype(src.loc, /turf/simulated) || src.anchored)))
+		else if ((isscrewdriver(W) && (istype(src.loc, /turf/simulated) || src.anchored)))
 			playsound(src.loc, 'sound/items/Screwdriver.ogg', 100, 1)
 			src.anchored = !( src.anchored )
 			src.visible_message("<span style=\"color:red\"><b>[usr]</b> [src.anchored ? "fastens" : "unfastens"] [src].</span>")

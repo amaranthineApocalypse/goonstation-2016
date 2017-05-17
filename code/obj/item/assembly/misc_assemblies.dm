@@ -78,7 +78,7 @@ Contains:
 	return
 
 /obj/item/assembly/time_ignite/attackby(obj/item/W as obj, mob/user as mob)
-	if ((istype(W, /obj/item/wrench) && !( src.status )))
+	if ((iswrench(W) && !( src.status )))
 		var/turf/T = src.loc
 		if (ismob(T))
 			T = T.loc
@@ -111,7 +111,7 @@ Contains:
 		else boutput(user, "You must remove the beaker from the assembly before transferring chemicals to it!")
 		return
 
-	if (!( istype(W, /obj/item/screwdriver) ))
+	if (!( isscrewdriver(W) ))
 		return
 	src.status = !( src.status )
 	if (src.status)
@@ -221,7 +221,7 @@ Contains:
 	return
 
 /obj/item/assembly/prox_ignite/attackby(obj/item/W as obj, mob/user as mob)
-	if ((istype(W, /obj/item/wrench) && !( src.status )))
+	if ((iswrench(W) && !( src.status )))
 		var/turf/T = src.loc
 		if (ismob(T))
 			T = T.loc
@@ -255,7 +255,7 @@ Contains:
 			boutput(user, "You attach the proximity/igniter assembly to the beaker.")
 		else boutput(user, "You must remove the beaker from the assembly before transferring chemicals to it!")
 		return
-	if (!( istype(W, /obj/item/screwdriver) ))
+	if (!( isscrewdriver(W) ))
 		return
 	src.status = !( src.status )
 	if (src.status)
@@ -331,7 +331,7 @@ Contains:
 
 /obj/item/assembly/rad_ignite/attackby(obj/item/W as obj, mob/user as mob)
 
-	if ((istype(W, /obj/item/wrench) && !( src.status )))
+	if ((iswrench(W) && !( src.status )))
 		var/turf/T = src.loc
 		if (ismob(T))
 			T = T.loc
@@ -360,7 +360,7 @@ Contains:
 		else boutput(user, "You must remove the beaker from the assembly before transferring chemicals to it!")
 		return
 
-	if (!( istype(W, /obj/item/screwdriver) ))
+	if (!( isscrewdriver(W) ))
 		return
 	src.status = !( src.status )
 	if (src.status)
@@ -444,7 +444,7 @@ Contains:
 	return
 
 /obj/item/assembly/anal_ignite/attackby(obj/item/W as obj, mob/user as mob)
-	if ((istype(W, /obj/item/wrench) && !( src.status )))
+	if ((iswrench(W) && !( src.status )))
 		var/turf/T = src.loc
 		if (ismob(T))
 			T = T.loc
@@ -457,7 +457,7 @@ Contains:
 
 		qdel(src)
 		return
-	if (( istype(W, /obj/item/screwdriver) ))
+	if (( isscrewdriver(W) ))
 		src.status = !( src.status )
 		if (src.status)
 			user.show_message("<span style=\"color:blue\">The analyzer is now secured!</span>", 1)
@@ -532,7 +532,7 @@ obj/item/assembly/radio_horn/receive_signal()
 
 /obj/item/assembly/rad_time/attackby(obj/item/W as obj, mob/user as mob)
 
-	if ((istype(W, /obj/item/wrench) && !( src.status )))
+	if ((iswrench(W) && !( src.status )))
 		var/turf/T = src.loc
 		if (ismob(T))
 			T = T.loc
@@ -545,7 +545,7 @@ obj/item/assembly/radio_horn/receive_signal()
 		//SN src = null
 		qdel(src)
 		return
-	if (!( istype(W, /obj/item/screwdriver) ))
+	if (!( isscrewdriver(W) ))
 		return
 	src.status = !( src.status )
 	if (src.status)
@@ -601,7 +601,7 @@ obj/item/assembly/radio_horn/receive_signal()
 
 /obj/item/assembly/rad_prox/attackby(obj/item/W as obj, mob/user as mob)
 
-	if ((istype(W, /obj/item/wrench) && !( src.status )))
+	if ((iswrench(W) && !( src.status )))
 		var/turf/T = src.loc
 		if (ismob(T))
 			T = T.loc
@@ -614,7 +614,7 @@ obj/item/assembly/radio_horn/receive_signal()
 		//SN src = null
 		qdel(src)
 		return
-	if (!( istype(W, /obj/item/screwdriver) ))
+	if (!( isscrewdriver(W) ))
 		return
 	src.status = !( src.status )
 	if (src.status)

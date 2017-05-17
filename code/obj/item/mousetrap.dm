@@ -160,7 +160,7 @@
 
 			logTheThing("bombing", user, null, "rigs [src] with [src.arm] and [C] at [log_loc(user)].")
 
-		else if (istype(C, /obj/item/wrench))
+		else if (iswrench(C))
 			if (src.grenade)
 				user.show_text("You detach [src.grenade].", "blue")
 				src.grenade.set_loc(get_turf(src))
@@ -321,7 +321,7 @@
 		return
 
 	attackby(obj/item/C as obj, mob/user as mob)
-		if (istype(C, /obj/item/wrench))
+		if (iswrench(C))
 			if (!isturf(src.loc))
 				user.show_text("Place the [src.name] on the ground first.", "red")
 				return

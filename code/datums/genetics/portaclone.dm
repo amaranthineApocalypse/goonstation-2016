@@ -40,7 +40,7 @@
 		return
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/disk/data/floppy) || istype(W, /obj/item/screwdriver) || istype(W, /obj/item/cloner_upgrade))
+		if (istype(W, /obj/item/disk/data/floppy) || isscrewdriver(W) || istype(W, /obj/item/cloner_upgrade))
 			computer.attackby(W,user)
 			src.add_fingerprint(user)
 

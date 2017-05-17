@@ -106,11 +106,11 @@ var/list/mechanics_telepads = new/list()
 
 	//Helper proc to check if a mob is allowed to change connections. Right now you only need a multitool.
 	proc/allowChange(var/mob/M)
-		if(hasvar(M, "l_hand") && istype(M:l_hand, /obj/item/device/multitool)) return 1
-		if(hasvar(M, "r_hand") && istype(M:r_hand, /obj/item/device/multitool)) return 1
+		if(hasvar(M, "l_hand") && ismultitool(M:l_hand)) return 1 //I mean, technically borgs can't have hands, but maybe a human will get an omnitool at some point?
+		if(hasvar(M, "r_hand") && ismultitool(M:r_hand)) return 1 //I mean, technically borgs can't have hands, but maybe a human will get an omnitool at some point?
 		if(hasvar(M, "module_states"))
 			for(var/atom/A in M:module_states)
-				if(istype(A, /obj/item/device/multitool))
+				if(ismultitool(A)) //heck yeah, compiler macros
 					return 1
 		return 0
 
@@ -202,7 +202,7 @@ var/list/mechanics_telepads = new/list()
 		return src.attack_hand(user)
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if(istype(W,/obj/item/wrench))
+		if(iswrench(W))
 			switch(level)
 				if(1) //Level 1 = wrenched into place
 					boutput(user, "You detach the [src] from the underfloor and deactivate it.")

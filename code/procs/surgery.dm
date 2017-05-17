@@ -110,7 +110,7 @@
 		if (patient.reagents.get_reagent_amount("antihistamine") >= 5)
 			screw_up_prob -= 5
 
-	if (surgeon.bioHolder.HasEffect("training_medical"))
+	if (surgeon.bioHolder.HasEffect("training_medical") || issilicon(surgeon)) //borgs make great surgeons!
 		screw_up_prob = max(0, min(100, screw_up_prob)) // if they're a doctor they can have no chance to mess up
 	else
 		screw_up_prob = max(5, min(100, screw_up_prob)) // otherwise there'll always be a slight chance
@@ -122,7 +122,7 @@
 /proc/calc_surgery_damage(var/mob/surgeon as mob, var/screw_up_prob = 25, var/damage = 10, var/adj1 = 0.5, adj2 = 200)
 	damage = damage * (adj1 + (screw_up_prob / adj2))
 
-	if (surgeon && surgeon.bioHolder.HasEffect("training_medical")) // doctor better trained and do less hurt
+	if (surgeon && surgeon.bioHolder.HasEffect("training_medical") || surgeon && issilicon(surgeon)) // doctor better trained and do less hurt. Borgs also do less hurt.
 		damage = max(0, round(damage))
 	else
 		damage = max(2, round(damage))

@@ -342,13 +342,16 @@
 				message_admins("[key_name(user)] builds a canister bomb at [log_loc(src)]. See bombing logs for atmos readout.")
 	else if (src.det && istype(W, /obj/item/tank))
 		user.show_message("<span style=\"color:red\">You cannot insert a tank, as the slot is shut closed by the detonator assembly.</span>")
-	else if (src.det && (istype(W, /obj/item/wirecutters) || istype(W, /obj/item/device/multitool)))
+	else if (src.det && (iswirecutters(W) || ismultitool(W)))//CONSISTENCY
 		src.attack_hand(user)
 
 	if (istype(W, /obj/item/cargotele))
 		W:cargoteleport(src, user)
 		return
-	if(istype(W, /obj/item/atmosporter))
+/*
+		//AmaranthineApocalypse: I'm fairly certain that Noahs tweaks to how the porter operates have rendered this redundant, still might as well keep it around just in case.
+
+	if(istype(W, /obj/item/porter/atmos)) //deprecated now, but I'm going to keep this around just in case there was a good reason to have it this way. It seems really odd that it'd be coded in such a bizarre way without a good reason, so I'm erring on the side of caution. Same with the other atmosporter references.
 		var/canamt = W:contents.len
 		if (canamt >= W:capacity) boutput(user, "<span style=\"color:red\">Your [W] is full!</span>")
 		else
@@ -358,7 +361,8 @@
 			var/datum/effects/system/spark_spread/s = unpool(/datum/effects/system/spark_spread)
 			s.set_up(5, 1, user)
 			s.start()
-	if(!istype(W, /obj/item/wrench) && !istype(W, /obj/item/tank) && !istype(W, /obj/item/device/analyzer) && !istype(W, /obj/item/device/pda2))
+*/
+	if(!iswrench(W) && !istype(W, /obj/item/tank) && !istype(W, /obj/item/device/analyzer) && !istype(W, /obj/item/device/pda2))
 		src.visible_message("<span style=\"color:red\">[user] hits the [src] with a [W]!</span>")
 		logTheThing("combat", user, null, "attacked [src] [log_atmos(src)] with [W] at [log_loc(src)].")
 		src.health -= W.force
@@ -583,8 +587,12 @@
 			overlay_state = "overlay_safety_off"
 
 		if (href_list["cut"])
-			if (!(istype(usr.equipped(), /obj/item/wirecutters)))
+
+			var/obj/item/equip = usr.equipped()
+			if (!iswirecutters(equip))
 				usr.show_message("<span style=\"color:red\">You need to have wirecutters equipped for this.</span>")
+				return
+
 			else
 				if (src.det.shocked)
 					var/mob/living/carbon/human/H = usr
@@ -649,8 +657,12 @@
 					src.det.WireStatus[index] = 0
 
 		if (href_list["pulse"])
-			if (!(istype(usr.equipped(), /obj/item/device/multitool)))
+
+			var/obj/item/equip = usr.equipped()
+			if (!ismultitool(equip))
 				usr.show_message("<span style=\"color:red\">You need to have a multitool equipped for this.</span>")
+				return
+
 			else
 				if (src.det.shocked)
 					var/mob/living/carbon/human/H = usr
@@ -856,4 +868,3 @@
 
 	src.update_icon()
 	return 1
-

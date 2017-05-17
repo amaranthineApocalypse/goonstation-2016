@@ -1207,7 +1207,7 @@
 				else
 					boutput(usr, "<span style=\"color:red\">That slot is already occupied!</span>")
 			return
-		if (istype(O, /obj/item/screwdriver))
+		if (isscrewdriver(O))
 			if (machine_state)
 				boutput(usr, "<span style=\"color:red\">You cannot do that while the machine is working.</span>")
 				return

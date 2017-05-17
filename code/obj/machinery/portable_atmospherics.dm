@@ -103,7 +103,7 @@
 			src.holding = W
 			update_icon()
 
-	else if (istype(W, /obj/item/wrench))
+	else if (iswrench(W))
 		if(connected_port)
 			logTheThing("station", user, null, "has disconnected \the [src] [log_atmos(src)] from the port at [log_loc(src)].")
 			disconnect()

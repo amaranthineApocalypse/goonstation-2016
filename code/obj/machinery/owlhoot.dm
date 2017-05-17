@@ -29,7 +29,7 @@
 						src.flash()
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/wrench))
+		if (iswrench(W))
 			add_fingerprint(user)
 			src.anchored = !src.anchored
 

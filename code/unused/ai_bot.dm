@@ -85,7 +85,7 @@ To-do: Add overlays here */
 			O.show_message(text("<span style=\"color:red\">[user] has mended the robot!</span>"), 1)
 		src.update()
 
-	else if (istype(W, /obj/item/weapon/crowbar))	// crowbar means open or close the cover
+	else if (istype(W, /obj/item/weapon/crowbar))	// crowbar means open or close the cover BUTTES: unused and damn old, don't change
 		if(opened)
 			opened = 0
 			updateicon()
@@ -209,4 +209,3 @@ To-do: Add overlays here */
 
 	operating = 0
 	update()
-

@@ -47,7 +47,7 @@ Contains:
 /obj/machinery/the_singularitygen/attackby(obj/item/W, mob/user)
 	src.add_fingerprint(user)
 
-	if (istype(W, /obj/item/wrench))
+	if (iswrench(W))
 		if (!anchored)
 			anchored = 1
 			playsound(src.loc, "sound/items/Ratchet.ogg", 75, 1)
@@ -512,7 +512,7 @@ for some reason I brought it back and tried to clean it up a bit and I regret ev
 		src.power += P.power
 
 /obj/machinery/field_generator/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/wrench))
+	if(iswrench(W))
 		if(active)
 			boutput(user, "Turn off the field generator first.")
 			return
@@ -898,7 +898,7 @@ for some reason I brought it back and tried to clean it up a bit and I regret ev
 	..()
 
 /obj/machinery/emitter/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/wrench))
+	if(iswrench(W))
 		if(active)
 			boutput(user, "Turn off the emitter first.")
 			return
@@ -1129,7 +1129,7 @@ for some reason I brought it back and tried to clean it up a bit and I regret ev
 		updateicon()
 		return
 
-	if(istype(W, /obj/item/crowbar))
+	if(iscrowbar(W))
 		if(!P)
 			return
 		var/obj/item/tank/plasma/Z = src.P
@@ -1353,7 +1353,7 @@ for some reason I brought it back and tried to clean it up a bit and I regret ev
 /obj/machinery/the_singularitybomb/attackby(obj/item/W, mob/user)
 	src.add_fingerprint(user)
 
-	if(istype(W, /obj/item/wrench))
+	if(iswrench(W))
 
 		if(state == 0)
 			state = 1

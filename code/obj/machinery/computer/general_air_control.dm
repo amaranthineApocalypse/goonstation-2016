@@ -21,7 +21,7 @@ obj/machinery/computer/general_air_control
 		src.updateDialog()
 
 	attackby(I as obj, user as mob)
-		if(istype(I, /obj/item/screwdriver))
+		if(isscrewdriver(I))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			if(do_after(user, 20))
 				if (src.stat & BROKEN)
@@ -275,7 +275,7 @@ Max Output Pressure: [output_pressure] kPa<BR>"}
 		var/on_temperature = 1200
 
 		attackby(I as obj, user as mob)
-			if(istype(I, /obj/item/screwdriver))
+			if(isscrewdriver(I))
 				playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 				if(do_after(user, 20))
 					if (src.stat & BROKEN)
@@ -569,7 +569,7 @@ Rate: <A href='?src=\ref[src];change_vol=-10'>--</A> <A href='?src=\ref[src];cha
 		src.updateDialog()
 
 	attackby(I as obj, user as mob)
-		if(istype(I, /obj/item/screwdriver))
+		if(isscrewdriver(I))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			if(do_after(user, 20))
 				if (src.stat & BROKEN)

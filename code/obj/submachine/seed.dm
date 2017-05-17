@@ -1036,18 +1036,34 @@
 
 		if ((href_list["cutwire"]) && (src.panelopen))
 			var/twire = text2num(href_list["cutwire"])
-			if (!( istype(usr.equipped(), /obj/item/wirecutters) ))
+
+			var/obj/item/equip = usr.equipped()
+			if (!istype(equip, /obj/item/wirecutters))
 				boutput(usr, "You need wirecutters!")
 				return
+			if(istype(equip, /obj/item/omnitool))
+				var/obj/item/omnitool/omnitool = equip
+				if (omnitool.omni_mode != OMNITOOL_WIRECUTTERS)
+					boutput(usr, "You need wirecutters!")
+					return
+
 			else if (src.isWireColorCut(twire)) src.mend(twire)
 			else src.cut(twire)
 			src.updateUsrDialog()
 
 		if ((href_list["pulsewire"]) && (src.panelopen))
 			var/twire = text2num(href_list["pulsewire"])
-			if (!istype(usr.equipped(), /obj/item/device/multitool))
+
+			var/obj/item/equip = usr.equipped()
+			if (!istype(equip, /obj/item/device/multitool))
 				boutput(usr, "You need a multitool!")
 				return
+			if(istype(equip, /obj/item/omnitool))
+				var/obj/item/omnitool/omnitool = equip
+				if (omnitool.omni_mode != OMNITOOL_MULTITOOL)
+					boutput(usr, "You need a multitool!")
+					return
+
 			else if (src.isWireColorCut(twire))
 				boutput(usr, "You can't pulse a cut wire.")
 				return
@@ -1068,7 +1084,7 @@
 			return 0
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if(istype(W, /obj/item/screwdriver))
+		if(isscrewdriver(W))
 			if (!src.panelopen)
 				src.overlays += image('icons/obj/vending.dmi', "grife-panel")
 				src.panelopen = 1

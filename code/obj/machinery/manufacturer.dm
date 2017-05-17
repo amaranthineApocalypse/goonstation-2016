@@ -568,9 +568,17 @@
 					if (src.manuf_zap(usr, 100))
 						return
 				var/twire = text2num(href_list["cutwire"])
-				if (!( istype(usr.equipped(), /obj/item/wirecutters) ))
+
+				var/obj/item/equip = usr.equipped()
+				if (!istype(equip, /obj/item/wirecutters))
 					boutput(usr, "You need wirecutters!")
 					return
+				if(istype(equip, /obj/item/omnitool))
+					var/obj/item/omnitool/omnitool = equip
+					if (omnitool.omni_mode != OMNITOOL_WIRECUTTERS)
+						boutput(usr, "You need wirecutters!")
+						return
+
 				else if (src.isWireColorCut(twire))
 					src.mend(twire)
 				else
@@ -579,9 +587,17 @@
 
 			if ((href_list["pulsewire"]) && (src.panelopen))
 				var/twire = text2num(href_list["pulsewire"])
-				if (!istype(usr.equipped(), /obj/item/device/multitool))
+
+				var/obj/item/equip = usr.equipped()
+				if (!istype(equip, /obj/item/device/multitool))
 					boutput(usr, "You need a multitool!")
 					return
+				if(istype(equip, /obj/item/omnitool))
+					var/obj/item/omnitool/omnitool = equip
+					if (omnitool.omni_mode != OMNITOOL_MULTITOOL)
+						boutput(usr, "You need a multitool!")
+						return
+
 				else if (src.isWireColorCut(twire))
 					boutput(usr, "You can't pulse a cut wire.")
 					return
@@ -647,7 +663,7 @@
 			if (amtload) boutput(user, "<span style=\"color:blue\">[amtload] materials loaded from [W]!</span>")
 			else boutput(user, "<span style=\"color:red\">No materials loaded!</span>")
 
-		else if (istype(W, /obj/item/screwdriver))
+		else if (isscrewdriver(W))
 			if (!src.panelopen)
 				src.panelopen = 1
 			else
@@ -698,7 +714,7 @@
 					if (src.health >= 50)
 						boutput(user, "<span style=\"color:blue\">The wiring is fully repaired. Now you need to weld the external plating.</span>")
 
-		else if (istype(W,/obj/item/wrench))
+		else if (iswrench(W))
 			var/do_action = 0
 			if (istype(W,src.base_material_class) && src.accept_loading(user))
 				if (alert(user,"What do you want to do with [W]?","[src.name]","Dismantle/Construct","Load it in") == "Load it in")
@@ -721,14 +737,14 @@
 					return
 				src.build_icon()
 
-		else if (istype(W,/obj/item/crowbar) && src.dismantle_stage == 1)
+		else if (iscrowbar(W) && src.dismantle_stage == 1)
 			user.visible_message("<b>[user]</b> pries off [src]'s plating.")
 			playsound(src.loc, "sound/items/Crowbar.ogg", 50, 1)
 			src.dismantle_stage = 2
 			new /obj/item/sheet/steel/reinforced(src.loc)
 			src.build_icon()
 
-		else if (istype(W,/obj/item/wirecutters) && src.dismantle_stage == 2)
+		else if (iswirecutters(W) && src.dismantle_stage == 2)
 			if (!(stat & NOPOWER))
 				if (src.manuf_zap(user,100))
 					return

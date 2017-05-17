@@ -258,7 +258,7 @@ Contains:
 
 /obj/item/assembly/rad_infra/attackby(obj/item/W as obj, mob/user as mob)
 
-	if ((istype(W, /obj/item/wrench) && !( src.status )))
+	if ((iswrench(W) && !( src.status )))
 		var/turf/T = src.loc
 		if (ismob(T))
 			T = T.loc
@@ -271,7 +271,7 @@ Contains:
 		//SN src = null
 		qdel(src)
 		return
-	if (!( istype(W, /obj/item/screwdriver) ))
+	if (!( isscrewdriver(W) ))
 		return
 	src.status = !( src.status )
 	if (src.status)

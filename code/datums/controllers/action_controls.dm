@@ -605,7 +605,7 @@ var/datum/action_controller/actions
 
 			var/obj/item/handcuffs/cuffs2
 
-			if (issilicon(ownerMob))
+			if (!(issilicon(ownerMob))) //Hopefully this should cause borg taperolls to function correctly?
 				cuffs2 = new /obj/item/handcuffs
 			else
 				if (cuffs.amount >= 2)

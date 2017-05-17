@@ -214,7 +214,7 @@
 
 		vaquero
 			name = "El Vaquero"
-			desc = "The side label reads 'Fabricado en México'"
+			desc = "The side label reads 'Fabricado en Mï¿½xico'"
 			setup_unique_name = 1
 			setup_default_startup_task = /datum/computer/file/guardbot_task/security/patrol
 			setup_charge_percentage = 98
@@ -359,7 +359,7 @@
 					boutput(user, "You show \the [W] to [src]! They are very impressed.")
 			return
 		*/
-		else if (istype(W, /obj/item/screwdriver))
+		else if (isscrewdriver(W))
 			if (src.health < initial(health))
 				src.health = initial(health)
 				src.visible_message("<span style=\"color:blue\">[user] repairs [src]!</span>", "<span style=\"color:blue\">You repair [src].</span>")
@@ -3456,7 +3456,7 @@
 		return
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/screwdriver))
+		if (isscrewdriver(W))
 			playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 			boutput(user, "You [src.panel_open ? "secure" : "unscrew"] the maintenance panel.")
 			src.panel_open = !src.panel_open

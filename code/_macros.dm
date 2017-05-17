@@ -47,6 +47,27 @@
 #define islist(x) istype(x, /list)
 #define isitem(x) istype(x, /obj/item)
 
+
+#define OMNITOOL_MULTITOOL 1
+#define OMNITOOL_SCREWDRIVER 2
+#define OMNITOOL_CROWBAR 4
+#define OMNITOOL_WIRECUTTERS 8
+#define OMNITOOL_WRENCH 16
+
+#define ismultitool(x) ((istype(x, /obj/item/device/multitool)) || (istype(x, /obj/item/omnitool) && x:omni_mode == OMNITOOL_MULTITOOL))
+#define isscrewdriver(x) ((istype(x, /obj/item/screwdriver)) || (istype(x, /obj/item/omnitool) && x:omni_mode == OMNITOOL_SCREWDRIVER))
+#define iscrowbar(x) ((istype(x, /obj/item/crowbar)) || (istype(x, /obj/item/omnitool) && x:omni_mode == OMNITOOL_CROWBAR))
+#define iswrench(x) ((istype(x, /obj/item/wrench)) || (istype(x, /obj/item/omnitool) && x:omni_mode == OMNITOOL_WRENCH))
+#define iswirecutters(x) ((istype(x, /obj/item/wirecutters)) || (istype(x, /obj/item/omnitool) && x:omni_mode == OMNITOOL_WIRECUTTERS))
+
+#define LASER_SCALPEL 1
+#define LASER_SAW 2
+#define LASER_SPOON 4
+
+#define isscalpel(x) ((istype(x, /obj/item/scalpel) || istype(x, /obj/item/raw_material/shard) || istype(x, /obj/item/kitchen/utensil/knife) || istype(x, /obj/item/knife_butcher) || istype(x, /obj/item/razor_blade)) || (istype(x, /obj/item/surgical_laser) && x:omni_mode == LASER_SCALPEL))
+#define issaw(x) ((istype(x, /obj/item/circular_saw) || istype(x, /obj/item/saw) || istype(x, /obj/item/kitchen/utensil/fork)) || (istype(x, /obj/item/surgical_laser) && x:omni_mode == LASER_SAW))
+#define isspoon(x) ((istype(x, /obj/item/surgical_spoon) || istype(x, /obj/item/kitchen/utensil/spoon)) || (istype(x, /obj/item/surgical_laser) && x:omni_mode == LASER_SPOON))
+
 // pick strings from cache-- code/procs/string_cache.dm
 #define pick_string(filename, key) pick(strings(filename, key))
 

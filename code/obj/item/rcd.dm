@@ -40,8 +40,8 @@ RCD
 
 	var/material_name = "steel"
 
-	cyborg
-		material_name = "electrum"
+	cyborg //you'd think cyborgs would use this, and it turns out they did at one point during the module research period.
+		material_name = "electrum" //however, this is probably a bad idea given how useful electrum is. So we'll just be sticking with a normal RCD.
 
 /obj/item/rcd/construction
 	name = "rapid-construction-device (RCD) deluxe"

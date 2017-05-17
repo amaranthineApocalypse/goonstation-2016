@@ -69,7 +69,7 @@
 				src.visible_message("<b>[src]</b> <i>says, \"I'm pizza.\"</i>")
 
 	attackby(obj/item/W as obj, mob/user as mob)
-		if (istype(W, /obj/item/axe) || istype(W, /obj/item/circular_saw) || istype(W, /obj/item/kitchen/utensil/knife) || istype(W, /obj/item/scalpel) || istype(W, /obj/item/sword) || istype(W,/obj/item/saw) || istype(W,/obj/item/knife_butcher))
+		if (istype(W, /obj/item/axe) || isscalpel(W) || istype(W, /obj/item/sword) || ((issaw(W)) && !(istype(W, /obj/item/kitchen/utensil/fork))))
 			if (src.sliced == 1)
 				boutput(user, "<span style=\"color:red\">This has already been sliced.</span>")
 				return
@@ -1585,7 +1585,7 @@
 
 	attackby(obj/item/W as obj, mob/user as mob)
 		if (wrapped)
-			if (istype(W, /obj/item/axe) || istype(W, /obj/item/circular_saw) || istype(W, /obj/item/kitchen/utensil/knife) || istype(W, /obj/item/scalpel) || istype(W, /obj/item/sword) || istype(W,/obj/item/saw) || istype(W,/obj/item/knife_butcher))
+			if (istype(W, /obj/item/axe) || isscalpel(W) || istype(W, /obj/item/sword) || ((issaw(W)) && !(istype(W, /obj/item/kitchen/utensil/fork))))
 				user.visible_message("<span style=\"color:red\">[user] performs an act of wonton destruction!</span>","You slice open the wrapper.")
 				wrapped.set_loc(get_turf(src))
 				src.reagents = null

@@ -146,7 +146,7 @@
 				boutput(user, "There is already a pipe at that location.")
 				return
 
-		if(istype(I, /obj/item/wrench))
+		if(iswrench(I))
 			if(anchored)
 				anchored = 0
 				level = 2
