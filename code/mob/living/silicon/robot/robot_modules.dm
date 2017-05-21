@@ -82,6 +82,7 @@
 		src.modules += new /obj/item/surgical_laser(src)
 		src.modules += new /obj/item/hemostat(src)
 		src.modules += new /obj/item/suture(src)
+		src.modules += new /obj/item/borgcloneraid(src)
 		src.modules += new /obj/item/reagent_containers/iv_drip/blood(src)
 		src.modules += new /obj/item/reagent_containers/patch/burn/medbot(src)
 		src.modules += new /obj/item/reagent_containers/patch/bruise/medbot(src)

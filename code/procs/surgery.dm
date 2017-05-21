@@ -296,6 +296,8 @@
 	if (!ishuman(patient))
 		return 0
 
+
+
 	if (!patient.organHolder)
 		return 0
 
@@ -327,10 +329,24 @@
 
 /* ---------- SCALPEL - HEAD ---------- */
 
+
 	if (surgeon.zone_sel.selecting == "head")
 		if (!headSurgeryCheck(patient))
 			surgeon.show_text("You're going to need to remove that mask/helmet/glasses first.", "blue")
 			return 1
+
+		var/mob/living/silicon/robot/robodoc = surgeon
+		var/borghand = "none"
+		if (issilicon(surgeon))
+			if (robodoc.find_in_hand(src) == robodoc.module_states[1])
+				DEBUG("borghand left")
+				borghand = "left"
+			else if (robodoc.find_in_hand(src) == robodoc.module_states[2])
+				DEBUG("borghand centre")
+				borghand = "centre"
+			else if (robodoc.find_in_hand(src) == robodoc.module_states[3])
+				DEBUG("borghand right")
+				borghand = "right"
 
 		if (surgeon.a_intent == INTENT_HARM && patient.organHolder.head)
 			if (patient.organHolder.head.op_stage == 0.0)
@@ -377,7 +393,7 @@
 				patient.organHolder.head.op_stage = 3.0
 				return 1
 
-		else if (patient.organHolder.right_eye && patient.organHolder.right_eye.op_stage == 1.0 && surgeon.find_in_hand(src) == surgeon.r_hand)
+		else if ((patient.organHolder.right_eye && patient.organHolder.right_eye.op_stage == 1.0) && (surgeon.find_in_hand(src) == surgeon.r_hand || borghand == "right"))
 			playsound(get_turf(patient), "sound/weapons/squishcut.ogg", 50, 1)
 
 			if (prob(screw_up_prob))
@@ -399,7 +415,7 @@
 			patient.organHolder.right_eye.op_stage = 2.0
 			return 1
 
-		else if (patient.organHolder.left_eye && patient.organHolder.left_eye.op_stage == 1.0 && surgeon.find_in_hand(src) == surgeon.l_hand)
+		else if ((patient.organHolder.left_eye && patient.organHolder.left_eye.op_stage == 1.0) && (surgeon.find_in_hand(src) == surgeon.l_hand || borghand == "left"))
 			playsound(get_turf(patient), "sound/weapons/squishcut.ogg", 50, 1)
 
 			if (prob(screw_up_prob))
@@ -1309,8 +1325,20 @@
 			return 1
 
 /* ---------- SPOON - RIGHT EYE ---------- */
+		var/mob/living/silicon/robot/robodoc = surgeon
+		var/borghand = "none"
+		if (issilicon(surgeon))
+			if (robodoc.find_in_hand(src) == robodoc.module_states[1])
+				DEBUG("borghand left")
+				borghand = "left"
+			else if (robodoc.find_in_hand(src) == robodoc.module_states[2])
+				DEBUG("borghand centre")
+				borghand = "centre"
+			else if (robodoc.find_in_hand(src) == robodoc.module_states[3])
+				DEBUG("borghand right")
+				borghand = "right"
 
-		if (surgeon.find_in_hand(src) == surgeon.r_hand && patient.organHolder.right_eye)
+		if (((surgeon.find_in_hand(src) == surgeon.r_hand) || (borghand == "right"))  && patient.organHolder.right_eye)
 			if (patient.organHolder.right_eye.op_stage == 0.0)
 				playsound(get_turf(patient), "sound/weapons/squishcut.ogg", 50, 1)
 
@@ -1361,7 +1389,7 @@
 
 /* ---------- SPOON - LEFT EYE ---------- */
 
-		else if (surgeon.find_in_hand(src) == surgeon.l_hand && patient.organHolder.left_eye)
+		else if (((surgeon.find_in_hand(src) == surgeon.l_hand) || (borghand == "left")) && patient.organHolder.left_eye)
 			if (patient.organHolder.left_eye.op_stage == 0.0)
 				playsound(get_turf(patient), "sound/weapons/squishcut.ogg", 50, 1)
 

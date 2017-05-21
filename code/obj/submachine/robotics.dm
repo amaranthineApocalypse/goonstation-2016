@@ -704,12 +704,145 @@ ported and crapped up by: haine
 		user.show_text("Selection cleared.", "red")
 		return
 
-/obj/item/borgcloneraid
+/obj/item/borgcloneraid //important notice, this thing will just straight up not work if given to a non-borg mob. Don't do that thing >:(
 	name = "\improper Genetek BioBuddy"
 	desc = "An exciting new piece of technology from GeneTek! Allows for clone scanning, biomatter breakdown and human limb replacment on the fly!"
-	icon = 'icons/obj/device.dmi"
+	icon = 'icons/obj/device.dmi'
 	icon_state = "forensic0"
 	var/meatlevel = 40
 	var/list/scannedhumans = list()
+	var/eyepos
 
-	attack(mob/living/carbon/human/M as mob, mob/user as mob)
+	attack(mob/living/carbon/human/target as mob, mob/user as mob)
+		var/select = user.zone_sel.selecting
+		actions.start(new/datum/action/bar/organ_replace(src), target, select, user)
+
+
+/datum/action/bar/organ_replace
+	duration = 10
+	id = "GeneTek Replace"
+	var/mob/living/carbon/human/target
+	var/select
+	var/mob/living/silicon/robot/user
+	var/eyepos = "left"
+
+	New(Target, Select, User)
+		target = Target
+		select = Select
+		user = User
+		playsound(target.loc, "sound/machines/click.ogg", 50, 1)
+		..()
+
+	onStart()
+		..()
+		switch (select)
+			if ("head")
+				if ((user.find_in_hand(src) == user.module_states[3]) && !(target.organHolder.right_eye))
+					eyepos = "right"
+					playsound(target.loc, "sound/machines/click.ogg", 50, 1)
+				else if ((user.find_in_hand(src) == user.module_states[1]) && !(target.organHolder.left_eye))
+					eyepos = "left"
+					playsound(target.loc, "sound/machines/click.ogg", 50, 1)
+				else
+					interrupt(INTERRUPT_ALWAYS)
+					return
+			if ("chest")
+				if ((target.organHolder.heart))
+					interrupt(INTERRUPT_ALWAYS)
+					return
+			if ("l_arm")
+				return
+			if ("r_arm")
+				return
+			if ("l_leg")
+				return
+			if ("r_leg")
+				return
+
+	onUpdate()
+		..()
+		var/shit_be_fucked = 0
+		if(get_dist(owner, target) > 1)
+			DEBUG("dist between owner and target > 1")
+			interrupt(INTERRUPT_ALWAYS)
+			shit_be_fucked = 1
+
+		if (target == null)
+			DEBUG("target null")
+			interrupt(INTERRUPT_ALWAYS)
+			shit_be_fucked = 1
+
+		if (user == null)
+			DEBUG("user null")
+			interrupt(INTERRUPT_ALWAYS)
+			shit_be_fucked = 1
+
+		if (shit_be_fucked)
+			return
+
+		switch (select)
+			if ("head")
+				if ((user.find_in_hand(src) == user.module_states[3]) && (target.organHolder.right_eye))
+					boutput(user, "Apparently already had a right eye? Or module state wasn't right.")
+					interrupt(INTERRUPT_ALWAYS)
+					return
+				if ((user.find_in_hand(src) == user.module_states[1]) && (target.organHolder.left_eye))
+					boutput(user, "Apparently already had a left eye? Or module state wasn't left.")
+					interrupt(INTERRUPT_ALWAYS)
+					return
+			if("chest")
+				if ((target.organHolder.heart))
+					interrupt(INTERRUPT_ALWAYS)
+					return
+			if ("l_arm")
+				interrupt(INTERRUPT_ALWAYS)
+				return
+			if ("r_arm")
+				interrupt(INTERRUPT_ALWAYS)
+				return
+			if ("l_leg")
+				interrupt(INTERRUPT_ALWAYS)
+				return
+			if ("r_leg")
+				interrupt(INTERRUPT_ALWAYS)
+				return
+
+	onEnd()
+		..()
+		if(get_dist(owner, target) > 1 || target == null || user == null)
+			interrupt(INTERRUPT_ALWAYS)
+			return
+
+		switch (select)
+			if ("head")
+				if ((user.find_in_hand(src) == user.module_states[3]) && (target.organHolder.right_eye))
+					interrupt(INTERRUPT_ALWAYS)
+					return
+				if ((user.find_in_hand(src) == user.module_states[1]) && (target.organHolder.left_eye))
+					interrupt(INTERRUPT_ALWAYS)
+					return
+				else if (eyepos = "right")
+					target.organHolder.receive_organ(src, "right_eye", 2.0)
+				else if (eyepos = "left")
+					target.organHolder.receive_organ(src, "left_eye", 2.0)
+				else
+					boutput(user, "Eyepos wasn't left or right somehow??")
+
+			if("chest")
+				if ((target.organHolder.heart))
+					interrupt(INTERRUPT_ALWAYS)
+					return
+				else
+					target.organHolder.receive_organ(src, "heart", 3.0)
+			if ("l_arm")
+				interrupt(INTERRUPT_ALWAYS)
+				return
+			if ("r_arm")
+				interrupt(INTERRUPT_ALWAYS)
+				return
+			if ("l_leg")
+				interrupt(INTERRUPT_ALWAYS)
+				return
+			if ("r_leg")
+				interrupt(INTERRUPT_ALWAYS)
+				return

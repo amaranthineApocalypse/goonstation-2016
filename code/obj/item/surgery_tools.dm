@@ -183,7 +183,7 @@ SURGICAL LASER
 /* -------------------- Surgical Laser ----------------------- */
 /* =========================================================== */
 
-/obj/item/surgical_laser //Moved here from tools.dm //gonna need to come back to this once you have help
+/obj/item/surgical_laser //Moved here from tools.dm //Working except for the spoon??
 	name = "surgical laser"
 	icon = 'icons/obj/surgery.dmi' //once again, all sprite references are placeholders until sundance finishes his sprites
 	inhand_image_icon = 'icons/mob/inhand/hand_tools.dmi'
@@ -279,7 +279,6 @@ SURGICAL LASER
 					stamina_cost = 5
 					stamina_crit_chance = 35
 					omni_mode = LASER_SPOON
-		return
 
 	attack(mob/living/carbon/M as mob, mob/user as mob)
 		logTheThing("combat", user, M, "used [src] in [src.temp_mode] mode on %target% (<b>Intent</b>: <i>[user.a_intent]</i>) (<b>Targeting</b>: <i>[user.zone_sel.selecting]</i>)")
