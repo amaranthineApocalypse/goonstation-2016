@@ -477,7 +477,7 @@
 
 			else
 				// AI radios. See further down in this proc (Convair880).
-				if (issilicon(src))
+				if (isAI(src))
 					switch (lowertext(copytext(message, 2, 3))) // One vs. two letter prefix.
 						if ("1")
 							message_mode = "internal 1"
@@ -495,7 +495,7 @@
 							message = copytext(message, 3)
 
 				else
-					if (ishuman(src) || istype(src, /mob/living/critter)) // this is shit
+					if (isliving(src) && !isghostdrone(src)) // this is shit
 						message_mode = "secure headset"
 						secure_headset_mode = lowertext(copytext(message,2,3))
 					message = copytext(message, 3)

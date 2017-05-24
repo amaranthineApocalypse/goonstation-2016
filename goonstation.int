@@ -1,11 +1,11 @@
 // BEGIN_INTERNALS
 /*
-LAST_COMPILE_TIME: 1495234067
-DIR: code code\chui\example code\datums code\datums\buildmodes code\datums\buildmodes\adventure code\datums\buildmodes\adventure\elements code\datums\chemistry code\datums\chemistry\tools code\datums\controllers code\datums\critter_mobs\health code\mob code\mob\living code\mob\living\silicon code\mob\living\silicon\robot code\obj code\obj\item code\obj\submachine code\procs icons icons\mob icons\mob\inhand 
+LAST_COMPILE_TIME: 1495644724
+DIR: code code\chui\example code\datums code\datums\buildmodes code\datums\buildmodes\adventure code\datums\buildmodes\adventure\elements code\datums\chemistry code\datums\chemistry\tools code\datums\controllers code\datums\critter_mobs\health code\datums\diseases code\datums\hud code\mob code\mob\living code\mob\living\silicon code\mob\living\silicon\robot code\obj code\obj\item code\obj\item\device code\obj\item\device\radios code\obj\submachine icons icons\mob icons\mob\inhand sound sound\effects sound\vox 
 AUTO_FILE_DIR: OFF
 MAP_ICON_TYPE: 0
 LAST_COMPILE_VERSION: 511.1359
-WINDOW: code\mob\living\silicon\robot\robot_modules.dm;code\obj\submachine\robotics.dm;code\mob\living\silicon\robot.dm;code\_macros.dm;code\obj\item\tools.dm;code\obj\misc_junk.dm;icons\mob\inhand\hand_tools.dmi;code\obj\item\surgery_tools.dm;code\procs\surgery.dm
-FILE: code\procs\surgery.dm
+WINDOW: code\mob\living\silicon\robot\robot_modules.dm;code\obj\submachine\robotics.dm;code\mob\living\silicon\robot.dm;code\_macros.dm;code\obj\item\tools.dm;code\obj\misc_junk.dm;icons\mob\inhand\hand_tools.dmi;code\obj\item\surgery_tools.dm;code\obj\item\device\scanners.dm;code\obj\item\device\radio.dm;code\obj\item\device\radios\headsets.dm;code\mob\living.dm;code\mob\living\silicon.dm
+FILE: code\obj\item\device\radio.dm
 */
 // END_INTERNALS

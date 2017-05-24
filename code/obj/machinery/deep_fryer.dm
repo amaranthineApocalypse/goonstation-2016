@@ -81,6 +81,18 @@
 		SubscribeToProcess()
 		return
 
+	MouseDrop_T(atom/movable/O as obj, mob/user as mob)
+		if(get_dist(user, src) > 1)
+			boutput(user, "<span style=\"color:red\">You're too far away to do that.</span>")
+		else if (get_dist(O, user) > 1)
+			boutput(user, "<span style=\"color:red\">That's too far away to load!.</span>")
+		else if(istype(O, /obj/item) && isliving(user)) //No ghost cooking >:(
+			src.attackby(O, user)
+		else if(!isliving(user)) //Spooky
+			boutput(user, "<span style=\"color:red\">You glare at the deep fryer. It reminds you how you used to be able to eat. You're minorly irked now. Gosh being dead is such an inconvenience.</span>")
+		else
+			boutput(user, "<span style=\"color:red\">You can't put that in the fryer!</span>")
+
 	onVarChanged(variable, oldval, newval)
 		if (variable == "fryitem")
 			if (!oldval && newval)

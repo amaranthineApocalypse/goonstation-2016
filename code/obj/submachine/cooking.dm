@@ -39,6 +39,18 @@
 			if (W.reagents)
 				W.reagents.clear_reagents()		// avoid null error
 
+	MouseDrop_T(atom/movable/O as obj, mob/user as mob)
+		if(get_dist(user, src) > 1)
+			boutput(user, "<span style=\"color:red\">You're too far away to do that.</span>")
+		else if (get_dist(O, src) > 1)
+			boutput(user, "<span style=\"color:red\">That's too far away to wash!.</span>")
+		else if(istype(O, /obj/item) && isliving(user)) //No ghost cooking >:(
+			src.attackby(O, user)
+		else if(!isliving(user)) //Spooky
+			boutput(user, "<span style=\"color:red\">You glare at the sink. It reminds you how you used to be able to drink. You're minorly irked now. Gosh being dead is such an inconvenience.</span>")
+		else
+			boutput(user, "<span style=\"color:red\">No matter how dirty you think that is, you can't stick it into the sink.</span>")
+
 	attack_hand(var/mob/user as mob)
 		if (ishuman(user))
 			var/mob/living/carbon/human/H = user
@@ -220,7 +232,11 @@ var/list/oven_recipes = list()
 	//var/allowed = list(/obj/item/reagent_containers/food/, /obj/item/parts/robot_parts/head, /obj/item/clothing/head/butt, /obj/item/organ/brain/obj/item)
 	var/allowed = list(/obj/item)
 
+	attack_ai(mob/user as mob)
+		return src.attack_hand(user)
+
 	attack_hand(var/mob/user as mob)
+		..()
 		if (!src.working)
 			user.machine = src
 			var/dat = {"<B>Cookomatic Multi-Oven</B><BR>
@@ -560,11 +576,25 @@ var/list/oven_recipes = list()
 		W.dropped()
 		src.updateUsrDialog()
 
-	MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+
+	MouseDrop_T(atom/movable/O as obj, mob/user as mob)
+		if(get_dist(user, src) > 1)
+			boutput(user, "<span style=\"color:red\">You're too far away to do that.</span>")
+		else if (get_dist(O, src) > 1)
+			boutput(user, "<span style=\"color:red\">That's too far away to load!.</span>")
+		else if(istype(O, /obj/item) && isliving(user)) //No ghost cooking >:(
+			src.attackby(O, user)
+		else if(!isliving(user)) //Spooky
+			boutput(user, "<span style=\"color:red\">You glare at the oven. It reminds you how you used to be able to eat. You're minorly irked now. Gosh being dead is such an inconvenience.</span>")
+		else
+			boutput(user, "<span style=\"color:red\">You can't put that in the oven!</span>")
+
+
+/*	MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
 		if(istype(O, /obj/item)) //might need to implement some kind of mob type check for the user, not sure. Need advice.
 			src.attackby(O, user)
 		else
-			boutput(user, "<span style=\"color:red\">You can't put that in the oven!</span>")
+			boutput(user, "<span style=\"color:red\">You can't put that in the oven!</span>") */
 
 	proc/OVEN_checkitem(var/recipeitem, var/recipecount)
 		if (!locate(recipeitem) in src.contents) return 0
@@ -829,10 +859,22 @@ var/list/mixer_recipes = list()
 		W.set_loc(src)
 		W.dropped()
 
-	MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-		src.attackby(O, user)
+	MouseDrop_T(atom/movable/O as obj, mob/user as mob)
+		if(get_dist(user, src) > 1)
+			boutput(user, "<span style=\"color:red\">You're too far away to do that.</span>")
+		else if (get_dist(O, src) > 1)
+			boutput(user, "<span style=\"color:red\">That's too far away to load!.</span>")
+		else if(istype(O, /obj/item) && isliving(user)) //No ghost cooking >:(
+			src.attackby(O, user)
+		else if(!isliving(user)) //Spooky
+			boutput(user, "<span style=\"color:red\">You glare at the mixer. It reminds you how you used to be able to eat. You're minorly irked now. Gosh being dead is such an inconvenience.</span>")
+		else
+			boutput(user, "<span style=\"color:red\">You can't put that in the mixer!</span>")
 
-	attack_hand(var/mob/user as mob)
+	attack_ai(mob/user as mob)
+		return src.attack_hand(user)
+
+	attack_hand(mob/user as mob)
 		if (!src.working)
 			user.machine = src
 			var/dat = {"<B>KitchenHelper Mixer</B><BR>

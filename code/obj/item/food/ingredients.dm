@@ -8,6 +8,17 @@
 	heal_amt = 0
 	custom_food = 0
 
+	MouseDrop_T(atom/movable/O as obj, mob/user as mob)
+		if(get_dist(user, src) > 1)
+			return
+		else if (get_dist(O, src) > 1)
+			return
+		else if(istype(O, /obj/item/reagent_containers/food/snacks/ingredient) && isliving(user)) //No ghost cooking >:(
+			src.attackby(O, user)
+		else if(!isliving(user)) //Spooky
+			boutput(user, "<span style=\"color:red\">You glare at the [src.name]. It reminds you how you used to be able to eat. You're minorly irked now. Gosh being dead is such an inconvenience.</span>")
+		else return
+
 /obj/item/reagent_containers/food/snacks/ingredient/meat/
 	name = "raw meat"
 	desc = "you shouldnt be able to see this either!!"

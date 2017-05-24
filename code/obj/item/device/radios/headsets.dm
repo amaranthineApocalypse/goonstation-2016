@@ -71,8 +71,8 @@
 	name = "\improper Security Headset"
 	desc = "A radio headset capable of communicating over a second, secure frequency."
 	icon_state = "sec headset"
-	secure_frequencies = list("h" = R_FREQ_SECURITY)
-	secure_colors = list("h" = RADIOC_SECURITY)
+	secure_frequencies = list("g" = R_FREQ_SECURITY)
+	secure_colors = list("g" = RADIOC_SECURITY)
 
 	borg
 	name = "\improper Security Scanner"
@@ -80,6 +80,8 @@
 	icon = 'icons/misc/worlds.dmi'
 	icon_state = "radio"
 	item_state = "radio"
+	secure_frequencies = list("g" = R_FREQ_SECURITY)
+	secure_colors = list("g" = RADIOC_SECURITY)
 
 /obj/item/device/radio/headset/engineer
 	name = "\improper Engineering Headset"

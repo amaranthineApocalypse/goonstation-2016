@@ -117,21 +117,24 @@
 
 /obj/item/porter //this is the parent of atmosporters and cargoporters. It was really dumb to have all the code excuted by the item to be stored. This way is much more extensible
 	name = "Porter Parent"
-	desc = "You really shouldn't be able to see this, but since you can try not to fuck up everything too much with this"
+	desc = "You really shouldn't be able to see this, but since you can try not to fuck up everything too much"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "bedbin"
 	var/list/allowed = list(/obj) //ONLY FOR TESTING. WILL BREAK THINGS HORRIBLY IF USED LIVE.
 	var/capacity = 3
 
-	afterattack(atom/target as obj|mob|turf, mob/user as mob, flag )
+	afterattack(atom/target as obj|mob|turf, var/mob/user as mob, flag )
 		var/proceed = 0
 		for(var/check_path in src.allowed)
 			if(istype(target, check_path))
 				proceed = 1
 				break
+
 		if (!proceed)
 			boutput(user, "<span style=\"color:red\">[src] cannot hold that!</span>")
 			return
+
+
 		var/canamt = src.contents.len
 		if (canamt >= src.capacity)
 			boutput(user, "<span style=\"color:red\">Your [src] is full!</span>")
@@ -161,13 +164,13 @@
 	attack_self(var/mob/user as mob)
 		if (src.contents.len == 0) boutput(user, "<span style=\"color:red\">You have nothing stored!</span>")
 		else
-			var/selection = input("What do you want to drop?", "Atmos Transporter", null, null) as null|anything in src.contents
+			var/selection = input("What do you want to drop?", "Atmos Transporter") as null|anything in src.contents
 			if(!selection)
 				return
-			selection:set_loc(user.loc)
 
+			selection:set_loc(user.loc)
 			if(hasvar(selection, "contained"))
-				selection:contained = 1
+				selection:contained = 0
 			//selection:contained = 0 //Hello free runtimes - AmaranthineApocalypse
 			var/datum/effects/system/spark_spread/s = unpool(/datum/effects/system/spark_spread)
 			s.set_up(5, 1, user)
@@ -478,10 +481,11 @@ ported and crapped up by: haine
 
 
 	afterattack(obj/target, mob/user)
-		if ((!(istype(target, /obj/machinery/plantpot/))) && (!(istype(src, /obj/item/borghose/chem)))) //Previously meant that chemborgs can only do plantpot science.
-			user.show_text("That is not a plant tray!", "red")
+		if (!(istype(target, /obj/item/reagent_containers/glass/)) || !(istype(target, /obj/machinery/plantpot/)))
+			user.show_text("You can't put reagents in there!", "red")
+			return
 
-		else if ((istype(target, /obj/item/reagent_containers/glass/)) || (istype(target, /obj/machinery/plantpot/)))
+		else if ((istype(target, /obj/item/reagent_containers/glass/)) || !(istype(target, /obj/machinery/plantpot/)))
 
 			if (!src.active_tank)
 				user.show_text("No tank is currently active.", "red")
@@ -704,7 +708,7 @@ ported and crapped up by: haine
 		user.show_text("Selection cleared.", "red")
 		return
 
-/obj/item/borgcloneraid //important notice, this thing will just straight up not work if given to a non-borg mob. Don't do that thing >:(
+/obj/item/borgcloneraid //Why is surgerycode so awful
 	name = "\improper Genetek BioBuddy"
 	desc = "An exciting new piece of technology from GeneTek! Allows for clone scanning, biomatter breakdown and human limb replacment on the fly!"
 	icon = 'icons/obj/device.dmi'
@@ -715,7 +719,7 @@ ported and crapped up by: haine
 
 	attack(mob/living/carbon/human/target as mob, mob/user as mob)
 		var/select = user.zone_sel.selecting
-		actions.start(new/datum/action/bar/organ_replace(src), target, select, user)
+		actions.start(new/datum/action/bar/organ_replace(src), target, select)
 
 
 /datum/action/bar/organ_replace
@@ -723,31 +727,40 @@ ported and crapped up by: haine
 	id = "GeneTek Replace"
 	var/mob/living/carbon/human/target
 	var/select
-	var/mob/living/silicon/robot/user
+	var/mob/user
 	var/eyepos = "left"
 
 	New(Target, Select, User)
 		target = Target
 		select = Select
-		user = User
+		user = src
 		playsound(target.loc, "sound/machines/click.ogg", 50, 1)
 		..()
 
 	onStart()
 		..()
+		if (issilicon(user) && (select == "head"))
+			var/mob/living/silicon/robot/robodoc = user
+			if (robodoc.find_in_hand(src) == robodoc.module_states[3])
+				eyepos = "right"
+			if (robodoc.find_in_hand(src) == robodoc.module_states[1])
+				eyepos = "left"
+
 		switch (select)
 			if ("head")
-				if ((user.find_in_hand(src) == user.module_states[3]) && !(target.organHolder.right_eye))
+				if (((user.find_in_hand(src) == user.r_hand) || (eyepos == "right")) && !(target.organHolder.right_eye))
 					eyepos = "right"
 					playsound(target.loc, "sound/machines/click.ogg", 50, 1)
-				else if ((user.find_in_hand(src) == user.module_states[1]) && !(target.organHolder.left_eye))
+				else if (((user.find_in_hand(src) == user.l_hand) || (eyepos == "left")) && !(target.organHolder.left_eye))
 					eyepos = "left"
 					playsound(target.loc, "sound/machines/click.ogg", 50, 1)
 				else
+					DEBUG("Not right hand, right module, or target has a right eye already")
 					interrupt(INTERRUPT_ALWAYS)
 					return
 			if ("chest")
 				if ((target.organHolder.heart))
+					DEBUG("Not left hand, left module, or target has a left eye already")
 					interrupt(INTERRUPT_ALWAYS)
 					return
 			if ("l_arm")
@@ -780,14 +793,21 @@ ported and crapped up by: haine
 		if (shit_be_fucked)
 			return
 
+		if (issilicon(user) && (select == "head"))
+			var/mob/living/silicon/robot/robodoc = user
+			if (robodoc.find_in_hand(src) == robodoc.module_states[3])
+				eyepos = "right"
+			if (robodoc.find_in_hand(src) == robodoc.module_states[1])
+				eyepos = "left"
+
 		switch (select)
 			if ("head")
-				if ((user.find_in_hand(src) == user.module_states[3]) && (target.organHolder.right_eye))
-					boutput(user, "Apparently already had a right eye? Or module state wasn't right.")
+				if (((user.find_in_hand(src) == user.r_hand) || (eyepos == "right")) && (target.organHolder.right_eye))
+					DEBUG("Apparently already had a right eye? Or module state wasn't right.")
 					interrupt(INTERRUPT_ALWAYS)
 					return
-				if ((user.find_in_hand(src) == user.module_states[1]) && (target.organHolder.left_eye))
-					boutput(user, "Apparently already had a left eye? Or module state wasn't left.")
+				if (((user.find_in_hand(src) == user.l_hand) || (eyepos == "left")) && (target.organHolder.left_eye))
+					DEBUG("Apparently already had a left eye? Or module state wasn't left.")
 					interrupt(INTERRUPT_ALWAYS)
 					return
 			if("chest")
@@ -809,16 +829,40 @@ ported and crapped up by: haine
 
 	onEnd()
 		..()
-		if(get_dist(owner, target) > 1 || target == null || user == null)
+		var/shit_be_fucked = 0
+		if(get_dist(owner, target) > 1)
+			DEBUG("dist between owner and target > 1 at end")
 			interrupt(INTERRUPT_ALWAYS)
+			shit_be_fucked = 1
+
+		if (target == null)
+			DEBUG("target null at end")
+			interrupt(INTERRUPT_ALWAYS)
+			shit_be_fucked = 1
+
+		if (user == null)
+			DEBUG("user null at end")
+			interrupt(INTERRUPT_ALWAYS)
+			shit_be_fucked = 1
+
+		if (shit_be_fucked)
 			return
+
+		if (issilicon(user) && (select == "head"))
+			var/mob/living/silicon/robot/robodoc = user
+			if (robodoc.find_in_hand(src) == robodoc.module_states[3])
+				eyepos = "right"
+			if (robodoc.find_in_hand(src) == robodoc.module_states[1])
+				eyepos = "left"
 
 		switch (select)
 			if ("head")
-				if ((user.find_in_hand(src) == user.module_states[3]) && (target.organHolder.right_eye))
+				if (((user.find_in_hand(src) == user.r_hand) || (eyepos == "right")) && (target.organHolder.right_eye))
+					DEBUG("Target already has a right eye?")
 					interrupt(INTERRUPT_ALWAYS)
 					return
-				if ((user.find_in_hand(src) == user.module_states[1]) && (target.organHolder.left_eye))
+				if (((user.find_in_hand(src) == user.l_hand) || (eyepos == "left")) && (target.organHolder.left_eye))
+					DEBUG("Target already has a left eye?")
 					interrupt(INTERRUPT_ALWAYS)
 					return
 				else if (eyepos = "right")
@@ -826,7 +870,7 @@ ported and crapped up by: haine
 				else if (eyepos = "left")
 					target.organHolder.receive_organ(src, "left_eye", 2.0)
 				else
-					boutput(user, "Eyepos wasn't left or right somehow??")
+					DEBUG("Eyepos wasn't left or right somehow??")
 
 			if("chest")
 				if ((target.organHolder.heart))
@@ -846,3 +890,7 @@ ported and crapped up by: haine
 			if ("r_leg")
 				interrupt(INTERRUPT_ALWAYS)
 				return
+
+	onInterrupt(var/flag = 0)
+		..()
+		CRASH("Something has gone horribly wrong here!")

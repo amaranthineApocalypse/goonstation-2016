@@ -612,7 +612,7 @@
 			else if (istype(src.module,/obj/item/robot_module/construction)) boutput(usr, "[src.name] has a Construction module installed.")
 			else if (istype(src.module,/obj/item/robot_module/mining)) boutput(usr, "[src.name] has a Mining module installed.")
 			else if (istype(src.module,/obj/item/robot_module/chemistry)) boutput(usr, "[src.name] has a Chemistry module installed.")
-			else boutput(usr, "[src.name] has an unknown module installed.")
+			else boutput(usr, "[src.name] has an unknown installed.")
 			*/
 
 			rendered += "[src.name] has a [src.module.name] installed.<br>"

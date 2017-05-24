@@ -436,7 +436,7 @@ Contains:
 	//	boutput(user, "<span style=\"color:red\">Device only works in designated security areas!</span>")
 	//	return
 	boutput(user, "<span style=\"color:blue\">You scan in [M]</span>")
-	boutput(M, "<span style=\"color:red\">[user] scans you with the Securotron-5000</span>")
+	boutput(M, "<span style=\"color:red\">[user] scans you with the [src.name]</span>")
 	for(var/datum/data/record/R in data_core.general)
 		if (lowertext(R.fields["name"]) == lowertext(M.name))
 			//Update Information
@@ -477,6 +477,17 @@ Contains:
 				E.fields["criminal"] = "Incarcerated"
 			else if(src.mode == 2)
 				E.fields["criminal"] = "Parolled"
+			else if ((src.mode == 4) && istype(src, /obj/item/device/prisoner_scanner/borg))
+				if (E.fields["criminal"] != "*Arrest*")
+					var/bot_location = get_area(src)
+					//////PDA NOTIFY/////
+					var/datum/radio_frequency/transmit_connection = radio_controller.return_frequency("1149")
+					var/datum/signal/pdaSignal = get_free_signal()
+					pdaSignal.data = list("address_1"="00000000", "command"="text_message", "sender_name"="SECURITY-MAILBOT",  "group"="security", "sender"="00000000", "message"="Notification: [M] set to arrest by [src] in [bot_location].")
+					pdaSignal.transmission_method = TRANSMISSION_RADIO
+					if(transmit_connection != null)
+						transmit_connection.post_signal(src, pdaSignal)
+				E.fields["criminal"] = "*Arrest*"
 			else
 				E.fields["criminal"] = "Released"
 			return
@@ -508,9 +519,16 @@ Contains:
 	else if (src.mode == 2)
 		src.mode = 3
 		boutput(user, "<span style=\"color:blue\">you switch the record mode to Released</span>")
+	else if (src.mode == 3 && istype(src, /obj/item/device/prisoner_scanner/borg))
+		src.mode = 4
+		boutput(user, "<span style=\"color:blue\">you switch the record mode to Arrest</span>")
 	else
 		src.mode = 1
 		boutput(user, "<span style=\"color:blue\">you switch the record mode to Incarcerated</span>")
 
 	add_fingerprint(user)
 	return
+
+/obj/item/device/prisoner_scanner/borg
+	name = "Securotron Deluxe"
+	desc = "Used to scan in prisoners and update their security records. The deluxe model allows for tagging of criminals on the go!"

@@ -22,6 +22,8 @@
 		if(istype(R))
 			C.name = "[R.name]'s PDA"
 			C.owner = "[R.name]"
+			R.radio = new /obj/item/device/radio(src)
+			R.ears = R.radio
 			src.modules += C
 
 /obj/item/robot_module/standard
@@ -197,9 +199,10 @@
 
 	New()
 		..()
+		src.modules += new /obj/item/device/prisoner_scanner/borg(src)
 		src.modules += new /obj/item/robot_grenade_fabricator_security(src)
 		src.modules += new /obj/item/handcuffs/tape_roll/borg(src)
-		src.modules += new /obj/item/device/radio/headset/security/borg(src)
+		//src.modules += new /obj/item/device/radio/headset/security/borg(src) //This just adds the radio to the module. You can't use it.
 		src.modules += new /obj/item/device/detective_scanner(src)
 		src.modules += new /obj/item/device/audio_log/borg(src)
 		var/obj/item/device/pda2/ticket/Q = new /obj/item/device/pda2/ticket(src)
@@ -207,6 +210,8 @@
 		if(istype(B))
 			Q.name = "[B.name]'s Ticketing PDA"
 			Q.owner = "[B.name]"
+			B.radio = new /obj/item/device/radio/headset/security/borg(src)
+			B.ears = B.radio
 			src.modules += Q
 
 /datum/robot_cosmetic/brobot
