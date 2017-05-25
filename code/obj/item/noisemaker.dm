@@ -18,6 +18,14 @@
 			if ("burp") playsound(src.loc, "sound/misc/burp_alien.ogg", 50, 1)
 			if ("squeak") playsound(src.loc, "sound/misc/clownstep1.ogg", 50, 1)
 			if ("cat") playsound(src.loc, "sound/effects/cat.ogg", 50, 1)
+			if ("saxophone") //this is the most horrible idea anybody has ever had
+				var/which = rand(1,5)
+				switch(which)
+					if(1) playsound(src.loc, "sound/items/sax.ogg", 50, 1)
+					if(2) playsound(src.loc, "sound/items/sax2.ogg", 50, 1)
+					if(3) playsound(src.loc, "sound/items/sax3.ogg", 50, 1)
+					if(4) playsound(src.loc, "sound/items/sax4.ogg", 50, 1)
+					if(5) playsound(src.loc, "sound/items/sax5.ogg", 50, 1)
 			if ("harmonica")
 				var/which = rand(1,3)
 				switch(which)
@@ -37,7 +45,7 @@
 			else playsound(src.loc, "sound/machines/buzz-two.ogg", 50, 1)
 
 	attack(mob/M as mob, mob/user as mob, def_zone)
-		var/newmode = input("Select sound to play", "Make some noise", src.mode) in list("honk", "fart", "burp", "squeak", "cat", "harmonica", "vuvuzela", "bang", "buzz", "gunshot", "siren", "coo", "rimshot", "trombone")
+		var/newmode = input("Select sound to play", "Make some noise", src.mode) in list("honk", "fart", "burp", "squeak", "cat", "harmonica", "vuvuzela", "bang", "buzz", "gunshot", "siren", "coo", "rimshot", "trombone", "saxophone")
 		/*
 		switch(src.mode)
 			if ("honk")

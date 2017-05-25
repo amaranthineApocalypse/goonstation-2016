@@ -43,18 +43,22 @@
 		if (src.sound_roll)
 			playsound(get_turf(src), src.sound_roll, 100, 1)
 
-		src.set_loc(get_turf(src))
-		src.pixel_y = rand(-8,8)
-		src.pixel_x = rand(-8,8)
+		if (!(istype(src, /obj/item/dice/borg)))
+			src.set_loc(get_turf(src))
+			src.pixel_y = rand(-8,8)
+			src.pixel_x = rand(-8,8)
 
-		src.name = initial(src.name)
-		src.desc = initial(src.desc)
-		src.overlays = null
+			src.name = initial(src.name)
+			src.desc = initial(src.desc)
+			src.overlays = null
 
 		if (src.sides && isnum(src.sides))
 			src.last_roll = rand(1, src.sides)
 			roll_total = src.last_roll
 			src.visible_message("[src] shows [get_english_num(src.last_roll)].")
+			if (istype(src, /obj/item/dice/borg))
+				var/mob/user = src.loc
+				user.visible_message("[src] shows [get_english_num(src.last_roll)].")
 
 #ifdef HALLOWEEN
 			if (last_roll == 13 && prob(5))
@@ -69,9 +73,15 @@
 		else if (src.sides && islist(src.sides) && src.sides:len)
 			src.last_roll = pick(src.sides)
 			src.visible_message("[src] shows <i>[src.last_roll]</i>.")
+			if (istype(src, /obj/item/dice/borg))
+				var/mob/user = src.loc
+				user.visible_message("[src] shows <i>[src.last_roll]</i>.")
 		else
 			src.last_roll = null
 			src.visible_message("[src] shows... um. Something. It hurts to look at. [pick("What the fuck?", "You should probably find the chaplain.")]")
+			if (istype(src, /obj/item/dice/borg))
+				var/mob/user = src.loc
+				user.visible_message("[src] shows... um. Something. It hurts to look at. [pick("What the fuck?", "You should probably find the chaplain.")]")
 
 		if (src.dicePals.len)
 			shuffle(src.dicePals) // so they don't all roll in the same order they went into the pile
@@ -125,7 +135,8 @@
 			return ..()
 
 	attack_self(mob/user as mob)
-		user.u_equip(src)
+		if (!(istype(src, /obj/item/dice/borg)))
+			user.u_equip(src)
 		src.roll_dat_thang()
 
 	throw_impact(var/turf/T)
@@ -231,45 +242,60 @@
 	icon_state = "dice"
 	sides = 1
 
-/obj/item/dice_bot
-	name = "Probability Cube"
-	desc = "A device for the calculation of random probabilities. Especially ones between one and six."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "dice"
-	w_class = 1.0
-	var/sides = 6
-	var/last_roll = null
 
-	New()
-		..()
-		name = "[initial(name)] (d[sides])"
+/obj/item/dice/borg
+	name = "Probability Mechanism"
+	desc = "This sophisticated device uses atmospheric white-noise to generate completely random prophecies, numbers, and sides of coins!"
+	var/mode = "d6"
 
-	proc/roll_dat_thang()
-		playsound(get_turf(src), "sound/misc/dicedrop.ogg", 100, 1)
-		if (src.sides && isnum(src.sides))
-			src.last_roll = get_english_num(rand(1, src.sides))
-			src.visible_message("[src] shows [src.last_roll].")
-		else
-			src.last_roll = null
-			src.visible_message("[src] shows... um. This isn't a number. It hurts to look at. [pick("What the fuck?", "You should probably find the chaplain.")]")
-
-	attack_self(var/mob/user as mob)
-		src.roll_dat_thang()
-
-	d4
-		icon_state = "d4"
-		sides = 4
-	d10
-		icon_state = "d20"
-		sides = 10
-	d12
-		icon_state = "d20"
-		sides = 12
-	d20
-		icon_state = "d20"
-		sides = 20
-	d100
-		icon_state = "d100"
-		sides = 100
+	attack(mob/M as mob, mob/user as mob, def_zone) // i don't think this is significant enough to have a power cost, honestly
+		mode = input("Select a probability type") in list("dice", "coin", "magic 8 ball")
+		switch (mode)
+			if ("coin")
+				sides = list("heads", "tails")
+				sound_roll = 'sound/misc/coindrop.ogg'
+			if ("dice")
+				sound_roll = 'sound/misc/dicedrop.ogg'
+				mode = input("What kind of dice?") in list("d4", "d6", "d8", "d10", "d12", "d20", "d30", "d100")
+				switch (mode)
+					if ("d4")
+						sides = 4
+					if ("d6")
+						sides = 6
+					if ("d8")
+						sides = 8
+					if ("d10")
+						sides = 10
+					if ("d12")
+						sides = 12
+					if ("d20")
+						sides = 20
+					if ("d30")
+						sides = 30
+					if ("d100")
+						sides = 100
+			if ("magic 8 ball")
+				sides = list("It is certain",\
+				"It is decidedly so",\
+				"Without a doubt",\
+				"Yes definitely",\
+				"You may rely on it",\
+				"As I see it, yes",\
+				"Most likely",\
+				"Outlook good",\
+				"Yes",\
+				"Signs point to yes",\
+				"Reply hazy try again",\
+				"Ask again later",\
+				"Better not tell you now",\
+				"Cannot predict now",\
+				"Concentrate and ask again",\
+				"Don't count on it",\
+				"My reply is no",\
+				"My sources say no",\
+				"Outlook not so good",\
+				"Very doubtful")
+				sound_roll = 'sound/items/liquid_shake.ogg'
+		boutput(user, "<span style=\"color:blue\">The [src] is now set to function as a [src.mode]</span>")
 
 #undef MAX_DICE_GROUP

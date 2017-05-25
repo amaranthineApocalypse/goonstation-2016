@@ -80,8 +80,6 @@
 	icon = 'icons/misc/worlds.dmi'
 	icon_state = "radio"
 	item_state = "radio"
-	secure_frequencies = list("g" = R_FREQ_SECURITY)
-	secure_colors = list("g" = RADIOC_SECURITY)
 
 /obj/item/device/radio/headset/engineer
 	name = "\improper Engineering Headset"

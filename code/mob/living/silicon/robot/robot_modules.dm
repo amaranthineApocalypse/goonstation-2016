@@ -185,8 +185,7 @@
 		src.modules += new /obj/item/robot_foodsynthesizer(src)
 		src.modules += new /obj/item/reagent_containers/food/drinks/bottle/beer/borg(src)
 		src.modules += new /obj/item/reagent_containers/food/drinks/drinkingglass(src)
-		src.modules += new /obj/item/coin_bot(src)
-		src.modules += new /obj/item/dice_bot(src)
+		src.modules += new /obj/item/dice/borg(src)
 		src.modules += new /obj/item/c_tube(src) //tube can now disarm people! //But still needs reworked because it's G A R B A G E
 		src.modules += new /obj/item/zippo/borg(src)
 
