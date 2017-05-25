@@ -11,20 +11,29 @@
 	var/mod_hudicon = "unknown"
 	var/mod_appearance = "robot"
 	var/cosmetic_mods = null
+	var/radiotype = /obj/item/device/radio
 
 	New() //Shit all the mods have - make sure to call ..() at the top of any New() in this class of item
 		src.modules += new /obj/item/device/flashlight(src)
 		src.modules += new /obj/item/device/unilyzer(src)  //fuck it, they can all get this.
 		src.modules += new /obj/item/omnitool(src) //same here
-
-		var/obj/item/device/pda2/cyborg/C = new /obj/item/device/pda2/cyborg(src)
+		src.modules += new /obj/item/device/pda2/cyborg(src)
 		var/mob/living/silicon/robot/R = src.loc
+		if (!istype(src, /obj/item/robot_module/brobot/brobocop))
+			for (var/obj/item/device/pda2/C in src.modules)
+				C.name = "[R.name]'s PDA"
+				C.owner = "[R.name]"
+				if (istype(C, /obj/item/device/pda2/ticket))
+					C.name = "[R.name]'s Ticketing PDA"
+
 		if(istype(R))
-			C.name = "[R.name]'s PDA"
-			C.owner = "[R.name]"
-			R.radio = new /obj/item/device/radio(src)
+			qdel(R.ears)
+			qdel(R.radio)
+			R.radio = null
+			R.ears = null
+			R.radio = new src.radiotype(src)
+			R.radio.set_loc(src.loc)
 			R.ears = R.radio
-			src.modules += C
 
 /obj/item/robot_module/standard
 	name = "Civilian Module"
@@ -37,12 +46,12 @@
 		src.cosmetic_mods = new /datum/robot_cosmetic/civilian(src) //Decided to just amalgamate janitor and hydro cosmetics.
 		//src.cosmetic_mods += new /datum/robot_cosmetic/janitor(src)
 		//src.cosmetic_mods += new /datum/robot_cosmetic/hydro(src) //Having more than one cosmetics module seems to be causing problems somehow??
-		src.modules += new /obj/item/device/flashlight(src)
+		//src.modules += new /obj/item/device/flashlight(src) //already has one of these
 		src.modules += new /obj/item/robojumper(src)
 		src.modules += new /obj/item/extinguisher(src)
 		//src.modules += new /obj/item/wrench(src)
 		src.modules += new /obj/item/pen(src)
-		//src.modules += new /obj/submachine/chef_oven(src) //Incredibly, this works perfectly. //Like fuck it does
+		//src.modules += new /obj/submachine/chef_oven(src) //Incredibly, this works perfectly. //Like fuck it does //Should be more or less unnecessary now that clickdrag food exists
 		src.modules += new /obj/item/seedplanter(src)
 		src.modules += new /obj/item/plantanalyzer(src)
 		src.modules += new /obj/item/device/igniter(src)
@@ -195,7 +204,7 @@
 	icon_state = "mod-bro"
 	mod_hudicon = "brobot"
 	mod_appearance = "BroBot"
-
+	radiotype = /obj/item/device/radio/headset/security/borg
 	New()
 		..()
 		src.modules += new /obj/item/device/prisoner_scanner/borg(src)
@@ -204,15 +213,27 @@
 		//src.modules += new /obj/item/device/radio/headset/security/borg(src) //This just adds the radio to the module. You can't use it.
 		src.modules += new /obj/item/device/detective_scanner(src)
 		src.modules += new /obj/item/device/audio_log/borg(src)
-		var/obj/item/device/pda2/ticket/Q = new /obj/item/device/pda2/ticket(src)
-		var/mob/living/silicon/robot/B = src.loc
-		if(istype(B))
+		src.modules += new /obj/item/device/pda2/ticket(src)
+		var/mob/living/silicon/robot/R = src.loc
+		for (var/obj/item/device/pda2/C in src.modules)
+			C.name = "[R.name]'s PDA"
+			C.owner = "[R.name]"
+			if (istype(C, /obj/item/device/pda2/ticket))
+				C.name = "[R.name]'s Ticketing PDA"
+	//	var/mob/living/silicon/robot/B = src.loc
+	/*	if(istype(B))
 			Q.name = "[B.name]'s Ticketing PDA"
 			Q.owner = "[B.name]"
-			B.radio = new /obj/item/device/radio/headset/security/borg(src)
-			B.ears = B.radio
-			src.modules += Q
+		/*	qdel(B.ears)
+			qdel(B.radio)
+			B.radio = null
+			B.ears = null
+			B.radio = new src.radiotype(src)
+			B.radio.set_loc(src.loc)
+			B.ears = B.radio	*/
 
+			src.modules += Q
+	*/
 /datum/robot_cosmetic/brobot
 	head_mod = "Afro and Shades"
 	legs_mod = "Disco Flares"

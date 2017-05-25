@@ -481,12 +481,7 @@ ported and crapped up by: haine
 
 
 	afterattack(obj/target, mob/user)
-		if (!(istype(target, /obj/item/reagent_containers/glass/)) || !(istype(target, /obj/machinery/plantpot/)))
-			user.show_text("You can't put reagents in there!", "red")
-			return
-
-		else if ((istype(target, /obj/item/reagent_containers/glass/)) || !(istype(target, /obj/machinery/plantpot/)))
-
+		if (istype(target, /obj/item/reagent_containers/glass) || istype(target, /obj/machinery/plantpot))
 			if (!src.active_tank)
 				user.show_text("No tank is currently active.", "red")
 				return
@@ -505,6 +500,7 @@ ported and crapped up by: haine
 			if (!(src in processing_items))
 				processing_items.Add(src)
 		else
+			user.show_text("You can't put reagents in there!", "red")
 			return ..() // call your parents!!
 
 	get_desc(dist)

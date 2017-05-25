@@ -433,6 +433,19 @@
 						R.module = RM
 						R.hud.update_module()
 						R.hud.module_added()
+						for (var/obj/item/device/pda2/C in RM.modules)
+							C.name = "[R.name]'s PDA"
+							C.owner = "[R.name]"
+							if (istype(C, /obj/item/device/pda2/ticket))
+								C.name = "[R.name]'s Ticketing PDA"
+						qdel(R.ears)
+						qdel(R.radio)
+						R.radio = null
+						R.ears = null
+						R.radio = new RM.radiotype(src)
+						R.radio.set_loc(R)
+						R.ears = R.radio
+
 				R.update_appearance()
 
 			if (href_list["remove"])
@@ -479,6 +492,13 @@
 					boutput(R, "<span style=\"color:red\">Your module was removed!</span>")
 					R.hud.update_module()
 					R.uneq_all()
+					qdel(R.ears)
+					qdel(R.radio)
+					R.radio = null
+					R.ears = null
+					R.radio = new /obj/item/device/radio(src)
+					R.radio.set_loc(R)
+					R.ears = R.radio
 					R.hud.module_removed()
 					R.module = null
 				R.update_appearance()

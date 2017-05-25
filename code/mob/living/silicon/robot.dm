@@ -1065,6 +1065,18 @@
 				W.set_loc(src)
 				src.module = W
 				boutput(user, "You insert [W].")
+				var/obj/item/robot_module/RM = W
+				for (var/obj/item/device/pda2/C in RM.modules)
+					C.name = "[src.name]'s PDA"
+					C.owner = "[src.name]"
+					if (istype(C, /obj/item/device/pda2/ticket))
+						C.name = "[src.name]'s Ticketing PDA"
+				qdel(src.ears)
+				qdel(src.radio)
+				src.radio = null
+				src.ears = null
+				src.radio = new RM.radiotype(src)
+				src.ears = src.radio
 				hud.update_module()
 				src.update_appearance()
 				hud.module_added()
@@ -1415,6 +1427,13 @@
 						user.show_text("You remove [RM].")
 						src.show_text("Your module was removed!", "red")
 						uneq_all()
+						qdel(src.ears)
+						qdel(src.radio)
+						src.radio = null
+						src.ears = null
+						src.radio = new /obj/item/device/radio(src)
+						src.radio.set_loc(src)
+						src.ears = src.radio
 						hud.module_removed()
 						src.module = null
 
@@ -1802,21 +1821,7 @@
 		else return 0
 
 	proc/radio_menu()
-		var/dat = {"
-		<TT>
-		Microphone: [src.radio.broadcasting ? "<A href='byond://?src=\ref[src.radio];talk=0'>Engaged</A>" : "<A href='byond://?src=\ref[src.radio];talk=1'>Disengaged</A>"]<BR>
-		Speaker: [src.radio.listening ? "<A href='byond://?src=\ref[src.radio];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src.radio];listen=1'>Disengaged</A>"]<BR>
-		Frequency:
-		<A href='byond://?src=\ref[src.radio];freq=-10'>-</A>
-		<A href='byond://?src=\ref[src.radio];freq=-2'>-</A>
-		[format_frequency(src.radio.frequency)]
-		<A href='byond://?src=\ref[src.radio];freq=2'>+</A>
-		<A href='byond://?src=\ref[src.radio];freq=10'>+</A><BR>
-		-------
-	</TT>"}
-		src << browse(dat, "window=radio")
-		onclose(src, "radio")
-		return
+		src.radio.attack_self(src)
 
 	proc/toggle_module_pack()
 		if(weapon_lock)
