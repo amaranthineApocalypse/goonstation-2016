@@ -890,3 +890,50 @@ ported and crapped up by: haine
 	onInterrupt(var/flag = 0)
 		..()
 		CRASH("Something has gone horribly wrong here!")
+
+/obj/item/borg_tube
+	name = "KidcurityCo. FUN Baton(tm)"
+	desc = "This all new EXCITING!!! product from KidcurityCo. gives you ALL THE FUN of security with NONE OF THE HARM"
+	icon = 'icons/obj/items.dmi'
+	icon_state = "c_tube"
+	inhand_image_icon = 'icons/mob/inhand/hand_weapons.dmi'
+	w_class = 1.0
+	stamina_damage = 1
+	stamina_cost = 1
+	w_class = 1.0
+	throw_speed = 4
+	throw_range = 5
+
+	attack(mob/M as mob, mob/user as mob)
+		if(user.a_intent == "harm") //this is so brobots can still attack people with cardboard tubes without disarming people
+			var/pick = rand(1,10)
+			stamina_damage = 120
+			if (pick == 1)
+				var/obj/item/I = M.equipped()
+				if (I)
+					if (I.cant_other_remove && ishuman(M))
+						playsound(src.loc, 'sound/weapons/punchmiss.ogg', 50, 1)
+						src.loc.visible_message("<span style=\"color:red\"><B>[src] vainly tries to knock [I] out of [M]'s hand!</B></span>")
+						user.visible_message("<span style=\"color:red\">Something is binding [I] to [M]. You won't be able to disarm [him_or_her(M)].</span>")
+						M.visible_message("<span style=\"color:red\">Something is binding [I] to you. It cannot be knocked out of your hands.</span>")
+
+					else
+						if (ishuman(src))
+							var/mob/living/carbon/human/H2 = src
+							for (var/uid in H2.pathogens)
+								var/datum/pathogen/P = H2.pathogens[uid]
+								var/ret = P.ondisarm(M, 1)
+								if (!ret)
+									H2.loc.visible_message("<span style=\"color:red\"><B>[src] tries to knock [I] out of [M]'s hand!</B></span>")
+									return
+						user.loc.visible_message("<span style=\"color:red\"><B>[src] knocks [I] out of [M]'s hand!</B></span>")
+						playsound(src.loc, 'sound/weapons/thudswoosh.ogg', 50, 1)
+						M.deliver_move_trigger("bump")
+						M.drop_item()
+				else
+					..()
+			else
+				..()
+		else
+			stamina_damage = 1
+			..()

@@ -1,11 +1,11 @@
 // BEGIN_INTERNALS
 /*
-LAST_COMPILE_TIME: 1495740782
-DIR: code code\chui\example code\datums code\datums\buildmodes code\datums\buildmodes\adventure code\datums\buildmodes\adventure\elements code\datums\chemistry code\datums\chemistry\tools code\datums\controllers code\datums\critter_mobs\health code\mob code\mob\living code\mob\living\silicon code\mob\living\silicon\robot code\obj code\obj\item code\obj\item\device code\obj\machinery code\obj\machinery\computer code\obj\submachine 
+LAST_COMPILE_TIME: 1495821422
+DIR: code code\chui\example code\datums code\datums\buildmodes code\datums\buildmodes\adventure code\datums\buildmodes\adventure\elements code\datums\chemistry code\datums\chemistry\tools code\datums\controllers code\datums\critter_mobs\health code\mob code\mob\living code\mob\living\silicon code\mob\living\silicon\robot code\obj code\obj\item code\obj\item\device code\obj\machinery code\obj\submachine 
 AUTO_FILE_DIR: OFF
 MAP_ICON_TYPE: 0
 LAST_COMPILE_VERSION: 511.1359
-WINDOW: code\mob\living\silicon\robot\robot_modules.dm;code\obj\submachine\robotics.dm;code\mob\living\silicon\robot.dm;code\_macros.dm;code\obj\item\surgery_tools.dm;code\obj\item\device\radio.dm;code\obj\item\noisemaker.dm;code\obj\machinery\recharger.dm;code\obj\machinery\recharge_station.dm
-FILE: code\mob\living\silicon\robot\robot_modules.dm
+WINDOW: code\mob\living\silicon\robot\robot_modules.dm;code\obj\submachine\robotics.dm;code\mob\living\silicon\robot.dm;code\_macros.dm;code\obj\item\surgery_tools.dm;code\obj\item\device\radio.dm;code\obj\item\noisemaker.dm;code\obj\machinery\recharger.dm;code\obj\misc_junk.dm
+FILE: code\obj\submachine\robotics.dm
 */
 // END_INTERNALS

@@ -195,7 +195,7 @@
 		src.modules += new /obj/item/reagent_containers/food/drinks/bottle/beer/borg(src)
 		src.modules += new /obj/item/reagent_containers/food/drinks/drinkingglass(src)
 		src.modules += new /obj/item/dice/borg(src)
-		src.modules += new /obj/item/c_tube(src) //tube can now disarm people! //But still needs reworked because it's G A R B A G E
+		//src.modules += new /obj/item/c_tube(src) //tube can now disarm people! //But still needs reworked because it's G A R B A G E
 		src.modules += new /obj/item/zippo/borg(src)
 
 /obj/item/robot_module/brobot/brobocop //this is the secbot module
@@ -210,6 +210,7 @@
 		src.modules += new /obj/item/device/prisoner_scanner/borg(src)
 		src.modules += new /obj/item/robot_grenade_fabricator_security(src)
 		src.modules += new /obj/item/handcuffs/tape_roll/borg(src)
+		src.modules += new /obj/item/borg_tube(src)
 		//src.modules += new /obj/item/device/radio/headset/security/borg(src) //This just adds the radio to the module. You can't use it.
 		src.modules += new /obj/item/device/detective_scanner(src)
 		src.modules += new /obj/item/device/audio_log/borg(src)
