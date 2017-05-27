@@ -197,6 +197,7 @@
 		src.modules += new /obj/item/dice/borg(src)
 		//src.modules += new /obj/item/c_tube(src) //tube can now disarm people! //But still needs reworked because it's G A R B A G E
 		src.modules += new /obj/item/zippo/borg(src)
+		src.modules += new /obj/item/pen/crayon/borg(src)
 
 /obj/item/robot_module/brobot/brobocop //this is the secbot module
 	name = "Brobocop Module" //the main reason being that I like the idea of the secborgs being half-rate discount dan style mallcops

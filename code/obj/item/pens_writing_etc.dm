@@ -251,9 +251,16 @@
 		return 1
 
 	write_on_turf(var/turf/T as turf, var/mob/user as mob)
+		if (istype(src, /obj/item/pen/crayon/borg))
+			var/obj/item/pen/crayon/borg/borgpen = src
+			if (borgpen.penmode == "pen")
+				..()
+				return
+
 		if (!T || !user || src.in_use || get_dist(T, user) > 1)
 			return
 		src.in_use = 1
+
 		var/t = input(user, "What do you want to write?", null, null) as null|anything in list(\
 		"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",\
 		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9",\
@@ -273,6 +280,59 @@
 		G.pixel_x = rand(-4,4)
 		G.pixel_y = rand(-4,4)
 		src.in_use = 0
+
+/obj/item/pen/crayon/borg
+	name = "Magic pen"
+	desc = "With a vast range of hues and fonts available to choose from, this pen truly is mightier than the sword! Warning, do not attempt to fight using pen."
+	var/penmode = "crayon"
+	font = "Courier"
+	color = "#000000"
+	var/list/fontlist = list(
+	"Courier",
+	"Courier New",
+	"Georgia",
+	"Verdana",
+	"Times",
+	"Times New Roman",
+	"Arial",
+	"Helvetica",
+	"Comic Sans MS",
+	"Wingdings",
+	"Impact",
+	"Palatino Linotype",
+	"Garamond",
+	"Bookman",
+	"Century Gothic",
+	"Arial Black",
+	"Trebuchet MS",
+	"Dancing Script",
+	"Permanent Marker"
+	)
+	//list of fonts! Hopefully all of these are websafe and as such should work with the paper!!
+	attack_self(var/mob/user as mob)
+		if (src.penmode == "crayon")
+			src.penmode = "pen"
+			boutput(user, "Changed mode to 'Pen'")
+		else if (src.penmode == "pen")
+			src.penmode = "crayon"
+			boutput(user, "Changed mode to 'Crayon'")
+
+	attack(mob/M as mob, mob/user as mob, def_zone)
+		var/col_new = input(user, "Please select pen color.", "Color Select") as null|color
+		if(col_new)
+			src.color = "[col_new]"
+			src.font_color = src.color
+			src.color_name = hex2color_name(src.color)
+
+		if (src.penmode == "pen")
+			var/font_new = input("Select a new font", "Write something fancy!", src.font) as null|anything in src.fontlist
+			if (font_new)
+				src.font = font_new
+				src.webfont = src.font
+		else if( M == null || M != user )
+			..()
+		else
+			return
 
 /obj/item/pen/infrared
 	desc = "A pen that can write in infrared."
