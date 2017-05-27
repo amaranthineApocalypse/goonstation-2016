@@ -88,16 +88,16 @@
 		max_lines = 360
 		desc ="A fairly spartan recording device. Now with six times the capacity!"
 	//nuclear mode briefing log
-	attack_self()
-		src.name = "Internal Recording Device"
-		return ..()
-
-	Topic(href, href_list)
-		if (href_list["command"] == "eject")
-			boutput(usr, "<span style=\"color:red\">You can't eject it, the tape is internalised!</span>")
-			return
-		else
+		attack_self()
+			src.name = "Internal Recording Device"
 			return ..()
+
+		Topic(href, href_list)
+			if (href_list["command"] == "eject")
+				boutput(usr, "<span style=\"color:red\">You can't eject it, the tape is internalised!</span>")
+				return
+			else
+				return ..()
 
 	nuke_briefing
 		name = "Mission Briefing"

@@ -330,6 +330,7 @@
 		src.modules += new /obj/item/satchel/mining/large(src)
 		src.modules += new /obj/item/device/gps(src)
 		src.modules += new /obj/item/extinguisher(src)
+		sec.modules += new /obj/item/robo_barcoder(src)
 		//src.modules += new /obj/machinery/portable_reclaimer(src) //this should work, in theory //Except it doesn't :(
 
 /datum/robot_cosmetic/mining

@@ -318,21 +318,24 @@
 			boutput(user, "Changed mode to 'Crayon'")
 
 	attack(mob/M as mob, mob/user as mob, def_zone)
-		var/col_new = input(user, "Please select pen color.", "Color Select") as null|color
-		if(col_new)
-			src.color = "[col_new]"
-			src.font_color = src.color
-			src.color_name = hex2color_name(src.color)
+		var/choice = input("What would you like to change?") as null|anything in list("Color", "Font")
+		switch (choice)
+			if ("Color")
+				var/col_new = input(user, "Please select pen color.", "Color Select") as null|color
+				if(col_new)
+					src.color = "[col_new]"
+					src.font_color = src.color
+					src.color_name = hex2color_name(src.color)
 
-		if (src.penmode == "pen")
-			var/font_new = input("Select a new font", "Write something fancy!", src.font) as null|anything in src.fontlist
-			if (font_new)
-				src.font = font_new
-				src.webfont = src.font
-		else if( M == null || M != user )
-			..()
-		else
-			return
+			if ("Font")
+				var/font_new = input("Select a new font", "Write something fancy!", src.font) as null|anything in src.fontlist
+				if (font_new)
+					src.font = font_new
+					src.webfont = src.font
+			else if( M == null || M != user )
+				..()
+			else
+				return
 
 /obj/item/pen/infrared
 	desc = "A pen that can write in infrared."

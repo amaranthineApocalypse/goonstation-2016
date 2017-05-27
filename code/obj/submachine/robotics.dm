@@ -937,3 +937,68 @@ ported and crapped up by: haine
 		else
 			stamina_damage = 1
 			..()
+
+/obj/item/robo_barcoder
+	name = "Handheld Barcode Printer"
+	desc = "This device acts as a trading and transport barcode printer. Convenient!"
+	icon = 'icons/obj/writing.dmi'
+	icon_state = "labeler"
+	item_state = "flight"
+	var/destination = "QM"
+	var/list/destinations = list("Airbridge", "Cafeteria", "EVA", "Engine", "Disposals", "QM", "Catering", "MedSci", "Security")
+
+	attack_self(mob/user as mob)
+		if (..(user))
+			return
+
+		var/dat = ""
+		dat += "<b>Available Destinations:</b><BR>"
+		for(var/I in destinations)
+			dat += "<b><A href='?src=\ref[src];confirm=[I]'>[I]</A></b><BR><BR>"
+
+		dat += "<b>Available Traders:</b><BR>"
+		for(var/datum/trader/T in shippingmarket.active_traders)
+			if (!T.hidden)
+				dat += "<br><b><A href='?src=\ref[src];confirm=[T.crate_tag]'>Sell to [T.name]</A></b><BR>"
+
+		user.machine = src
+		user << browse("<TITLE>Handheld Barcode Printer</TITLE><BR>[dat]", "window=bc_computer;size=400x300")
+		onclose(user, "bc_computer")
+		return
+
+	Topic(href, href_list)
+		if (..(href, href_list))
+			return
+
+		if (href_list["confirm"])
+			src.desc = "This device acts as a trading and transport barcode printer. Convenient! It's currently set to deliver to ([href_list["print"]])"
+			src.destination = href_list["confirm"]
+
+		usr << browse(null, "window=bc_computer")
+		src.updateUsrDialog()
+		return
+
+	proc/attachTo(atom/target)
+		if(get_dist(get_turf(target), get_turf(src)) <= 1 && istype(target, /atom/movable))
+			if(target==loc && target != usr) return //Backpack or something
+			playsound(src.loc, "sound/machines/printer_thermal.ogg", 50, 0)
+			target:delivery_destination = destination
+			usr.visible_message("<span style=\"color:blue\">[usr] puts a barcode on [target].</span>")
+			if (isrobot(usr)) // Carbon mobs might end up using this
+				var/mob/living/silicon/robot/R = usr
+				if (R.cell) R.cell.charge -= 100 //Might be too high honestly
+
+			if (isghostdrone(usr)) //Drones aren't getting away with this bullshit either
+				var/mob/living/silicon/ghostdrone/D = usr
+				if (D.cell) D.cell.charge -= 100
+
+
+
+
+	/*attack(mob/M as mob, mob/user as mob, def_zone)
+		src.attachTo(M)
+		return*/
+
+	afterattack(atom/target as mob|obj|turf, mob/user as mob)
+		src.attachTo(target)
+		return
