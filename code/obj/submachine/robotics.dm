@@ -123,7 +123,7 @@
 	var/list/allowed = list(/obj) //ONLY FOR TESTING. WILL BREAK THINGS HORRIBLY IF USED LIVE.
 	var/capacity = 3
 
-	afterattack(atom/target as obj|mob|turf, var/mob/user as mob, flag )
+	afterattack(atom/target as obj|mob, var/mob/user as mob, flag )
 		var/proceed = 0
 		for(var/check_path in src.allowed)
 			if(istype(target, check_path))
@@ -142,11 +142,11 @@
 		else
 			user.visible_message("<span style=\"color:blue\">[user] collects the [target].</span>", "<span style=\"color:blue\">You collect the [target].</span>")
 			contents += target
-
-			if(hasvar(target, "contained"))
-				target:contained = 1 //No running around venting plasma thank you very much - AmaranthineApocalypse
-
-			target:set_loc(src)
+			var/atom/movable/target2 = target
+			target2.set_loc(src)
+			if (!istype(target, /obj/item/reagent_containers/glass/vial) && istype(target, /obj/machinery/portable_atmospherics))
+				var/obj/machinery/portable_atmospherics/canetc = target
+				canetc.contained = 1 //No running around venting plasma thank you very much - AmaranthineApocalypse
 
 			var/datum/effects/system/spark_spread/s = unpool(/datum/effects/system/spark_spread)
 			s.set_up(5, 1, user)
@@ -164,13 +164,27 @@
 	attack_self(var/mob/user as mob)
 		if (src.contents.len == 0) boutput(user, "<span style=\"color:red\">You have nothing stored!</span>")
 		else
-			var/selection = input("What do you want to drop?", "Atmos Transporter") as null|anything in src.contents
+
+			var/list/stuff_in_here = list()
+			var/num_of_stuff = 1
+			for (var/atom/movable/AM in src.contents)
+				stuff_in_here["([num_of_stuff]) [AM.name]"] = AM
+				num_of_stuff++
+
+			var/selection = input("What do you want to drop?", "Atmos Transporter") as null|anything in stuff_in_here
 			if(!selection)
 				return
+			var/atom/movable/selection2 = stuff_in_here[selection]
+			if (!selection2)
+				return
+			selection2.set_loc(user.loc)
 
-			selection:set_loc(user.loc)
-			if(hasvar(selection, "contained"))
-				selection:contained = 0
+			/*if(hasvar(selection, "contained"))
+				selection:contained = 0*/
+
+			if (!istype(selection, /obj/item/reagent_containers/glass/vial) && istype(selection, /obj/machinery/portable_atmospherics))
+				var/obj/machinery/portable_atmospherics/canetc = selection
+				canetc.contained = 0
 			//selection:contained = 0 //Hello free runtimes - AmaranthineApocalypse
 			var/datum/effects/system/spark_spread/s = unpool(/datum/effects/system/spark_spread)
 			s.set_up(5, 1, user)
@@ -722,26 +736,24 @@ ported and crapped up by: haine
 	duration = 10
 	id = "GeneTek Replace"
 	var/mob/living/carbon/human/target
-	var/select
 	var/mob/user
 	var/eyepos = "left"
 
 	New(Target, Select, User)
 		target = Target
-		select = Select
 		user = src
 		playsound(target.loc, "sound/machines/click.ogg", 50, 1)
 		..()
 
 	onStart()
 		..()
+		var/select = user.zone_sel.selecting
 		if (issilicon(user) && (select == "head"))
 			var/mob/living/silicon/robot/robodoc = user
 			if (robodoc.find_in_hand(src) == robodoc.module_states[3])
 				eyepos = "right"
 			if (robodoc.find_in_hand(src) == robodoc.module_states[1])
 				eyepos = "left"
-
 		switch (select)
 			if ("head")
 				if (((user.find_in_hand(src) == user.r_hand) || (eyepos == "right")) && !(target.organHolder.right_eye))
@@ -759,20 +771,26 @@ ported and crapped up by: haine
 					DEBUG("Not left hand, left module, or target has a left eye already")
 					interrupt(INTERRUPT_ALWAYS)
 					return
-			if ("l_arm")
+			/*if ("l_arm")
 				return
 			if ("r_arm")
 				return
 			if ("l_leg")
 				return
 			if ("r_leg")
-				return
+				return*/
 
 	onUpdate()
 		..()
+		var/select = user.zone_sel.selecting
 		var/shit_be_fucked = 0
 		if(get_dist(owner, target) > 1)
 			DEBUG("dist between owner and target > 1")
+			interrupt(INTERRUPT_ALWAYS)
+			shit_be_fucked = 1
+
+		if (select == null)
+			DEBUG("select null")
 			interrupt(INTERRUPT_ALWAYS)
 			shit_be_fucked = 1
 
@@ -806,7 +824,7 @@ ported and crapped up by: haine
 					DEBUG("Apparently already had a left eye? Or module state wasn't left.")
 					interrupt(INTERRUPT_ALWAYS)
 					return
-			if("chest")
+		/*	if("chest")
 				if ((target.organHolder.heart))
 					interrupt(INTERRUPT_ALWAYS)
 					return
@@ -821,10 +839,11 @@ ported and crapped up by: haine
 				return
 			if ("r_leg")
 				interrupt(INTERRUPT_ALWAYS)
-				return
+				return */
 
 	onEnd()
 		..()
+		var/select = user.zone_sel.selecting
 		var/shit_be_fucked = 0
 		if(get_dist(owner, target) > 1)
 			DEBUG("dist between owner and target > 1 at end")
@@ -838,6 +857,11 @@ ported and crapped up by: haine
 
 		if (user == null)
 			DEBUG("user null at end")
+			interrupt(INTERRUPT_ALWAYS)
+			shit_be_fucked = 1
+
+		if (select == null)
+			DEBUG("select null")
 			interrupt(INTERRUPT_ALWAYS)
 			shit_be_fucked = 1
 
@@ -887,9 +911,9 @@ ported and crapped up by: haine
 				interrupt(INTERRUPT_ALWAYS)
 				return
 
-	onInterrupt(var/flag = 0)
+/*	onInterrupt(var/flag = 0)
 		..()
-		CRASH("Something has gone horribly wrong here!")
+		CRASH("Something has gone horribly wrong here!") */
 
 /obj/item/borg_tube
 	name = "KidcurityCo. FUN Baton(tm)"
@@ -1002,3 +1026,83 @@ ported and crapped up by: haine
 	afterattack(atom/target as mob|obj|turf, mob/user as mob)
 		src.attachTo(target)
 		return
+
+/*/obj/item/borgoreprocessor
+	name = "Handheld Ore Processor"
+	desc = "Makes bars and cubes on the fly! Fancy!"
+
+	/proc/isExploitableObject(var/atom/A)
+    if(istype(A, /obj/item/tile) || istype(A, /obj/item/rods) || istype(A, /obj/item/sheet)) return 1
+    return 0
+
+	attack(atom/target as obj|turf)
+		if (istype(target, /obj/item)
+			var/obj/item/W = target
+			if (istype(A, /obj/item/tile) || istype(A, /obj/item/rods) || istype(A, /obj/item/sheet))
+				boutput(user, "<span style=\"color:red\">\the [src] grumps at you and refuses to use [W].</span>")
+				return
+
+			if(istype(W, /obj/item/material_piece))
+				boutput(user, "<span style=\"color:red\">[W] has already been processed.</span>")
+				return
+
+			if(istype(W, /obj/item/satchel))
+				var/obj/item/satchel/S = W
+				boutput(user, "<span style=\"color:blue\">You empty \the [W] into \the [src].</span>")
+				for(var/obj/item/I in S)
+					if(I.material)
+						I.set_loc(src)
+				S.satchel_updateicon()
+				return
+
+			if(W.material)
+				boutput(user, "<span style=\"color:blue\">You put \the [W] into \the [src].</span>")
+				user.u_equip(W)
+				W.set_loc(src)
+				W.dropped()
+				return
+			return
+		else if(isturf(target))
+
+
+
+		else
+			return ..()
+	process()
+		if(contents.len)
+			var/atom/X = contents[1]
+			var/list/matches = list()
+
+			for(var/atom/A in contents)
+				if(A == X) continue
+				if(isSameMaterial(A.material, X.material))
+					matches.Add(A)
+
+			var/obj/item/material_piece/exists_nearby = null
+			for(var/obj/item/material_piece/G in get_output_location())
+				if(isSameMaterial(G.material, X.material))
+					exists_nearby = G
+					break
+
+			matches.Add(X)
+
+			var/totalAmount = 0
+			for(var/obj/item/M in matches)
+				totalAmount += M.amount
+
+			if(exists_nearby)
+				exists_nearby.change_stack_amount(totalAmount)
+			else
+				var/newType = getProcessedMaterialForm(X.material)
+				var/obj/item/material_piece/P = new newType(get_output_location())
+				P.setMaterial(copyMaterial(X.material))
+				P.change_stack_amount(totalAmount - P.amount)
+
+			for(var/atom/movable/D in matches)
+				D.set_loc(null)
+				qdel(matches)
+
+			playsound(src.loc, "sound/effects/pop.ogg", 40, 1)
+			flick("fab3-work",src)
+		return
+*/

@@ -43,15 +43,10 @@
 
 	New()
 		..()
-		src.cosmetic_mods = new /datum/robot_cosmetic/civilian(src) //Decided to just amalgamate janitor and hydro cosmetics.
-		//src.cosmetic_mods += new /datum/robot_cosmetic/janitor(src)
-		//src.cosmetic_mods += new /datum/robot_cosmetic/hydro(src) //Having more than one cosmetics module seems to be causing problems somehow??
-		//src.modules += new /obj/item/device/flashlight(src) //already has one of these
+		src.cosmetic_mods = new /datum/robot_cosmetic/civilian(src)
 		src.modules += new /obj/item/robojumper(src)
 		src.modules += new /obj/item/extinguisher(src)
-		//src.modules += new /obj/item/wrench(src)
 		src.modules += new /obj/item/pen(src)
-		//src.modules += new /obj/submachine/chef_oven(src) //Incredibly, this works perfectly. //Like fuck it does //Should be more or less unnecessary now that clickdrag food exists
 		src.modules += new /obj/item/seedplanter(src)
 		src.modules += new /obj/item/plantanalyzer(src)
 		src.modules += new /obj/item/device/igniter(src)
@@ -62,6 +57,9 @@
 		src.modules += new /obj/item/mop(src)
 		src.modules += new /obj/item/device/camera_viewer(src)
 		src.modules += new /obj/item/borghose(src) //Forgot to add this
+		src.modules += new /obj/item/kitchen/utensil/knife(src)
+		src.modules += new /obj/item/kitchen/rollingpin(src)
+		src.modules += new /obj/item/reagent_containers/glass/bottle/icing(src)
 
 /datum/robot_cosmetic/standard //Unused now, but who knows, maybe someone will find a use for it - AmaranthineApocalypse
 	fx = list(255,0,0)
@@ -330,7 +328,7 @@
 		src.modules += new /obj/item/satchel/mining/large(src)
 		src.modules += new /obj/item/device/gps(src)
 		src.modules += new /obj/item/extinguisher(src)
-		sec.modules += new /obj/item/robo_barcoder(src)
+		src.modules += new /obj/item/robo_barcoder(src)
 		//src.modules += new /obj/machinery/portable_reclaimer(src) //this should work, in theory //Except it doesn't :(
 
 /datum/robot_cosmetic/mining
