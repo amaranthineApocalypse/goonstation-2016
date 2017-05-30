@@ -144,8 +144,14 @@
 		if(holder.stat != 2)
 			if(prob(40))
 				holder.emote("scream")
+
+		if (!tool.the_mob.find_type_in_hand(/obj/item/hemostat))
+			take_bleeding_damage(holder, null, 15, DAMAGE_STAB)
+		else
+			tool.the_mob.show_text("You clamp the bleeders with the hemostat.", "blue")
+
 		holder.TakeDamage("chest",20,0)
-		take_bleeding_damage(holder, null, 15, DAMAGE_STAB)
+
 
 		return 1
 

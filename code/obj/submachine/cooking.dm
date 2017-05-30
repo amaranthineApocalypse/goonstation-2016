@@ -482,11 +482,11 @@ var/list/oven_recipes = list()
 							if (F.quality > 0.5)
 								F.quality = 0.5
 							F.heal_amt = 0
-						F.set_loc(src.loc)
+						F.set_loc(get_turf(src))
 				else
 					var/obj/item/reagent_containers/food/snacks/F
 					if (ispath(output))
-						F = new output(src.loc)
+						F = new output(get_turf(src))
 					else
 						F = output
 						F.set_loc( get_turf(src) )
@@ -536,7 +536,7 @@ var/list/oven_recipes = list()
 				boutput(usr, "<span style=\"color:red\">Too late! It's already cooking, ejecting the food would ruin everything forever!</span>")
 				return
 			for (var/obj/item/I in src.contents)
-				I.set_loc(src.loc)
+				I.set_loc(get_turf(src))
 			src.updateUsrDialog()
 			return
 

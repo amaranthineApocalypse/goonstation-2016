@@ -36,7 +36,7 @@
 			if ("bang") playsound(src.loc, "sound/effects/bang.ogg", 40, 1)
 			if ("buzz") playsound(src.loc, "sound/machines/warning-buzzer.ogg", 50, 1)
 			if ("gunshot") playsound(src.loc, "sound/weapons/Gunshot.ogg", 50, 1)
-			if ("siren") playsound(src.loc, "sound/machines/siren_police.ogg", 50, 1)
+		//	if ("siren") playsound(src.loc, "sound/machines/siren_police.ogg", 50, 1)
 			if ("coo") playsound(src.loc, "sound/misc/babynoise.ogg", 50, 1)
 			if ("rimshot") playsound(src.loc, "sound/misc/rimshot.ogg", 50, 1)
 			if ("trombone") playsound(src.loc, "sound/misc/trombone.ogg", 50, 1)
@@ -45,7 +45,7 @@
 			else playsound(src.loc, "sound/machines/buzz-two.ogg", 50, 1)
 
 	attack(mob/M as mob, mob/user as mob, def_zone)
-		var/newmode = input("Select sound to play", "Make some noise", src.mode) in list("honk", "fart", "burp", "squeak", "cat", "harmonica", "vuvuzela", "bang", "buzz", "gunshot", "siren", "coo", "rimshot", "trombone", "saxophone")
+		var/newmode = input("Select sound to play", "Make some noise", src.mode) in list("honk", "fart", "burp", "squeak", "cat", "harmonica", "vuvuzela", "bang", "buzz", "gunshot", /*"siren",*/ "coo", "rimshot", "trombone", "saxophone")
 		/*
 		switch(src.mode)
 			if ("honk")

@@ -885,9 +885,9 @@ ported and crapped up by: haine
 					DEBUG("Target already has a left eye?")
 					interrupt(INTERRUPT_ALWAYS)
 					return
-				else if (eyepos = "right")
+				else if (eyepos == "right")
 					target.organHolder.receive_organ(src, "right_eye", 2.0)
-				else if (eyepos = "left")
+				else if (eyepos == "left")
 					target.organHolder.receive_organ(src, "left_eye", 2.0)
 				else
 					DEBUG("Eyepos wasn't left or right somehow??")
@@ -1027,82 +1027,92 @@ ported and crapped up by: haine
 		src.attachTo(target)
 		return
 
-/*/obj/item/borgoreprocessor
-	name = "Handheld Ore Processor"
-	desc = "Makes bars and cubes on the fly! Fancy!"
+/obj/item/machine_holder
+	name = "Machine Holder Parent"
+	desc = "You shouldn't see this"
+	var/holding = /obj/item/pipebomb/bomb/syndicate
+	var/obj/my_machine = null
 
-	/proc/isExploitableObject(var/atom/A)
-    if(istype(A, /obj/item/tile) || istype(A, /obj/item/rods) || istype(A, /obj/item/sheet)) return 1
-    return 0
+	New()
+		..()
+		my_machine = new holding(src)
 
-	attack(atom/target as obj|turf)
-		if (istype(target, /obj/item)
-			var/obj/item/W = target
-			if (istype(A, /obj/item/tile) || istype(A, /obj/item/rods) || istype(A, /obj/item/sheet))
-				boutput(user, "<span style=\"color:red\">\the [src] grumps at you and refuses to use [W].</span>")
-				return
-
-			if(istype(W, /obj/item/material_piece))
-				boutput(user, "<span style=\"color:red\">[W] has already been processed.</span>")
-				return
-
-			if(istype(W, /obj/item/satchel))
-				var/obj/item/satchel/S = W
-				boutput(user, "<span style=\"color:blue\">You empty \the [W] into \the [src].</span>")
-				for(var/obj/item/I in S)
-					if(I.material)
-						I.set_loc(src)
-				S.satchel_updateicon()
-				return
-
-			if(W.material)
-				boutput(user, "<span style=\"color:blue\">You put \the [W] into \the [src].</span>")
-				user.u_equip(W)
-				W.set_loc(src)
-				W.dropped()
-				return
-			return
-		else if(isturf(target))
-
-
-
-		else
-			return ..()
-	process()
-		if(contents.len)
-			var/atom/X = contents[1]
-			var/list/matches = list()
-
-			for(var/atom/A in contents)
-				if(A == X) continue
-				if(isSameMaterial(A.material, X.material))
-					matches.Add(A)
-
-			var/obj/item/material_piece/exists_nearby = null
-			for(var/obj/item/material_piece/G in get_output_location())
-				if(isSameMaterial(G.material, X.material))
-					exists_nearby = G
-					break
-
-			matches.Add(X)
-
-			var/totalAmount = 0
-			for(var/obj/item/M in matches)
-				totalAmount += M.amount
-
-			if(exists_nearby)
-				exists_nearby.change_stack_amount(totalAmount)
-			else
-				var/newType = getProcessedMaterialForm(X.material)
-				var/obj/item/material_piece/P = new newType(get_output_location())
-				P.setMaterial(copyMaterial(X.material))
-				P.change_stack_amount(totalAmount - P.amount)
-
-			for(var/atom/movable/D in matches)
-				D.set_loc(null)
-				qdel(matches)
-
-			playsound(src.loc, "sound/effects/pop.ogg", 40, 1)
-			flick("fab3-work",src)
+	attackby(var/obj/item/W as obj, mob/user as mob)
+		if (my_machine)
+			return my_machine.attack_hand(W, user)
 		return
-*/
+
+	attack_hand(var/obj/item/W as obj, mob/user as mob)
+		if (my_machine)
+			return my_machine.attack_hand(W, user)
+		return
+
+	attack_self(var/obj/item/W as obj, mob/user as mob)
+		if (my_machine)
+			return my_machine.attack_hand(W, user)
+		return
+
+	MouseDrop_T(atom/movable/O as obj, mob/user as mob)
+		if (my_machine && O != src)
+			return my_machine.MouseDrop_T(O, user)
+		return
+
+	oven
+		name = "Portable Oven"
+		desc = "An internalised portable oven for cyborgs to create crimes against cooking with!"
+		holding = /obj/submachine/chef_oven
+		icon = 'icons/obj/kitchen.dmi'
+		icon_state = "oven_off"
+
+	reclaimer
+		name = "Internal Reclaimer"
+		desc = "An internalised ore processor for borgs!"
+		holding = /obj/machinery/portable_reclaimer
+		icon = 'icons/obj/scrap.dmi'
+		icon_state = "reclaimer"
+
+/obj/item/internal_siren
+	name = "Brobocop Internal Siren"
+	desc = "You probably shouldn't be seeing this!"
+	var/datum/light/light
+	var/weeoo_in_progress = 0
+
+	New()
+		..()
+		var/obj/ability_button/weeoo2/NB = new
+		NB.screen_loc = "NORTH-2,1"
+		ability_buttons += NB
+		light = new /datum/light/point
+		light.set_brightness(0.7)
+		light.attach(src.loc)
+
+/obj/item/internal_siren/proc/weeoo()
+	if (weeoo_in_progress)
+		return
+
+	weeoo_in_progress = 10
+	spawn (0)
+		playsound(src.loc, "sound/machines/siren_police.ogg", 50, 1)
+		light.enable()
+		while (weeoo_in_progress--)
+			light.set_color(0.9, 0.1, 0.1)
+			sleep(3)
+			light.set_color(0.1, 0.1, 0.9)
+			sleep(3)
+		light.disable()
+
+		weeoo_in_progress = 0
+
+/obj/ability_button/weeoo2
+	name = "Police Siren"
+	icon = 'icons/misc/abilities.dmi'
+	icon_state = "noise"
+
+	Click()
+		if(!the_mob) return
+
+		for (var/obj/item/internal_siren/S in the_mob.contents)
+			if (S)
+				S.weeoo()
+				break
+		return

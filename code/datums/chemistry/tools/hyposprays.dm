@@ -98,7 +98,7 @@ var/global/list/chem_whitelist = list("antihol", "charcoal", "epinephrine", "ins
 
 		if (href_list["change_amt"])
 			var/amt = input(usr,"Select:","Amount", inj_amount) in amounts //Changing how this works so that 60u hypos are consistent with normal ones.
-			if (amt = "ALL")
+			if (amt == "ALL")
 				inj_amount = -1
 			else
 				inj_amount = amt

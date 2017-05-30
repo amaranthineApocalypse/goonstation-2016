@@ -60,6 +60,7 @@
 		src.modules += new /obj/item/kitchen/utensil/knife(src)
 		src.modules += new /obj/item/kitchen/rollingpin(src)
 		src.modules += new /obj/item/reagent_containers/glass/bottle/icing(src)
+		src.modules += new /obj/item/machine_holder/oven(src)
 
 /datum/robot_cosmetic/standard //Unused now, but who knows, maybe someone will find a use for it - AmaranthineApocalypse
 	fx = list(255,0,0)
@@ -329,6 +330,7 @@
 		src.modules += new /obj/item/device/gps(src)
 		src.modules += new /obj/item/extinguisher(src)
 		src.modules += new /obj/item/robo_barcoder(src)
+		src.modules += new /obj/item/machine_holder/reclaimer(src)
 		//src.modules += new /obj/machinery/portable_reclaimer(src) //this should work, in theory //Except it doesn't :(
 
 /datum/robot_cosmetic/mining

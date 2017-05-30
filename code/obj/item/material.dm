@@ -862,11 +862,11 @@
 
 	proc/get_output_location()
 		if (isnull(output_location))
-			return src.loc
+			return get_turf(src)
 
 		if (get_dist(src.output_location,src) > 1)
 			output_location = null
-			return src.loc
+			return get_turf(src)
 
 		if (istype(output_location,/obj/machinery/manufacturer))
 			var/obj/machinery/manufacturer/M = output_location
