@@ -2011,7 +2011,7 @@
 		if(src.module) return
 		if(!src.freemodule) return
 		boutput(src, "<span style=\"color:blue\">You may choose a starter module.</span>")
-		var/list/starter_modules = list("Civilian", "Engineering and Construction", "Medical", "Mining", "Chemistry", "Brobocop")
+		var/list/starter_modules = list("Civilian", "Engineering", "Medical", "Resource", "Chemistry", "Brobocop")
 		//var/list/starter_modules = list("Standard", "Engineering", "Medical", "Brobot")
 		if (ticker && ticker.mode)
 			if (istype(ticker.mode, /datum/game_mode/construction))
@@ -2031,9 +2031,9 @@
 				boutput(src, "<span style=\"color:blue\">You chose the Medical module. It comes with a free Healthgoggles Upgrade.</span>")
 				src.module = new /obj/item/robot_module/medical(src)
 				src.upgrades += new /obj/item/roboupgrade/healthgoggles(src)
-			if("Engineering and Construction")
+			if("Engineering")
 				src.freemodule = 0
-				boutput(src, "<span style=\"color:blue\">You chose the Engineering and Construction module. It comes with a free Meson Vision Upgrade.</span>")
+				boutput(src, "<span style=\"color:blue\">You chose the Engineering module. It comes with a free Meson Vision Upgrade.</span>")
 				src.module = new /obj/item/robot_module/engineering(src)
 				src.upgrades += new /obj/item/roboupgrade/opticmeson(src)
 
@@ -2056,7 +2056,7 @@
 				src.upgrades += new /obj/item/roboupgrade/aware(src)
 			if("Mining")
 				src.freemodule = 0
-				boutput(src, "<span style=\"color:blue\">You chose the Mining module. It comes with a free Propulsion Upgrade.</span>")
+				boutput(src, "<span style=\"color:blue\">You chose the Resource module. It comes with a free Propulsion Upgrade.</span>")
 				src.module = new /obj/item/robot_module/mining(src)
 				src.upgrades += new /obj/item/roboupgrade/jetpack(src)
 				/*

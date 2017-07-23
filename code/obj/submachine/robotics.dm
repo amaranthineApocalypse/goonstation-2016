@@ -23,7 +23,7 @@
 			<HR><BR>
 			<A href='?src=\ref[src];module=std'>Write Standard Module<BR>
 			<A href='?src=\ref[src];module=med'>Write Medical Module<BR>
-			<A href='?src=\ref[src];module=eng'>Write Engineering and Construction Module<BR>
+			<A href='?src=\ref[src];module=eng'>Write Engineering<BR>
 			<A href='?src=\ref[src];module=bro'>Write Brobocop Module<BR>
 			<A href='?src=\ref[src];module=min'>Write Mining Module<BR>
 			<A href='?src=\ref[src];module=chem'>Write Chemistry Module<BR>"}
@@ -198,7 +198,7 @@
 /obj/item/porter/cargo
 	name = "Crate Holder"
 	desc = "Used by Cargo Cyborgs for convenient carrying of heavy storage containers."
-	capacity = 12 //I know it seems a bit excessive, but I feel like it needs to be excessive in order to properly accomodate the sheer number of crates a QM will typically order.
+	capacity = 1 //I know it seems a bit excessive, but I feel like it needs to be excessive in order to properly accomodate the sheer number of crates a QM will typically order.
 	allowed = list(/obj/storage)
 
 /obj/item/robot_chemaster
@@ -723,201 +723,238 @@ ported and crapped up by: haine
 	desc = "An exciting new piece of technology from GeneTek! Allows for clone scanning, biomatter breakdown and human limb replacment on the fly!"
 	icon = 'icons/obj/device.dmi'
 	icon_state = "forensic0"
+	var/maxmeatlevel = 40
 	var/meatlevel = 40
-	var/list/scannedhumans = list()
-	var/eyepos
-
-	attack(mob/living/carbon/human/target as mob, mob/user as mob)
-		var/select = user.zone_sel.selecting
-		actions.start(new/datum/action/bar/organ_replace(src), target, select)
+	var/list/records = list()
+	var/list/acceptable = list()
+	var/selected = "none"
 
 
-/datum/action/bar/organ_replace
-	duration = 10
-	id = "GeneTek Replace"
-	var/mob/living/carbon/human/target
-	var/mob/user
-	var/eyepos = "left"
+	attack(mob/living/carbon/human/subject as mob, mob/user as mob)
+		if (subject && (selected == "none"))
+			if ((isnull(subject)) || (!istype(subject, /mob/living/carbon/human)))
+				boutput(user, "Error: Unable to locate valid genetic data.")
+				return
+			if(subject.decomp_stage)
+				boutput(user, "Error: Failed to read genetic data from subject.<br>Necrosis of tissue has been detected.")
+				return
+			if (!subject.bioHolder || subject.bioHolder.HasEffect("husk"))
+				boutput(user, "Error: Extreme genetic degredation present.")
+				return
 
-	New(Target, Select, User)
-		target = Target
-		user = src
-		playsound(target.loc, "sound/machines/click.ogg", 50, 1)
-		..()
-
-	onStart()
-		..()
-		var/select = user.zone_sel.selecting
-		if (issilicon(user) && (select == "head"))
-			var/mob/living/silicon/robot/robodoc = user
-			if (robodoc.find_in_hand(src) == robodoc.module_states[3])
-				eyepos = "right"
-			if (robodoc.find_in_hand(src) == robodoc.module_states[1])
-				eyepos = "left"
-		switch (select)
-			if ("head")
-				if (((user.find_in_hand(src) == user.r_hand) || (eyepos == "right")) && !(target.organHolder.right_eye))
-					eyepos = "right"
-					playsound(target.loc, "sound/machines/click.ogg", 50, 1)
-				else if (((user.find_in_hand(src) == user.l_hand) || (eyepos == "left")) && !(target.organHolder.left_eye))
-					eyepos = "left"
-					playsound(target.loc, "sound/machines/click.ogg", 50, 1)
+			var/datum/mind/subjMind = subject.mind
+			if ((!subjMind) || (!subjMind.key))
+				if (subject.ghost && subject.ghost.mind && subject.ghost.mind.key)
+					subjMind = subject.ghost.mind
 				else
-					DEBUG("Not right hand, right module, or target has a right eye already")
-					interrupt(INTERRUPT_ALWAYS)
+					boutput(user, "Error: Mental interface failure.")
 					return
-			if ("chest")
-				if ((target.organHolder.heart))
-					DEBUG("Not left hand, left module, or target has a left eye already")
-					interrupt(INTERRUPT_ALWAYS)
-					return
-			/*if ("l_arm")
+			if (!isnull(find_record(ckey(subjMind.key))))
+				boutput(user, "Subject already in database.")
 				return
-			if ("r_arm")
-				return
-			if ("l_leg")
-				return
-			if ("r_leg")
-				return*/
 
-	onUpdate()
+			var/datum/data/record/R = new /datum/data/record(  )
+			R.fields["ckey"] = ckey(subjMind.key)
+			R.fields["name"] = subject.real_name
+			R.fields["id"] = copytext(md5(subject.real_name), 2, 6)
+
+			var/datum/bioHolder/H = new/datum/bioHolder(null)
+			H.CopyOther(subject.bioHolder)
+
+			R.fields["holder"] = H
+
+			R.fields["abilities"] = null
+			if (subject.abilityHolder)
+				var/datum/abilityHolder/A = subject.abilityHolder.deepCopy()
+				R.fields["abilities"] = A
+
+			R.fields["traits"] = list()
+			if(subject.traitHolder && subject.traitHolder.traits.len)
+				R.fields["traits"] = subject.traitHolder.traits.Copy()
+
+			//Add an implant if needed
+			var/obj/item/implant/health/imp = locate(/obj/item/implant/health, subject)
+			if (isnull(imp))
+				imp = new /obj/item/implant/health(subject)
+				imp.implanted = 1
+				imp.owner = subject
+				subject.implant.Add(imp)
+//				imp.implanted = subject // this isn't how this works with new implants sheesh
+				R.fields["imp"] = "\ref[imp]"
+			//Update it if needed
+			else
+				R.fields["imp"] = "\ref[imp]"
+
+			if (!isnull(subjMind)) //Save that mind so traitors can continue traitoring after cloning.
+				R.fields["mind"] = subjMind
+
+			src.records += R
+			boutput(user, "Subject successfully scanned.")
+
+		else
+			var/areaselect = zone_sel2name[user.zone_sel.selecting]
+			switch(areaselect)
+				if ("head")
+					var/hand = "none"
+					if (selected == "eye")
+						if(issilicon(user))
+							var/mob/living/silicon/robot/robodoc = user
+							hand = robodoc.find_in_hand(src)
+							if (hand == robodoc.module_states[1])
+								hand = "left"
+							else if (hand == robodoc.module_states[2])
+								hand = "centre"
+							else if (hand == robodoc.module_states[3])
+								hand = "right"
+						else
+							hand = user.find_in_hand(src)
+							if (hand == user.l_hand)
+								hand = "left"
+							else if ( hand == user.r_hand)
+								hand = "right"
+						var/fluff = pick("insert", "shove", "place", "drop", "smoosh", "squish")
+						if (hand == "left" && !subject.organHolder.left_eye)
+							subject.tri_message("<span style=\"color:red\"><b>[user]</b> [fluff][fluff == "smoosh" || fluff == "squish" ? "es" : "s"] the [selected] into [subject == user ? "[his_or_her(subject)]" : "[subject]'s"] left eye socket!</span>",\
+							user, "<span style=\"color:red\">You [fluff] the [selected] into [user == subject ? "your" : "[subject]'s"] left eye socket!</span>",\
+							subject, "<span style=\"color:red\">[subject == user ? "You" : "<b>[user]</b>"] [fluff][fluff == "smoosh" || fluff == "squish" ? "es" : "s"] the [selected] into your left socket!</span>")
+
+							var/obj/item/organ/eye/newLeftEye = new /obj/item/organ/eye/left(subject.organHolder)
+							subject.organHolder.left_eye = newLeftEye
+							subject.organHolder.organ_list["left_eye"] = newLeftEye
+							subject.update_body()
+							src.selected = "none"
+						else if (hand == "right" && !subject.organHolder.right_eye)
+							subject.tri_message("<span style=\"color:red\"><b>[user]</b> [fluff][fluff == "smoosh" || fluff == "squish" ? "es" : "s"] the [selected] into [subject == user ? "[his_or_her(subject)]" : "[subject]'s"] right eye socket!</span>",\
+							user, "<span style=\"color:red\">You [fluff] the [selected] into [user == subject ? "your" : "[subject]'s"] right eye socket!</span>",\
+							subject, "<span style=\"color:red\">[subject == user ? "You" : "<b>[user]</b>"] [fluff][fluff == "smoosh" || fluff == "squish" ? "es" : "s"] the [selected] into your right socket!</span>")
+
+							var/obj/item/organ/eye/newRightEye = new /obj/item/organ/eye/right(subject.organHolder)
+							subject.organHolder.right_eye = newRightEye
+							subject.organHolder.organ_list["right_eye"] = newRightEye
+							subject.update_body()
+							src.selected = "none"
+				if("left arm")
+					if(selected == "arm")
+						subject.tri_message("<span style=\"color:red\"><b>[user]</b> cauterises the left arm onto [subject == user ? "[his_or_her(subject)]" : "[subject]'s"] stump.</span>",\
+						user, "<span style=\"color:red\">You cauterise the left arm onto [user == subject ? "your" : "[subject]'s"] stump.</span>",\
+						subject, "<span style=\"color:red\">[subject == user ? "You" : "<b>[user]</b>"] cauterise the left arm onto your stump!</span>")
+
+						var/obj/item/parts/human_parts/part = new /obj/item/parts/human_parts/arm/left {remove_stage = 2;} (subject)
+						subject.limbs.vars["l_arm"] = part
+						part.holder = subject
+						subject.update_body()
+					else return
+
+				if("right arm")
+					if(selected == "arm")
+						subject.tri_message("<span style=\"color:red\"><b>[user]</b> cauterises the right arm onto [subject == user ? "[his_or_her(subject)]" : "[subject]'s"] stump.</span>",\
+						user, "<span style=\"color:red\">You cauterise the right arm onto [user == subject ? "your" : "[subject]'s"] stump.</span>",\
+						subject, "<span style=\"color:red\">[subject == user ? "You" : "<b>[user]</b>"] cauterise the right arm onto your stump!</span>")
+						var/obj/item/parts/human_parts/part = new /obj/item/parts/human_parts/arm/right {remove_stage = 2;} (subject)
+						subject.limbs.vars["r_arm"] = part
+						part.holder = subject
+						subject.update_body()
+					else return
+
+				if("left leg")
+					if(selected == "leg")
+
+					else return
+				if("right leg")
+					if(selected == "leg")
+
+					else return
+
+				if("chest")
+					if(selected == "heart")
+
+					else return
+			..()
+
+	attack_self(mob/user as mob)
+		var/inprogress = 0
+		if (src.selected == "none" && inprogress == 0)
+			inprogress = 1
+			if (src.meatlevel > 9)
+				src.selected = input("Select desired organ", "Confirm organ selection", src.selected) in list("arm", "leg", "heart", "eye")
+				boutput(user, "You begin generating the [src.selected].")
+				if (!do_after(user, 60))
+					boutput(user, "You were interrupted!")
+					src.selected = "none"
+					inprogress = 0
+					return
+				meatlevel = meatlevel - 10
+				boutput(user, "You generate the [src.selected].")
+				inprogress = 0
+
+			else
+				boutput(user, "You don't have enough biomass for that!")
+				inprogress = 0
+		else if (inprogress = 0)
+			inprogress = 1
+			boutput(user, "You begin reclaiming the [src.selected].")
+			if (!do_after(user, 60))
+				boutput(user, "You were interrupted!")
+				inprogress = 0
+				return
+			boutput(user, "You reclaim the [src.selected].")
+			src.selected = "none"
+			inprogress = 0
+			meatlevel = meatlevel + 10
 		..()
-		var/select = user.zone_sel.selecting
-		var/shit_be_fucked = 0
-		if(get_dist(owner, target) > 1)
-			DEBUG("dist between owner and target > 1")
-			interrupt(INTERRUPT_ALWAYS)
-			shit_be_fucked = 1
 
-		if (select == null)
-			DEBUG("select null")
-			interrupt(INTERRUPT_ALWAYS)
-			shit_be_fucked = 1
+	afterattack(atom/target as mob|obj|turf, mob/user as mob)
+		if (istype(target, /obj/machinery/computer/cloning))
+			var/obj/machinery/computer/cloning/C = target
+			var/already = 0
+			for (var/R in src.records)
+				for (var/CR in C.records)
+					if (R == CR)
+						already = 1
+						break
 
-		if (target == null)
-			DEBUG("target null")
-			interrupt(INTERRUPT_ALWAYS)
-			shit_be_fucked = 1
+				if (already == 0)
+					C.records += R
+				src.records -=R
+				already = 0
+			boutput(user, "Records transfered to cloning computer!")
 
-		if (user == null)
-			DEBUG("user null")
-			interrupt(INTERRUPT_ALWAYS)
-			shit_be_fucked = 1
+		else if (istype(target, /obj/item))
+			var/obj/item/meat = target
+			src.acceptable = list(/obj/item/reagent_containers/food/snacks/ingredient/meat, /obj/item/parts/human_parts, /obj/item/clothing/head/butt, /obj/item/organ, /obj/item/raw_material/martian)
+			for (var/C in src.acceptable)
+				if (istype(meat, C))
+					if (meatlevel < maxmeatlevel)
+						meatlevel = meatlevel + 5
+						qdel(meat)
+						if (meatlevel > maxmeatlevel)
+							meatlevel = maxmeatlevel
+					else
+						boutput(user, "[src] is full")
+						break
 
-		if (shit_be_fucked)
-			return
+			if (istype(meat, /obj/item/reagent_containers/food) && (findtext(meat.name, "meat")||findtext(meat.name,"bacon")))
+				if (meatlevel < maxmeatlevel)
+					meatlevel = meatlevel + 5
+					qdel(meat)
+					if (meatlevel > maxmeatlevel)
+						meatlevel = maxmeatlevel
+					else
+						boutput(user, "[src] is full")
+						return
+		//else if (istype(target, /mob/living/carbon/human))
 
-		if (issilicon(user) && (select == "head"))
-			var/mob/living/silicon/robot/robodoc = user
-			if (robodoc.find_in_hand(src) == robodoc.module_states[3])
-				eyepos = "right"
-			if (robodoc.find_in_hand(src) == robodoc.module_states[1])
-				eyepos = "left"
-
-		switch (select)
-			if ("head")
-				if (((user.find_in_hand(src) == user.r_hand) || (eyepos == "right")) && (target.organHolder.right_eye))
-					DEBUG("Apparently already had a right eye? Or module state wasn't right.")
-					interrupt(INTERRUPT_ALWAYS)
-					return
-				if (((user.find_in_hand(src) == user.l_hand) || (eyepos == "left")) && (target.organHolder.left_eye))
-					DEBUG("Apparently already had a left eye? Or module state wasn't left.")
-					interrupt(INTERRUPT_ALWAYS)
-					return
-		/*	if("chest")
-				if ((target.organHolder.heart))
-					interrupt(INTERRUPT_ALWAYS)
-					return
-			if ("l_arm")
-				interrupt(INTERRUPT_ALWAYS)
-				return
-			if ("r_arm")
-				interrupt(INTERRUPT_ALWAYS)
-				return
-			if ("l_leg")
-				interrupt(INTERRUPT_ALWAYS)
-				return
-			if ("r_leg")
-				interrupt(INTERRUPT_ALWAYS)
-				return */
-
-	onEnd()
-		..()
-		var/select = user.zone_sel.selecting
-		var/shit_be_fucked = 0
-		if(get_dist(owner, target) > 1)
-			DEBUG("dist between owner and target > 1 at end")
-			interrupt(INTERRUPT_ALWAYS)
-			shit_be_fucked = 1
-
-		if (target == null)
-			DEBUG("target null at end")
-			interrupt(INTERRUPT_ALWAYS)
-			shit_be_fucked = 1
-
-		if (user == null)
-			DEBUG("user null at end")
-			interrupt(INTERRUPT_ALWAYS)
-			shit_be_fucked = 1
-
-		if (select == null)
-			DEBUG("select null")
-			interrupt(INTERRUPT_ALWAYS)
-			shit_be_fucked = 1
-
-		if (shit_be_fucked)
-			return
-
-		if (issilicon(user) && (select == "head"))
-			var/mob/living/silicon/robot/robodoc = user
-			if (robodoc.find_in_hand(src) == robodoc.module_states[3])
-				eyepos = "right"
-			if (robodoc.find_in_hand(src) == robodoc.module_states[1])
-				eyepos = "left"
-
-		switch (select)
-			if ("head")
-				if (((user.find_in_hand(src) == user.r_hand) || (eyepos == "right")) && (target.organHolder.right_eye))
-					DEBUG("Target already has a right eye?")
-					interrupt(INTERRUPT_ALWAYS)
-					return
-				if (((user.find_in_hand(src) == user.l_hand) || (eyepos == "left")) && (target.organHolder.left_eye))
-					DEBUG("Target already has a left eye?")
-					interrupt(INTERRUPT_ALWAYS)
-					return
-				else if (eyepos == "right")
-					target.organHolder.receive_organ(src, "right_eye", 2.0)
-				else if (eyepos == "left")
-					target.organHolder.receive_organ(src, "left_eye", 2.0)
-				else
-					DEBUG("Eyepos wasn't left or right somehow??")
-
-			if("chest")
-				if ((target.organHolder.heart))
-					interrupt(INTERRUPT_ALWAYS)
-					return
-				else
-					target.organHolder.receive_organ(src, "heart", 3.0)
-			if ("l_arm")
-				interrupt(INTERRUPT_ALWAYS)
-				return
-			if ("r_arm")
-				interrupt(INTERRUPT_ALWAYS)
-				return
-			if ("l_leg")
-				interrupt(INTERRUPT_ALWAYS)
-				return
-			if ("r_leg")
-				interrupt(INTERRUPT_ALWAYS)
-				return
-
-/*	onInterrupt(var/flag = 0)
-		..()
-		CRASH("Something has gone horribly wrong here!") */
+	proc/find_record(var/find_key)
+		var/selected_record = null
+		for (var/datum/data/record/R in src.records)
+			if (R.fields["ckey"] == find_key)
+				selected_record = R
+				break
+		return selected_record
 
 /obj/item/borg_tube
-	name = "KidcurityCo. FUN Baton(tm)"
-	desc = "This all new EXCITING!!! product from KidcurityCo. gives you ALL THE FUN of security with NONE OF THE HARM"
+	name = "Wifflebat"
+	desc = "This all new EXCITING!!! product gives you ALL THE FUN of security with NONE OF THE HARM"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "c_tube"
 	inhand_image_icon = 'icons/mob/inhand/hand_weapons.dmi'
@@ -1076,43 +1113,47 @@ ported and crapped up by: haine
 	desc = "You probably shouldn't be seeing this!"
 	var/datum/light/light
 	var/weeoo_in_progress = 0
+	icon = 'icons/obj/scrap.dmi'
+	icon_state = "reclaimer"
 
 	New()
 		..()
-		var/obj/ability_button/weeoo2/NB = new
-		NB.screen_loc = "NORTH-2,1"
-		ability_buttons += NB
-		light = new /datum/light/point
-		light.set_brightness(0.7)
-		light.attach(src.loc)
+		var/mob/living/user = src.loc
+		if (user)
+			pickup(user)
 
-/obj/item/internal_siren/proc/weeoo()
-	if (weeoo_in_progress)
-		return
+	attack_self(mob/user)
+		if (!src.light)
+			src.light = new /datum/light/point
+			src.light.set_brightness(0.7)
+			src.light.attach(src.loc)
+			src.weeoo()
+		else
+			src.weeoo()
 
-	weeoo_in_progress = 10
-	spawn (0)
-		playsound(src.loc, "sound/machines/siren_police.ogg", 50, 1)
-		light.enable()
-		while (weeoo_in_progress--)
-			light.set_color(0.9, 0.1, 0.1)
-			sleep(3)
-			light.set_color(0.1, 0.1, 0.9)
-			sleep(3)
-		light.disable()
+	proc/weeoo()
+		if (weeoo_in_progress)
+			return
 
-		weeoo_in_progress = 0
+		weeoo_in_progress = 10
+		spawn (0)
+			playsound(src.loc, "sound/machines/siren_police.ogg", 50, 1)
+			light.enable()
+			while (weeoo_in_progress--)
+				light.set_color(0.9, 0.1, 0.1)
+				sleep(3)
+				light.set_color(0.1, 0.1, 0.9)
+				sleep(3)
+			light.disable()
 
-/obj/ability_button/weeoo2
+			weeoo_in_progress = 0
+
+/obj/item/internal_siren/abilities = list(/obj/ability_button/siren)
+
+/obj/ability_button/siren
 	name = "Police Siren"
-	icon = 'icons/misc/abilities.dmi'
-	icon_state = "noise"
+	icon_state = "on"
 
-	Click()
-		if(!the_mob) return
-
-		for (var/obj/item/internal_siren/S in the_mob.contents)
-			if (S)
-				S.weeoo()
-				break
-		return
+	execute_ability()
+		var/obj/item/device/flashlight/J = the_item
+		J.attack_self(the_mob)

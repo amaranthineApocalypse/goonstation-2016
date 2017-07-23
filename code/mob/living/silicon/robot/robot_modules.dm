@@ -215,26 +215,14 @@
 		src.modules += new /obj/item/device/detective_scanner(src)
 		src.modules += new /obj/item/device/audio_log/borg(src)
 		src.modules += new /obj/item/device/pda2/ticket(src)
+		src.loc.contents += new /obj/item/internal_siren(src.loc)
 		var/mob/living/silicon/robot/R = src.loc
 		for (var/obj/item/device/pda2/C in src.modules)
 			C.name = "[R.name]'s PDA"
 			C.owner = "[R.name]"
 			if (istype(C, /obj/item/device/pda2/ticket))
 				C.name = "[R.name]'s Ticketing PDA"
-	//	var/mob/living/silicon/robot/B = src.loc
-	/*	if(istype(B))
-			Q.name = "[B.name]'s Ticketing PDA"
-			Q.owner = "[B.name]"
-		/*	qdel(B.ears)
-			qdel(B.radio)
-			B.radio = null
-			B.ears = null
-			B.radio = new src.radiotype(src)
-			B.radio.set_loc(src.loc)
-			B.ears = B.radio	*/
 
-			src.modules += Q
-	*/
 /datum/robot_cosmetic/brobot
 	head_mod = "Afro and Shades"
 	legs_mod = "Disco Flares"
@@ -310,8 +298,8 @@
 	paint = list(0,120,80)
 
 /obj/item/robot_module/mining //todo: crate porter, internal reclaimer, borg hammer
-	name = "Mining Module"
-	desc = "Tools for use in the excavation and transportation of valuable minerals."
+	name = "Resource Module"
+	desc = "Tools for use in the excavation and transportation of valuable goods and resources."
 	icon_state = "mod-min"
 	mod_hudicon = "mining"
 	mod_appearance = "MinBot"

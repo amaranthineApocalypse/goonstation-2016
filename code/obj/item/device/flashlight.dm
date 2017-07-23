@@ -54,55 +54,27 @@
 
 
 	attack(mob/M as mob, mob/user as mob, def_zone)
-		var/newmood = input("Select desired light", "Confirm light selection", src.mood) in list("white", "red", "yellow", "green", "cyan", "blue", "purple", "blacklight", "incandescent", "candle-like", "lava lamp", "siren")
+		var/newmood = input(user, "Please select pen color.", "Color Select") as null|color
 		if (newmood)
-			boutput(user, "<span style=\"color:blue\">Light style is now: [newmood]</span>")
-			src.mood = newmood
-		switch(src.mood)
-			if ("white")
-				//src.weeoo_in_progress = 0
-				light.set_color(1, 1, 1)
-			if ("red")
-				//src.weeoo_in_progress = 0
-				light.set_color(0.95, 0.2, 0.2)
-			if ("yellow")
-				//src.weeoo_in_progress = 0
-				light.set_color(0.95, 0.95, 0.2)
-			if ("green")
-				//src.weeoo_in_progress = 0
-				light.set_color(0.2, 0.95, 0.2)
-			if ("cyan")
-				//src.weeoo_in_progress = 0
-				light.set_color(0.2, 0.95, 0.95)
-			if ("blue")
-				//src.weeoo_in_progress = 0
-				light.set_color(0.2, 0.2, 0.95)
-			if ("purple")
-				//src.weeoo_in_progress = 0
-				light.set_color(0.95, 0.2, 0.95)
-			if ("blacklight")
-				//src.weeoo_in_progress = 0
-				light.set_color(0.3, 0, 0.9)
-			if ("incandescent")
-				//src.weeoo_in_progress = 0
-				light.set_color(1, 1, 0.9)
-			if ("candle-like")
-				//src.weeoo_in_progress = 0
-				light.set_color(0.5, 0.3, 0.0)
-			if ("lava lamp")
-				//src.weeoo_in_progress = 0
-				light.set_color(0.85, 0.45, 0.35)
-		/*	if ("siren")
-				src.weeoo_in_progress = 10
-				spawn (0)
-					if (on)
-						while (src.weeoo_in_progress++) //infinite, egads
-							light.set_color(0.9, 0.1, 0.1)
-							sleep(3)
-							light.set_color(0.1, 0.1, 0.9)
-							sleep(3)
-						src.weeoo_in_progress = 0
-*/
+			src.mood = hex2color_name(newmood)
+			boutput(user, "<span style=\"color:blue\">Light style is now: [src.mood]</span>")
+			var/adj = 0
+			if (copytext(newmood, 1, 2) == "#")
+				adj = 1
+
+			var/hR = hex2num(copytext(newmood, 1 + adj, 3 + adj))
+			var/hG = hex2num(copytext(newmood, 3 + adj, 5 + adj))
+			var/hB = hex2num(copytext(newmood, 5 + adj, 7 + adj))
+			DEBUG("[hR] [hG] [hB]")
+			var/R = hR / 255
+			var/G = hG / 255
+			var/B = hB / 255
+			light.set_color(R, G, B)
+		else
+			return
+
+
+
 
 /obj/item/device/glowstick // fuck yeah space rave
 	icon = 'icons/obj/lighting.dmi'
