@@ -1153,6 +1153,16 @@
 	create = 1
 	category = "Component"
 
+/datum/manufacture/robup_siren
+	name = "Siren Upgrade"
+	item_paths = list("CON-1","MET-1")
+	item_names = list("Conductive Material","Sturdy Metal")
+	item_amounts = list(3,5)
+	item_outputs = list(/obj/item/roboupgrade/siren)
+	time = 60
+	create = 1
+	category = "Component"
+
 /datum/manufacture/robup_speed
 	name = "Speed Upgrade"
 	item_paths = list("CON-1","CRY-1")

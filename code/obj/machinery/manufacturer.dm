@@ -571,11 +571,8 @@
 
 				var/obj/item/equip = usr.equipped()
 				if (!istype(equip, /obj/item/wirecutters))
-					boutput(usr, "You need wirecutters!")
-					return
-				if(istype(equip, /obj/item/omnitool))
 					var/obj/item/omnitool/omnitool = equip
-					if (omnitool.omni_mode != OMNITOOL_WIRECUTTERS)
+					if(!(istype(equip, /obj/item/omnitool) && omnitool.omni_mode == OMNITOOL_WIRECUTTERS))
 						boutput(usr, "You need wirecutters!")
 						return
 
@@ -589,14 +586,17 @@
 				var/twire = text2num(href_list["pulsewire"])
 
 				var/obj/item/equip = usr.equipped()
-				if (!istype(equip, /obj/item/device/multitool))
-					boutput(usr, "You need a multitool!")
-					return
-				if(istype(equip, /obj/item/omnitool))
+				if ( !(istype(equip, /obj/item/device/multitool)))
+					var/obj/item/omnitool/O = equip
+					if (!((istype(O, /obj/item/omnitool) && O.omni_mode == OMNITOOL_MULTITOOL)))
+						boutput(usr, "You need a multitool!")
+						return
+
+			/*	if (istype(equip, /obj/item/omnitool))
 					var/obj/item/omnitool/omnitool = equip
 					if (omnitool.omni_mode != OMNITOOL_MULTITOOL)
 						boutput(usr, "You need a multitool!")
-						return
+						return */
 
 				else if (src.isWireColorCut(twire))
 					boutput(usr, "You can't pulse a cut wire.")
@@ -1674,7 +1674,8 @@
 
 	hidden = list(/datum/manufacture/flash,
 	/datum/manufacture/cybereye_thermal,
-	/datum/manufacture/cyberbutt)
+	/datum/manufacture/cyberbutt,
+	/datum/manufacture/robup_siren)
 
 /obj/machinery/manufacturer/medical
 	name = "Medical Fabricator"

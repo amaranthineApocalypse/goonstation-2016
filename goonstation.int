@@ -1,9 +1,11 @@
 // BEGIN_INTERNALS
 /*
-LAST_COMPILE_TIME: 1498992765
-DIR: code code\chui\example code\datums code\datums\buildmodes code\datums\buildmodes\adventure code\datums\buildmodes\adventure\elements code\datums\chemistry code\datums\chemistry\tools code\datums\controllers code\datums\critter_mobs\health code\mob 
+LAST_COMPILE_TIME: 1505659908
+DIR: browserassets browserassets\images browserassets\images\traders code code\chui\example code\datums code\datums\buildmodes code\datums\buildmodes\adventure code\datums\buildmodes\adventure\elements code\datums\chemistry code\datums\chemistry\tools code\mob code\mob\living code\mob\living\silicon code\mob\living\silicon\robot code\obj code\obj\item code\obj\item\device code\obj\item\device\pda2 code\obj\item\mob_parts code\obj\machinery code\obj\submachine code\WorkInProgress icons icons\obj 
 AUTO_FILE_DIR: OFF
 MAP_ICON_TYPE: 0
 LAST_COMPILE_VERSION: 511.1359
+WINDOW: code\obj\submachine\robotics.dm;code\mob\living\silicon\robot.dm;code\mob\living\silicon\robot\robot_modules.dm;code\obj\item\device\flashlight.dm;code\obj\item\mob_parts\robot_parts.dm;code\obj\machinery\manufacturer.dm;code\datums\manufacturing.dm
+FILE: code\obj\machinery\manufacturer.dm
 */
 // END_INTERNALS

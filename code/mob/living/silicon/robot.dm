@@ -2051,9 +2051,10 @@
 */
 			if("Brobocop")
 				src.freemodule = 0
-				boutput(src, "<span style=\"color:blue\">You chose the Brobocop module. It comes with a free Recovery Upgrade</span>")
+				boutput(src, "<span style=\"color:blue\">You chose the Brobocop module. It comes with a free Recovery Upgrade and a free Siren Upgrade. What a deal!</span>")
 				src.module = new /obj/item/robot_module/brobot/brobocop(src)
 				src.upgrades += new /obj/item/roboupgrade/aware(src)
+				src.upgrades += new /obj/item/roboupgrade/siren(src)
 			if("Mining")
 				src.freemodule = 0
 				boutput(src, "<span style=\"color:blue\">You chose the Resource module. It comes with a free Propulsion Upgrade.</span>")

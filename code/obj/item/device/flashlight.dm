@@ -54,7 +54,7 @@
 
 
 	attack(mob/M as mob, mob/user as mob, def_zone)
-		var/newmood = input(user, "Please select pen color.", "Color Select") as null|color
+		var/newmood = input(user, "Please select your favourite mood.", "Color Select") as null|color
 		if (newmood)
 			src.mood = hex2color_name(newmood)
 			boutput(user, "<span style=\"color:blue\">Light style is now: [src.mood]</span>")

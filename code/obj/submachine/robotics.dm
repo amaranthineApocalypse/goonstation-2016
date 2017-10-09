@@ -728,6 +728,7 @@ ported and crapped up by: haine
 	var/list/records = list()
 	var/list/acceptable = list()
 	var/selected = "none"
+	var/inprogress = 0
 
 
 	attack(mob/living/carbon/human/subject as mob, mob/user as mob)
@@ -834,6 +835,8 @@ ported and crapped up by: haine
 							subject.update_body()
 							src.selected = "none"
 				if("left arm")
+					if(subject.limbs.vars["l_arm"])
+						return ..()
 					if(selected == "arm")
 						subject.tri_message("<span style=\"color:red\"><b>[user]</b> cauterises the left arm onto [subject == user ? "[his_or_her(subject)]" : "[subject]'s"] stump.</span>",\
 						user, "<span style=\"color:red\">You cauterise the left arm onto [user == subject ? "your" : "[subject]'s"] stump.</span>",\
@@ -843,9 +846,12 @@ ported and crapped up by: haine
 						subject.limbs.vars["l_arm"] = part
 						part.holder = subject
 						subject.update_body()
-					else return
+						src.selected = "none"
+					else return ..()
 
 				if("right arm")
+					if(subject.limbs.vars["r_arm"])
+						return ..()
 					if(selected == "arm")
 						subject.tri_message("<span style=\"color:red\"><b>[user]</b> cauterises the right arm onto [subject == user ? "[his_or_her(subject)]" : "[subject]'s"] stump.</span>",\
 						user, "<span style=\"color:red\">You cauterise the right arm onto [user == subject ? "your" : "[subject]'s"] stump.</span>",\
@@ -854,25 +860,55 @@ ported and crapped up by: haine
 						subject.limbs.vars["r_arm"] = part
 						part.holder = subject
 						subject.update_body()
-					else return
+						src.selected = "none"
+					else return ..()
 
 				if("left leg")
+					if(subject.limbs.vars["r_leg"])
+						return ..()
 					if(selected == "leg")
+						subject.tri_message("<span style=\"color:red\"><b>[user]</b> cauterises the left leg onto [subject == user ? "[his_or_her(subject)]" : "[subject]'s"] stump.</span>",\
+						user, "<span style=\"color:red\">You cauterise the left leg onto [user == subject ? "your" : "[subject]'s"] stump.</span>",\
+						subject, "<span style=\"color:red\">[subject == user ? "You" : "<b>[user]</b>"] cauterise the left leg onto your stump!</span>")
 
-					else return
+						var/obj/item/parts/human_parts/part = new /obj/item/parts/human_parts/leg/left {remove_stage = 2;} (subject)
+						subject.limbs.vars["l_leg"] = part
+						part.holder = subject
+						subject.update_body()
+					else return ..()
 				if("right leg")
+					if(subject.limbs.vars["r_leg"])
+						return ..()
 					if(selected == "leg")
+						subject.tri_message("<span style=\"color:red\"><b>[user]</b> cauterises the right leg onto [subject == user ? "[his_or_her(subject)]" : "[subject]'s"] stump.</span>",\
+						user, "<span style=\"color:red\">You cauterise the right leg onto [user == subject ? "your" : "[subject]'s"] stump.</span>",\
+						subject, "<span style=\"color:red\">[subject == user ? "You" : "<b>[user]</b>"] cauterise the right leg onto your stump!</span>")
 
-					else return
+						var/obj/item/parts/human_parts/part = new /obj/item/parts/human_parts/leg/left {remove_stage = 2;} (subject)
+						subject.limbs.vars["l_leg"] = part
+						part.holder = subject
+						subject.update_body()
+						src.selected = "none"
+					else return ..()
 
 				if("chest")
+					if (subject.organHolder.heart)
+						return ..()
 					if(selected == "heart")
+						var/fluff = pick("insert", "shove", "place", "drop", "smoosh", "squish")
 
+						subject.tri_message("<span style=\"color:red\"><b>[user]</b> [fluff][fluff == "smoosh" || fluff == "squish" ? "es" : "s"] the heart into [subject == user ? "[his_or_her(subject)]" : "[subject]'s"] chest!</span>",\
+						user, "<span style=\"color:red\">You [fluff] the heart into [user == subject ? "your" : "[subject]'s"] chest!</span>",\
+						subject, "<span style=\"color:red\">[subject == user ? "You" : "<b>[user]</b>"] [fluff][fluff == "smoosh" || fluff == "squish" ? "es" : "s"] the heart into your chest!</span>")
+
+						src.selected = "none"
+						var/obj/item/organ/heart/heart = new /obj/item/organ/heart(subject)
+						subject.organHolder.receive_organ(heart, "heart", 3.0)
+						subject.update_body()
 					else return
 			..()
 
 	attack_self(mob/user as mob)
-		var/inprogress = 0
 		if (src.selected == "none" && inprogress == 0)
 			inprogress = 1
 			if (src.meatlevel > 9)
@@ -890,7 +926,7 @@ ported and crapped up by: haine
 			else
 				boutput(user, "You don't have enough biomass for that!")
 				inprogress = 0
-		else if (inprogress = 0)
+		else if (inprogress == 0)
 			inprogress = 1
 			boutput(user, "You begin reclaiming the [src.selected].")
 			if (!do_after(user, 60))
@@ -904,7 +940,22 @@ ported and crapped up by: haine
 		..()
 
 	afterattack(atom/target as mob|obj|turf, mob/user as mob)
-		if (istype(target, /obj/machinery/computer/cloning))
+		if (istype(target, /obj/machinery/clonepod))
+			if (inprogress == 1)
+				boutput(user, "Be patient, the [src] is working!")
+				return
+			var/obj/machinery/clonepod/P = target
+			var/meattransferable = 100 - P.meat_level
+			if (meattransferable < src.meatlevel)
+				src.meatlevel = src.meatlevel - meattransferable
+				P.meat_level = P.meat_level + meattransferable
+				boutput(user, "You top up the cloning pod with biomass!")
+			else
+				P.meat_level = P.meat_level + src.meatlevel
+				src.meatlevel = 0
+				boutput(user, "You top up the cloning pod with biomass!")
+
+		else if (istype(target, /obj/machinery/computer/cloning))
 			var/obj/machinery/computer/cloning/C = target
 			var/already = 0
 			for (var/R in src.records)
@@ -1108,52 +1159,3 @@ ported and crapped up by: haine
 		icon = 'icons/obj/scrap.dmi'
 		icon_state = "reclaimer"
 
-/obj/item/internal_siren
-	name = "Brobocop Internal Siren"
-	desc = "You probably shouldn't be seeing this!"
-	var/datum/light/light
-	var/weeoo_in_progress = 0
-	icon = 'icons/obj/scrap.dmi'
-	icon_state = "reclaimer"
-
-	New()
-		..()
-		var/mob/living/user = src.loc
-		if (user)
-			pickup(user)
-
-	attack_self(mob/user)
-		if (!src.light)
-			src.light = new /datum/light/point
-			src.light.set_brightness(0.7)
-			src.light.attach(src.loc)
-			src.weeoo()
-		else
-			src.weeoo()
-
-	proc/weeoo()
-		if (weeoo_in_progress)
-			return
-
-		weeoo_in_progress = 10
-		spawn (0)
-			playsound(src.loc, "sound/machines/siren_police.ogg", 50, 1)
-			light.enable()
-			while (weeoo_in_progress--)
-				light.set_color(0.9, 0.1, 0.1)
-				sleep(3)
-				light.set_color(0.1, 0.1, 0.9)
-				sleep(3)
-			light.disable()
-
-			weeoo_in_progress = 0
-
-/obj/item/internal_siren/abilities = list(/obj/ability_button/siren)
-
-/obj/ability_button/siren
-	name = "Police Siren"
-	icon_state = "on"
-
-	execute_ability()
-		var/obj/item/device/flashlight/J = the_item
-		J.attack_self(the_mob)

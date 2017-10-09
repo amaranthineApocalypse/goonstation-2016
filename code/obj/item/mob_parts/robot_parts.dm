@@ -1073,6 +1073,50 @@
 		user.jetpack = 0
 		user.ion_trail = null
 
+/obj/item/roboupgrade/siren
+	name = "Siren Upgrade"
+	desc = "A small flashing, noisemaking box that will IRRITATE PEOPLE TO NO E- i mean, strike FEAR into the hearts of CRAVEN, DEPRAVED CRIMERS."
+	icon_state = "up-power"
+	drainrate = 1
+	var/datum/light/light
+	var/already = 0
+
+	upgrade_activate(var/mob/living/silicon/robot/user as mob)
+		..()
+		if (!src.light)
+			src.light = new /datum/light/point
+			src.light.set_brightness(0.7)
+			src.light.attach(user)
+		if (already == 1)
+			return
+		already = 1
+		spawn (0)
+			var/weeoo_in_progress = 10
+			light.enable()
+			while (src.activated == 1)
+				if (src.activated != 0)
+					break
+				playsound(src.loc, "sound/machines/siren_police.ogg", 50, 1)
+
+				weeoo_in_progress = 10
+				while (weeoo_in_progress--)
+					if (src.activated == 0)
+						break
+					light.set_color(0.9, 0.1, 0.1)
+					sleep(3)
+					if (src.activated == 0)
+						break
+					light.set_color(0.1, 0.1, 0.9)
+					sleep(3)
+
+				weeoo_in_progress = 0
+			light.disable()
+			already = 0
+
+	upgrade_deactivate(var/mob/living/silicon/robot/user as mob)
+		..()
+
+
 /obj/item/roboupgrade/healthgoggles
 	name = "ProDoc Healthgoggles"
 	desc = "Fitted with an advanced miniature sensor array that allows the user to quickly determine the physical condition of others."

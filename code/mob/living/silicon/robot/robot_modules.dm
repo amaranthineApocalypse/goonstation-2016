@@ -19,12 +19,6 @@
 		src.modules += new /obj/item/omnitool(src) //same here
 		src.modules += new /obj/item/device/pda2/cyborg(src)
 		var/mob/living/silicon/robot/R = src.loc
-		if (!istype(src, /obj/item/robot_module/brobot/brobocop))
-			for (var/obj/item/device/pda2/C in src.modules)
-				C.name = "[R.name]'s PDA"
-				C.owner = "[R.name]"
-				if (istype(C, /obj/item/device/pda2/ticket))
-					C.name = "[R.name]'s Ticketing PDA"
 
 		if(istype(R))
 			qdel(R.ears)
@@ -115,7 +109,7 @@
 	paint = list(150,150,150)
 
 /obj/item/robot_module/engineering
-	name = "Engineering and Contruction Module"
+	name = "Engineering Module"
 	desc = "A module designed to allow for station maintenance, repair work, and construction projects." //god, I hope merging those two isn't a bad idea.
 	icon_state = "mod-eng"
 	mod_hudicon = "engineer"
@@ -215,7 +209,6 @@
 		src.modules += new /obj/item/device/detective_scanner(src)
 		src.modules += new /obj/item/device/audio_log/borg(src)
 		src.modules += new /obj/item/device/pda2/ticket(src)
-		src.loc.contents += new /obj/item/internal_siren(src.loc)
 		var/mob/living/silicon/robot/R = src.loc
 		for (var/obj/item/device/pda2/C in src.modules)
 			C.name = "[R.name]'s PDA"
