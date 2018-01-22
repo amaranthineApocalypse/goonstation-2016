@@ -24,7 +24,7 @@
 	var/obj/item/wear_id = null
 	var/obj/item/r_store = null
 	var/obj/item/l_store = null
-
+	var/law_implanted = 0
 	var/image/body_standing = null
 	var/image/fire_standing = null
 	//var/image/face_standing = null
@@ -39,7 +39,7 @@
 	var/image/image_cust_three = null
 
 	var/last_b_state = 1.0
-
+	var/obj/item/large_implant/large_implant = null
 	var/list/implant = list()
 	var/list/implant_images = list()
 
@@ -749,6 +749,21 @@
 								message = "<B>[src]</B> hands [thing] to [H]."
 								src.u_equip(thing)
 								H.update_clothing()
+								if (H.large_implant && istype(H.large_implant, /obj/item/large_implant/ai_law))
+									thing.set_loc(get_turf(H))
+									H.u_equip(thing)
+									H.update_clothing()
+
+									boutput(H, "<span style=\"color:red\">Your implant whirrs petulantly.</span>")
+									H.large_implant.overheat_counter += 1
+									H.shock(H.large_implant, 75000, ignore_gloves=1)
+									if(!H.bioHolder)
+										return
+									if (H.bioHolder.HasEffect("implant_overheat"))
+										return
+									else
+										H.bioHolder.AddEffect("implant_overheat")
+										return
 							else
 								message = "<B>[src]</B> tries to hand [thing] to [H], but [H]'s hands are full!"
 						else

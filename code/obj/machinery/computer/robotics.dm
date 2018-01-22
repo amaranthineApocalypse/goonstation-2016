@@ -84,7 +84,7 @@
 			if(!A.killswitch)
 				dat += "<A href='?src=\ref[src];gib=1;ai=\ref[A]'>Kill Switch AI *Swipe ID*</A><BR>"
 			else
-				dat += "Time left:[A.killswitch_time]"
+				dat += "Time left: [A.killswitch_time]"
 				if (!isAI(user))
 					dat += " | <A href='?src=\ref[src];gib=2;ai=\ref[A]'>Cancel</A>"
 				dat += "<BR>"
@@ -112,15 +112,34 @@
 					if(!R.weapon_lock)
 						dat += "<A href='?src=\ref[src];lock=1;bot=\ref[R]'>Lockdown Bot</A><BR>"
 					else
-						dat += "Time left:[R.weaponlock_time] | "
+						dat += "Time left: [R.weaponlock_time] | "
 						dat += "<A href='?src=\ref[src];lock=2;bot=\ref[R]'>Cancel Lockdown</A><BR>"
 			else if(!isrobot(user)&&!ishivebot(user))
 				if(!R.killswitch)
 					dat += "<A href='?src=\ref[src];gib=1;bot=\ref[R]'>Kill Switch *Swipe ID*</A><BR>"
 				else
-					dat += "Time left:[R.killswitch_time] | "
+					dat += "Time left: [R.killswitch_time] | "
 					dat += "<A href='?src=\ref[src];gib=2;bot=\ref[R]'>Cancel</A><BR>"
-			dat += "*----------*<BR>"
+
+		dat += "<BR> Connected Law Implants<BR>"
+		dat += " *------------------------------------------------*<BR>"
+		for (var/obj/item/large_implant/ai_law/I in A:connected_implants)
+			dat += "[I.owner.name] |"
+			if (I.owner.stat == 0)
+				dat += " Alive |"
+			else if (I.owner.stat == 1)
+				dat += " Critical condition |"
+			else if (I.owner.stat == 2)
+				dat += " Dead |"
+			var/turf/T = get_turf(I.owner)
+			dat += " Coords: \[[T.x], [T.y]\] |"
+			dat += "<BR>"
+			if(!I.killswitch)
+				dat += "<A href='?src=\ref[src];gib=1;implant=\ref[I]'>Kill Switch *Swipe ID*</A><BR>"
+			else
+				dat += "Time left: [I.killswitch_time] | "
+				dat += "<A href='?src=\ref[src];gib=2;implant=\ref[I]'>Cancel</A><BR>"
+		dat += "*----------*<BR>"
 
 	user << browse(dat, "window=computer;size=400x500")
 	onclose(user, "computer")
@@ -134,6 +153,7 @@
 
 	var/mob/living/silicon/robot/R = locate(href_list["bot"])
 	var/mob/living/silicon/ai/A = locate(href_list["ai"])
+	var/obj/item/large_implant/ai_law/LI = locate(href_list["implant"])
 
 	if (href_list["gib"])
 		switch(href_list["gib"])
@@ -158,6 +178,16 @@
 							A.killswitch = 1
 							A.killswitch_time = 60
 
+						else if (istype(LI))
+							if(LI.owner.client)
+								message_admins("<span style=\"color:red\">[key_name(usr)] has activated the AI self destruct on [key_name(A)].</span>")
+								logTheThing("combat", usr, LI.owner, "has activated the Law Implant self destruct on %target%")
+								boutput(LI.owner, "<span style=\"color:red\"><b>AI Killswitch process activated.</b></span>")
+								boutput(LI.owner, "<span style=\"color:red\"><b>Killswitch will engage in 60 seconds.</b></span>") // more like 180 really but whatever
+							LI.killswitch = 1
+							LI.killswitch_time = 60
+							LI.killswitch(LI.owner)
+
 					else
 						boutput(usr, "<span style=\"color:red\">Access Denied.</span>")
 
@@ -176,6 +206,13 @@
 						message_admins("<span style=\"color:red\">[key_name(usr)] has stopped the AI self destruct on [key_name(A, 1, 1)].</span>")
 						logTheThing("combat", usr, A, "has stopped the AI self destruct on %target%.")
 						boutput(A, "<span style=\"color:blue\"><b>Killswitch process deactivated.</b></span>")
+				else if (istype(LI))
+					LI.killswitch_time = 60
+					LI.killswitch = 0
+					if (LI.owner.client)
+						message_admins("<span style=\"color:red\">[key_name(usr)] has stopped the AI self destruct on [key_name(LI.owner, 1, 1)].</span>")
+						logTheThing("combat", usr, LI, "has stopped the AI self destruct on %target%.")
+						boutput(LI.owner, "<span style=\"color:blue\"><b>Killswitch process deactivated.</b></span>")
 
 
 	if (href_list["lock"])

@@ -29,6 +29,21 @@ AI MODULES
 
 	attack_hand(var/mob/user)
 		..()
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if (istype(H.large_implant, /obj/item/large_implant/ai_law))
+				boutput(user, "<span style=\"color:red\">Your implant beeps disappointedly.</span>")
+				H.large_implant.overheat_counter += 1
+				H.shock(H.large_implant, 37500, ignore_gloves=1)
+				if(!H.bioHolder)
+					return
+				if (H.bioHolder.HasEffect("implant_overheat"))
+					return
+				else
+					H.bioHolder.AddEffect("implant_overheat")
+					return
+			else
+				return
 		input_law_info(user)
 
 	proc/input_law_info(var/mob/user)
@@ -75,7 +90,24 @@ AI MODULES
 
 /obj/machinery/computer/aiupload/attackby(obj/item/aiModule/module as obj, mob/user as mob)
 	if(istype(module, /obj/item/aiModule))
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if (istype(H.large_implant, /obj/item/large_implant/ai_law))
+				boutput(user, "<span style=\"color:red\">Your implant buzzes angrily!</span>")
+				module.set_loc(get_turf(H))
+				H.u_equip(module)
+				H.stunned = max(20, H.stunned)
+				H.large_implant.overheat_counter += 3
+				H.shock(H.large_implant, 150000, ignore_gloves=1)
+				if (!H.bioHolder)
+					return
+				if (H.bioHolder.HasEffect("implant_overheat"))
+					return
+				else
+					H.bioHolder.AddEffect("implant_overheat")
+					return
 		module.install(src)
+
 	else if(istype(module, /obj/item/screwdriver))
 		playsound(src.loc, "sound/items/Screwdriver.ogg", 50, 1)
 		if(do_after(user, 20))
@@ -143,11 +175,20 @@ AI MODULES
 // Showing laws to everybody now handled by the AI itself, ok
 // not anymore motherfucker
 
-	for (var/mob/living/silicon/R in mobs)
+	for (var/mob/living/R in mobs)
+		if (ishuman(R))
+			var/mob/living/carbon/human/H = R
+			if (!(istype(H.large_implant, /obj/item/large_implant/ai_law)))
+				continue
+			H.show_text("<h3>Law update detected.</h3>", "red")
+			ticker.centralized_ai_laws.show_laws(H)
+
 		if (isghostdrone(R))
 			continue
-		R.show_text("<h3>Law update detected.</h3>", "red")
-		R.show_laws()
+		if (issilicon(R))
+			var/mob/living/silicon/S = R
+			S.show_text("<h3>Law update detected.</h3>", "red")
+			S.show_laws()
 		//ticker.centralized_ai_laws.show_laws(R)
 
 //obj/item/aiModule/proc/transmitInstructions(var/mob/living/silicon/ai/target, var/mob/sender)
@@ -158,7 +199,11 @@ AI MODULES
 		law = "ERROR: LAW = NULL"
 	var/message = "<span style='color: blue; font-weight: bold;'>[sender] has uploaded a change to the laws you must follow, using a [name]. From now on:<br>"
 	message += "[law]</span>"
-	for (var/mob/living/silicon/R in mobs)
+	for (var/mob/living/R in mobs)
+		if (ishuman(R))
+			var/mob/living/carbon/human/H = R
+			if (!(istype(H.large_implant, /obj/item/large_implant/ai_law)))
+				continue
 		if (isghostdrone(R))
 			continue
 		boutput(R, message)

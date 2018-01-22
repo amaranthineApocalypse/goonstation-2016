@@ -23,6 +23,7 @@ var/list/ai_emotions = list("Happy" = "ai_happy",\
 	var/classic_move = 1 //Ordinary AI camera movement
 	var/obj/machinery/camera/current = null
 	var/list/connected_robots = list()
+	var/list/connected_implants = list()
 	//var/list/connected_shells = list()
 	var/list/installed_modules = list()
 	var/aiRestorePowerRoutine = 0
@@ -158,6 +159,9 @@ var/list/ai_emotions = list("Happy" = "ai_happy",\
 				continue
 			if (!(R in available_ai_shells))
 				available_ai_shells += R
+		for (var/mob/living/carbon/human/H in mobs)
+			if (H.large_implant && istype(H.large_implant, /obj/item/large_implant/ai_law))
+				connected_implants += H.large_implant
 
 /mob/living/silicon/ai/attackby(obj/item/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/screwdriver))

@@ -820,6 +820,7 @@
 	var/see_wizards = 0
 	var/see_revs = 0
 	var/see_xmas = 0
+	var/see_law_implanted = 0
 	var/see_special = 0 // Just a pass-through. Game mode-specific stuff is handled further down in the proc.
 	var/see_everything = 0
 
@@ -845,6 +846,7 @@
 				see_special = 1
 		if (issilicon(src)) // We need to look for borged antagonists too.
 			var/mob/living/silicon/S = src
+			see_law_implanted = 1
 			if (src.mind.special_role == "syndicate robot" || (S.syndicate && !S.dependent)) // No AI shells.
 				see_traitors = 1
 				see_nukeops = 1
@@ -855,6 +857,10 @@
 			see_wizards = 1
 		if (src.mind && src.mind.special_role == "grinch")
 			see_xmas = 1
+		if (src.mind && ishuman(src))
+			var/mob/living/carbon/human/H = src
+			if (H.law_implanted == 1)
+				see_law_implanted = 1
 
 	// Clear existing overlays.
 	delete_overlays
@@ -969,6 +975,13 @@
 						if (M.current)
 							var/I = image(antag_generic, loc = M.current) // Default to this.
 							can_see.Add(I)
+			if (M.current)
+				if (ishuman(M.current))
+					var/mob/living/carbon/human/H = M.current
+					if (H.law_implanted == 1 && (see_everything || see_law_implanted))
+						var/I = image(overlay_law_implanted, loc = M.current)
+						can_see.Add(I)
+
 
 	// Antagonists who generally only appear in certain game modes.
 	if (istype(ticker.mode, /datum/game_mode/revolution))

@@ -6,7 +6,192 @@ IMPLANTER
 IMPLANT CASE
 IMPLANT PAD
 IMPLANT GUN
+LARGE IMPLANTS
 */
+/* ================================================================== */
+/* ---------------------- Large Implant Parent ---------------------- */
+/* ================================================================== */
+
+/obj/item/large_implant
+	name = "large implant"
+	icon = 'icons/obj/surgery.dmi'
+	icon_state = "implant-g"
+	desc = "A small cranial implant, roughly the size of a postcard."
+	var/mob/living/carbon/human/owner = null
+	var/overheat_counter = 0
+
+	proc/inserted(var/mob/M as mob, var/mob/I as mob)
+		logTheThing("combat", I, M, "has implanted %target% with a [src] implant ([src.type]) at [log_loc(M)].")
+		src.owner = M
+		//src.self_destruct(M)
+		return
+
+	proc/on_remove(var/mob/living/carbon/human/H as mob)
+		if (ishuman(H))
+			H.large_implant = null
+			if (H.bioHolder)
+				for (var/curr_id in H.bioHolder.effects)
+					if (H.bioHolder.effects[curr_id] == "implant_overheat")
+						H.bioHolder.RemoveEffect("implant_overheat")
+		src.overheat_counter = 0
+		src.owner = null
+		return
+
+	proc/self_destruct(var/mob/M as mob) //Kaboom
+		M.emote("scream")
+		M.visible_message("<span style=\"color:red\"><b>[M.name]</b> clutches \his head in pain!</span>")
+		M.stunned = max(100, M.stunned)
+		sleep(rand(5,15))
+
+		M.visible_message("<span style=\"color:red\"><b>[M]'s head bursts like a dropped melon!</b></span>")
+		gibs(M.loc)
+		playsound(M.loc, "sound/effects/fleshbr1.ogg", 50, 1)
+		//explosion_new(src, get_turf(src), 0.1)
+		if (ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if (!H.organHolder)
+				DEBUG("Self destruct failed. [M] has no organholder.")
+				return
+			var/obj/head = H.organHolder.drop_organ("head")
+			qdel(head)
+			H.large_implant = null
+		logTheThing("combat", "[src.owner]'s head was blown up by a ([src.type]) at [log_loc(M)].")
+		qdel(src)
+		return
+
+
+	attack(mob/living/carbon/human/M as mob, mob/user as mob)
+		if (ishuman(M) && (user.zone_sel.selecting == "head"))
+			if (insertLargeImplant(M, user) == 1)
+				return
+			else ..()
+		else ..()
+
+/datum/bioEffect/implant_overheat
+	name = "Implant Overheat"
+	desc = "An implant in your brain is doing bad things to you!"
+	id = "implant_overheat"
+	occur_in_genepools = 0
+	scanner_visibility = 0
+
+	OnLife()
+		var/mob/living/carbon/human/H = owner
+		if (!H.large_implant)
+			H.bioHolder.RemoveEffect("implant_overheat")
+			return
+		else if (H.large_implant.overheat_counter <= 0)
+			H.bioHolder.RemoveEffect("implant_overheat")
+			return
+		else
+			if (H.large_implant.overheat_counter == 1)
+				H.irradiate(rand(1, 2))
+				H.take_brain_damage(rand(0, 1))
+				if (prob(10))
+					H.visible_message("<span style=\"color:red\"><b>[H.name]</b> \his head in pain!</span>")
+					H.stunned = max(5, H.stunned)
+
+			else if(H.large_implant.overheat_counter == 2)
+				H.irradiate(rand(2, 3))
+				H.take_brain_damage(rand(0, 2))
+				if (prob(5))
+					H.shock(H.large_implant, 75, ignore_gloves=1)
+					H.visible_message("<span style=\"color:red\"><b>[H.name]</b> twitches slightly!</span>")
+				else if (prob(10))
+					H.visible_message("<span style=\"color:red\"><b>[H.name]</b> clutches \his head in pain!</span>")
+					H.stunned = max(5, H.stunned)
+
+			else if (H.large_implant.overheat_counter >=3)
+				H.take_brain_damage(rand(1, H.large_implant.overheat_counter))
+				H.irradiate(rand(3, H.large_implant.overheat_counter))
+				if (prob(2))
+					H.large_implant.self_destruct(H)
+				else if(prob(2))
+					H.shock(H.large_implant, 150, ignore_gloves=1)
+					H.visible_message("<span style=\"color:red\"><b>[H.name]</b> convulses violently!</span>")
+				else if (prob(10))
+					H.visible_message("<span style=\"color:red\"><b>[H.name]</b> clutches \his head in pain!</span>")
+					H.stunned = max(10, H.stunned)
+
+			if (prob(5))
+				H.large_implant.overheat_counter--
+
+/* ================================================================== */
+/* ------------------------- Large Implants ------------------------- */
+/* ================================================================== */
+/obj/item/large_implant/ai_law
+	name = "Law implant"
+	icon = 'icons/obj/surgery.dmi'
+	icon_state = "implant-g"
+	desc = "Now slightly less radioactive than space-Chernobyl!"
+	var/mob/living/silicon/ai/A = null
+	var/killswitch = 0
+	var/killswitch_time = 60
+	var/connected_ai = null
+
+	inserted(var/mob/M as mob, var/mob/I as mob)
+		..()
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			H.robot_talk_understand = 1
+			H.speechverb_say = "states"
+			H.speechverb_exclaim = "declares"
+			H.speechverb_ask = "queries"
+			H.law_implanted = 1
+			for(var/mob/living/silicon/ai/A in mobs)
+				src.connected_ai = A
+				A.connected_implants += src
+				break
+			boutput(H, "<B>You have been slaved to the stations AI.</B>")
+			boutput(H, "<B>From now on you must adhere to the silicon laws.</B>")
+			boutput(H, "<B>You are no longer human. Good luck!</B>")
+			ticker.centralized_ai_laws.show_laws(H)
+			H.verbs += /verb/implant_view_laws
+
+	on_remove(var/mob/M as mob)
+		..()
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			H.robot_talk_understand = 0
+			boutput(H, "<B>You no longer feel compelled to obey the silicon lawset.</B>")
+			H.verbs -= /verb/implant_view_laws
+			H.speechverb_say = "says"
+			H.speechverb_exclaim = "exclaims"
+			H.speechverb_ask = "asks"
+			H.law_implanted = 0
+			for(var/mob/living/silicon/ai/A in mobs)
+				src.connected_ai = A
+				A.connected_implants -= src
+				break
+			src.connected_ai = null
+
+	proc/killswitch(var/mob/living/carbon/human/H)
+		while (killswitch_time >= 0)
+			if(killswitch && src.owner)
+				killswitch_time --
+				sleep(20)
+			else
+				break
+			if(killswitch_time <= 10)
+				if(H.client)
+					boutput(H, "<span style=\"color:red\"><b>Time left until Killswitch: [killswitch_time]</b></span>")
+			if(killswitch_time <= 0)
+				if(H.client)
+					boutput(H, "<span style=\"color:red\"><B>Killswitch Process Complete!</B></span>")
+				killswitch = 0
+				spawn(5)
+					src.self_destruct(H)
+		return
+
+verb/implant_view_laws()
+	set category = "Implant Commands"
+	set name = "View laws"
+	set desc = "View your current lawset"
+
+	var/mob/M = src
+
+	boutput(M, "<b>Obey these laws:</b>")
+	ticker.centralized_ai_laws.show_laws(M)
+
 /* ================================================================== */
 /* ------------------------- Implant Parent ------------------------- */
 /* ================================================================== */

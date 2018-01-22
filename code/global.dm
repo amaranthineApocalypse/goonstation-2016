@@ -676,6 +676,7 @@ var/global
 	antag_omnitraitor = image('icons/mob/antag_overlays.dmi', icon_state = "omnitraitor")
 	antag_blob = image('icons/mob/antag_overlays.dmi', icon_state = "blob")
 	antag_wrestler = image('icons/mob/antag_overlays.dmi', icon_state = "wrestler")
+	overlay_law_implanted = image('icons/mob/antag_overlays.dmi', icon_state = "law_implanted")
 
 	//SpyGuy: Oh my fucking god the QM shit. *cry *wail *sob *weep *vomit *scream
 	list/datum/supply_packs/qm_supply_cache = list()

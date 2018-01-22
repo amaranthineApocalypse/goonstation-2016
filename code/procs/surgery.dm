@@ -289,6 +289,35 @@
 		return 0
 
 /* ============================= */
+/* ------- LARGE IMPLANT ------- */
+/* ============================= */
+
+obj/item/large_implant/proc/insertLargeImplant(var/mob/living/carbon/human/patient as mob, var/mob/surgeon as mob)
+
+	if (!patient.organHolder)
+		return 0
+
+	if (patient.organHolder.brain.op_stage == 2.0)
+		if (patient.large_implant)
+			surgeon.show_text("There's already an implant in there.", "red")
+			return 1
+		patient.large_implant = src
+		patient.large_implant.set_loc(patient)
+		patient.large_implant.inserted(patient, surgeon)
+		patient.take_brain_damage(rand(0,3))
+		surgeon.show_text("You drop the implant into [patient]'s longitudinal fissure.", "blue")
+		surgeon.u_equip(src)
+		return 1
+	else if (patient.organHolder.brain.op_stage < 2.0)
+		surgeon.show_text("You need to expose the brain first", "red")
+		return 1
+	else if(patient.organHolder.brain.op_stage > 2.0)
+		surgeon.show_text("The brain must be firmly secured in order to implant [src].", "red")
+		return 1
+
+
+
+/* ============================= */
 /* ---------- SCALPEL ---------- */
 /* ============================= */
 
@@ -355,15 +384,15 @@
 				patient.organHolder.head.op_stage = 1.0
 				return 1
 
-			else if (patient.organHolder.head.op_stage == 2.0)
-				playsound(get_turf(patient), "sound/weapons/squishcut.ogg", 50, 1)
 
+			else if (patient.organHolder.head.op_stage == 2.0)
 				if (prob(screw_up_prob))
 					surgeon.visible_message("<span style=\"color:red\"><b>[surgeon][fluff2]!</b></span>")
 					patient.TakeDamage("head", damage_high, 0)
 					take_bleeding_damage(patient, surgeon, damage_high)
 					return 1
 
+				playsound(get_turf(patient), "sound/weapons/squishcut.ogg", 50, 1)
 				patient.tri_message("<span style=\"color:red\"><b>[surgeon]</b> slices the tissue around [patient == surgeon ? "[his_or_her(patient)]" : "[patient]'s"] spine with [src]!</span>",\
 				surgeon, "<span style=\"color:red\">You slice the tissue around [surgeon == patient ? "your" : "[patient]'s"] spine with [src]!</span>",\
 				patient, "<span style=\"color:red\">[patient == surgeon ? "You slice" : "<b>[surgeon]</b> slices"] the tissue around your spine with [src]!</span>")
@@ -451,6 +480,17 @@
 					surgeon.visible_message("<span style=\"color:red\"><b>[surgeon][fluff2]!</b></span>")
 					patient.TakeDamage("head", damage_high, 0)
 					take_bleeding_damage(patient, surgeon, damage_high)
+					return 1
+
+				if (patient.large_implant)
+
+					patient.tri_message("<span style=\"color:red\"><b>[surgeon]</b> teases the [patient.large_implant] out of [patient == surgeon ? "[his_or_her(patient)]" : "[patient]'s"] brain with [src]!</span>",\
+					surgeon, "<span style=\"color:red\">You tease the [patient.large_implant] out of [surgeon == patient ? "your" : "[patient]'s"] brain with [src]!</span>",\
+					patient, "<span style=\"color:red\">[patient == surgeon ? "You tease" : "<b>[surgeon]</b> teases"] the [patient.large_implant] out of your brain with [src]!</span>")
+
+					patient.large_implant.set_loc(get_turf(patient))
+					patient.take_brain_damage(rand(0,3))
+					patient.large_implant.on_remove(patient)
 					return 1
 
 				patient.tri_message("<span style=\"color:red\"><b>[surgeon]</b> removes the connections to [patient == surgeon ? "[his_or_her(patient)]" : "[patient]'s"] brain with [src]!</span>",\
@@ -809,6 +849,10 @@
 				logTheThing("combat", surgeon, patient, "removed %target%'s brain with [src].")
 				patient.death()
 				patient.organHolder.drop_organ("brain")
+				if (patient.large_implant)
+					patient.large_implant.set_loc(get_turf(patient))
+					patient.large_implant.on_remove()
+					surgeon.visible_message("<span style=\"color:red\"><b>[patient.large_implant] dislodges from the brain!</b></span>")
 				return 1
 
 			else
