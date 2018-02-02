@@ -483,7 +483,19 @@ obj/item/large_implant/proc/insertLargeImplant(var/mob/living/carbon/human/patie
 					return 1
 
 				if (patient.large_implant)
-
+					if ((patient == surgeon) && ishuman(surgeon))
+						var/mob/living/carbon/human/H = surgeon
+						if (istype(H.large_implant, /obj/item/large_implant/ai_law))
+							boutput(H, "<span style=\"color:red\">Your implant whirrs in alarm!</span>")
+							H.large_implant.overheat_counter += 1
+							H.shock(H.large_implant, 37500, ignore_gloves=1)
+							if(!H.bioHolder)
+								return 0
+							if (H.bioHolder.HasEffect("implant_overheat"))
+								return 0
+							else
+								H.bioHolder.AddEffect("implant_overheat")
+								return 0
 					patient.tri_message("<span style=\"color:red\"><b>[surgeon]</b> teases the [patient.large_implant] out of [patient == surgeon ? "[his_or_her(patient)]" : "[patient]'s"] brain with [src]!</span>",\
 					surgeon, "<span style=\"color:red\">You tease the [patient.large_implant] out of [surgeon == patient ? "your" : "[patient]'s"] brain with [src]!</span>",\
 					patient, "<span style=\"color:red\">[patient == surgeon ? "You tease" : "<b>[surgeon]</b> teases"] the [patient.large_implant] out of your brain with [src]!</span>")

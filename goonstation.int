@@ -6,6 +6,6 @@ AUTO_FILE_DIR: OFF
 MAP_ICON_TYPE: 0
 LAST_COMPILE_VERSION: 512.1395
 WINDOW: code\obj\item\implant.dm;code\procs\surgery.dm;code\obj\item\ai_modules.dm;code\mob\living\carbon\human.dm;code\obj\machinery\computer\robotics.dm;code\mob\living\silicon\ai.dm;code\procs\mob_procs.dm;code\global.dm;code\obj\item\storage\implant.dm;icons\obj\surgery.dmi;icons\mob\antag_overlays.dmi
-FILE: code\obj\item\implant.dm
+FILE: code\procs\surgery.dm
 */
 // END_INTERNALS
