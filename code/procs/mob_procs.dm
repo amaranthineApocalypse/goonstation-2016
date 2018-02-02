@@ -846,7 +846,8 @@
 				see_special = 1
 		if (issilicon(src)) // We need to look for borged antagonists too.
 			var/mob/living/silicon/S = src
-			see_law_implanted = 1
+			if (!isghostdrone(S))
+				see_law_implanted = 1
 			//DEBUG("See_law_implanted set to 1 because they a robit")
 			if (src.mind.special_role == "syndicate robot" || (S.syndicate && !S.dependent)) // No AI shells.
 				see_traitors = 1
