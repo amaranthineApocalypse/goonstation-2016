@@ -651,6 +651,7 @@ var/global
 
 	// list of miscreants since mode is irrelevant
 	list/miscreants = list()
+	list/mob/living/carbon/human/AI_IMPLANTED_PERSONS = list()
 
 	// Antag overlays for admin ghosts, Syndieborgs and the like (Convair880).
 	antag_generic = image('icons/mob/antag_overlays.dmi', icon_state = "generic")

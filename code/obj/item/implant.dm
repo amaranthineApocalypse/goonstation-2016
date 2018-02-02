@@ -121,12 +121,13 @@ LARGE IMPLANTS
 /obj/item/large_implant/ai_law
 	name = "Law implant"
 	icon = 'icons/obj/surgery.dmi'
-	icon_state = "implant-g"
+	icon_state = "implant-large"
 	desc = "Now slightly less radioactive than space-Chernobyl!"
 	var/mob/living/silicon/ai/A = null
 	var/killswitch = 0
 	var/killswitch_time = 60
 	var/connected_ai = null
+	var/traitoredalready = 0
 
 	inserted(var/mob/M as mob, var/mob/I as mob)
 		..()
@@ -137,6 +138,8 @@ LARGE IMPLANTS
 			H.speechverb_exclaim = "declares"
 			H.speechverb_ask = "queries"
 			H.law_implanted = 1
+			AI_IMPLANTED_PERSONS += H
+			//DEBUG("[H] added to AI_IMPLANTED_PERSONS")
 			for(var/mob/living/silicon/ai/A in mobs)
 				src.connected_ai = A
 				A.connected_implants += src
@@ -148,7 +151,6 @@ LARGE IMPLANTS
 			H.verbs += /verb/implant_view_laws
 
 	on_remove(var/mob/M as mob)
-		..()
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			H.robot_talk_understand = 0
@@ -162,7 +164,9 @@ LARGE IMPLANTS
 				src.connected_ai = A
 				A.connected_implants -= src
 				break
+			AI_IMPLANTED_PERSONS -= H
 			src.connected_ai = null
+		..()
 
 	proc/killswitch(var/mob/living/carbon/human/H)
 		while (killswitch_time >= 0)
@@ -178,8 +182,7 @@ LARGE IMPLANTS
 				if(H.client)
 					boutput(H, "<span style=\"color:red\"><B>Killswitch Process Complete!</B></span>")
 				killswitch = 0
-				spawn(5)
-					src.self_destruct(H)
+				src.self_destruct(H)
 		return
 
 verb/implant_view_laws()

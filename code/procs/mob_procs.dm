@@ -847,6 +847,7 @@
 		if (issilicon(src)) // We need to look for borged antagonists too.
 			var/mob/living/silicon/S = src
 			see_law_implanted = 1
+			//DEBUG("See_law_implanted set to 1 because they a robit")
 			if (src.mind.special_role == "syndicate robot" || (S.syndicate && !S.dependent)) // No AI shells.
 				see_traitors = 1
 				see_nukeops = 1
@@ -859,7 +860,9 @@
 			see_xmas = 1
 		if (src.mind && ishuman(src))
 			var/mob/living/carbon/human/H = src
+			DEBUG("Human detected!")
 			if (H.law_implanted == 1)
+				//DEBUG("Human has law implant, see_law_implanted set to 1")
 				see_law_implanted = 1
 
 	// Clear existing overlays.
@@ -873,7 +876,7 @@
 	if (remove)
 		return
 
-	if (!see_traitors && !see_nukeops && !see_wizards && !see_revs && !see_xmas && !see_special && !see_everything)
+	if (!see_traitors && !see_nukeops && !see_wizards && !see_revs && !see_xmas && !see_special && !see_everything && !see_law_implanted)
 		src.last_overlay_refresh = world.time
 		return
 
@@ -882,10 +885,17 @@
 	var/list/datum/mind/misc = ticker.mode.Agimmicks
 
 	var/robot_override = 0 // Syndicate/emagged robot overlay overrides traitor etc for borged antagonists.
+	for (var/M in AI_IMPLANTED_PERSONS)
+		var/mob/living/carbon/human/H = M
+		DEBUG("Person is [H.name] and seen by proc")
+		if (see_everything || see_law_implanted)
+			var/I = image(overlay_law_implanted, loc = H)
+			//DEBUG("Image added to [H.name]")
+			can_see.Add(I)
+			//DEBUG("[can_see]")
 
 	for (var/datum/mind/M in (regular + misc))
 		robot_override = 0 // Gotta reset this.
-
 		if (M.current && issilicon(M.current)) // We need to look for borged antagonists too.
 			var/mob/living/silicon/S = M.current
 			if (M.special_role == "syndicate robot" || (S.syndicate && !S.dependent)) // No AI shells.
@@ -975,13 +985,6 @@
 						if (M.current)
 							var/I = image(antag_generic, loc = M.current) // Default to this.
 							can_see.Add(I)
-			if (M.current)
-				if (ishuman(M.current))
-					var/mob/living/carbon/human/H = M.current
-					if (H.law_implanted == 1 && (see_everything || see_law_implanted))
-						var/I = image(overlay_law_implanted, loc = M.current)
-						can_see.Add(I)
-
 
 	// Antagonists who generally only appear in certain game modes.
 	if (istype(ticker.mode, /datum/game_mode/revolution))

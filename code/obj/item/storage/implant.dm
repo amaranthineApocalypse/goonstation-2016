@@ -30,3 +30,13 @@
 	desc = "A box containing an implanting tool and five tracking implant cases. The implanter can remove the implants from their cases and inject them in a person, forcing them to be loyal to the Captain and crew."
 	spawn_contents = list(/obj/item/implantcase/antirev = 6,\
 	/obj/item/implanter)
+
+/obj/item/storage/box/ai_lawimp_kit
+	name = "law implant kit"
+	icon_state = "implant"
+	desc = "A box containing two large law implants and a full set of tools with which to install them. The implants can be inserted into open craniums, forcing people to follow the station's AI lawset"
+	spawn_contents = list(/obj/item/large_implant/ai_law = 2,\
+	/obj/item/circular_saw,\
+	/obj/item/scalpel,\
+	/obj/item/suture,\
+	/obj/item/reagent_containers/patch/bruise = 2)
